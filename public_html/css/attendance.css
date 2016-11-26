@@ -1,0 +1,27 @@
+.btn {
+	border-radius: 0 !important;
+}
+.content {
+	padding: 0;
+}
+.btn-full-5 {
+	background-color: #74B3CE;
+	height: 20vh;
+	margin-top: 0 !important;
+	border: 0;
+	transition: .6s;
+}
+.btn-full-5:hover {
+	background-color: #669FB7;
+}
+.btn-full-5:focus {
+	background-color: #669FB7;
+}
+.content-wrapper {
+	background-color: #74B3CE;
+}
+
+.modal-header {
+	background-color: #74B3CE;
+	color: #fff;
+}

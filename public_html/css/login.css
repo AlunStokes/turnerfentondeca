@@ -1,0 +1,198 @@
+/*Scroll*/
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 0px;  /* remove scrollbar space */
+  background: transparent;  /* optional: just make scrollbar invisible */
+}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
+}
+
+/*Navbar*/
+.navbar-custom {
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: black;
+}
+.navbar-custom .navbar-toggle {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  font-size: 12px;
+}
+.navbar-custom .navbar-toggle:focus,
+.navbar-custom .navbar-toggle:active {
+  outline: none;
+}
+.navbar-custom .navbar-brand {
+  font-weight: 700;
+}
+.navbar-custom .navbar-brand:focus {
+  outline: none;
+}
+.navbar-custom a {
+  color: white;
+}
+.navbar-custom .nav li a {
+  -webkit-transition: background 0.3s ease-in-out;
+  -moz-transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out;
+}
+.navbar-custom .nav li a:hover {
+  color: rgba(255, 255, 255, 0.8);
+  outline: none;
+  background-color: rgba(255, 255, 255, .6); 
+}
+.navbar-custom .nav li a:focus,
+.navbar-custom .nav li a:active {
+  outline: none;
+  background-color: rgba(255, 255, 255, .6);
+}
+.navbar-custom .nav li.active {
+  outline: none;
+}
+.navbar-custom .nav li.active a {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.navbar-custom .nav li.active a:hover {
+  color: white;
+}
+@media (min-width: 768px) {
+  .navbar-custom {
+    padding: 20px 0;
+    border-bottom: none;
+    letter-spacing: 1px;
+    background: transparent;
+    -webkit-transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+    -moz-transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+    transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+  }
+  .navbar-custom.top-nav-collapse {
+    padding: 0;
+    background: black;
+    border-bottom: 0px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0);
+  }
+}
+
+
+/*Background*/
+body {
+  height:100vh;
+  color: #ececec;
+  background: #d5d5d5;
+  background-image: url(../img/noise.png);
+}
+
+/*Form Styling*/
+.form-signin input[type="text"] {
+  margin-bottom: 3px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 3px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.form-signin .form-control {
+  position: relative;
+  font-size: 16px;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.vertical-offset-100 {
+  padding-top: 100px;
+}
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: auto;
+}
+.panel { /*Box Controls*/
+  margin: 0 auto; 
+  margin-bottom: 20px;
+  background-color: #ececec;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  width: 450px;
+}
+@media (max-width: 450px) {
+  .panel { /*Box Controls*/
+    margin: 0 auto; 
+    margin-bottom: 20px;
+    background-color: #ececec;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    width: 95vw;
+  }
+}
+.panel-body { /*Middle Section*/
+ background-color: #ececec; 
+ padding-bottom: 0px;
+}
+
+
+/*Buttom Text Styling*/
+p {
+  color: #5d5d5d;
+  text-align: center;
+  font-size: 16px;
+  font-weight: normal;
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  margin: 0 0 10px;
+}
+
+/*Top Section*/
+.panel-default>.panel-heading {
+  color: #333;
+  background-color: #ececec;
+  border-color: #ddd;
+}
+/*Top Image*/
+.profile-img-card {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 10px;
+  display: block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  margin-bottom: 0px;
+}
+/*Between Top and Middle*/
+.panel-heading {
+  padding: 20px 15px;
+  border-bottom: 0px solid transparent;
+}
+
+/*Link Colour*/
+a {
+  color: #5d5d5d;
+}
+a:hover, a:focus {
+  text-decoration: none;
+  color: #3075cb;
+}
+
+
+/*Button Styling*/
+.btn {
+  font-size: 18px;
+  border: 0px solid #fff;
+}
+.btn-primary:hover {
+  color: #fff;
+  background: #5d5d5d;
+  border: 0px solid #fff;
+}

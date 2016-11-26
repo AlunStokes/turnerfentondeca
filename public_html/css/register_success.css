@@ -1,0 +1,62 @@
+/*Scroll*/
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 0px;  /* remove scrollbar space */
+  background: transparent;  /* optional: just make scrollbar invisible */
+}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #FF0000;
+}
+
+/*Background*/
+body {
+  height:100vh;
+  color: #5d5d5d;
+  background: #d5d5d5;
+  background-image: url(../img/noise.png);
+}
+
+h1 {
+  color: #5d5d5d;
+  text-align: center;
+  font-size: 48px;
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  margin-top: 40vh;
+}
+
+/*Text Styling*/
+p {
+  color: #5d5d5d;
+  text-align: center;
+  font-size: 16px;
+  font-weight: normal;
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+/*Link Colour*/
+a {
+  color: #3C8DBC;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+a:hover, a:focus {
+  text-decoration: none;
+  color: #5d5d5d;
+}
+
+h2 {
+  text-align: center;
+  color: #5d5d5d;
+}
+
+h3 {
+  text-align: center;
+  color: #5d5d5d;
+  font-weight: 400;
+  text-transform: none;
+}

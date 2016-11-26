@@ -1,0 +1,331 @@
+<?php
+
+include ('includes/session.php');
+
+if ($_SESSION['member'] == false) {
+  header("Location:applicant_home.php");
+}
+
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>TFSS DECA | Practice</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- jQuery UI CSS -->
+  <link rel="stylesheet" hred="css/jquery-ui.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="css/admin.min.css">
+  <link rel="stylesheet" href="css/skin-blue.min.css">
+  <!-- Page Style -->
+  <link rel="stylesheet" href="css/take_attendance.css">
+
+
+
+  <!-- jQuery 2.2.3 -->
+  <script src="js/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="js/admin.min.js"></script>
+  <!-- jQuery Easing Javascript -->
+  <script src="js/jquery.easing.min.js"></script>
+  <!-- jQuery UI Javascript -->
+  <script src="js/jquery-ui.min.js"></script>
+
+
+</head>
+
+
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+
+
+
+
+
+    <!-- Main Header -->
+    <header class="main-header">
+
+      <!-- Logo -->
+      <a href="attendance.php" class="logo">
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><i class="glyphicon glyphicon-chevron-left"></i> Back to Attendance</span>
+      </a>
+
+      <!-- Header Navbar -->
+      <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+
+
+            <!-- User Account Menu -->
+            <li class="dropdown user user-menu">
+              <!-- Menu Toggle Button -->
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <!-- The user image in the navbar-->
+                <img src="img/user_images/thumbnails/<?php echo $_SESSION['image_file']; ?>" class="user-image" alt="User Image" width="160px" height="160px">
+                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                <span class="hidden-xs"><?php echo $_SESSION['first_name'].' '.$_SESSION['last_name']; ?></span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- The user image in the menu -->
+                <li class="user-header">
+                  <img src="img/user_images/thumbnails/<?php echo $_SESSION['image_file']; ?>" class="img-circle" alt="User Image">
+
+                  <p>
+                    <?php if ($_SESSION['event_boolean']) { echo $_SESSION['first_name'].' '.$_SESSION['last_name'].' - '.$_SESSION['cluster'].' ('.$_SESSION['event'].')'; }
+                    else { echo $_SESSION['first_name'].' '.$_SESSION['last_name'].'<br>Undecided'; } ?>
+                    <small>Member since June. 2016</small>
+                  </p>
+                </li>
+
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="account.php" class="btn btn-default btn-flat">Account</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+
+
+    <section class="container-fluid-body" id="top-div">
+
+      <div class="row">
+        <div class="col-md-6">
+
+<h1>1. Add Questions</h1>   
+      <p>   Toggle switch to add question to exam</p>
+      <div class="container-fluid">
+        <div class="row" style="margin-top:1vh;">
+          <div class="col-md-6">
+            <input tpye="text" id="question_contains" class="question-search" placeholder="Write words in question" style="width:100%; font-size:14px; height:30px;" />
+          </div>
+          <div class="col-md-6" style="text-align:right; padding:8px;">
+            <select id="dropdown">
+              <option value="mix">All Clusters</option>
+              <option value="marketing">Marketing</option>
+              <option value="businessadmin">Business Administration</option>
+              <option value="finance">Finance</option>
+              <option value="hospitality">Hospitality & Tourism</option>
+            </select>
+          </div>
+        </div>
+
+        <br>
+        <br>
+        <div class-"row" id="question_area">
+        </div>
+      </div>
+        </div>
+        <div class="col-md-6">
+<h1>2. Review Questions</h1>   
+      <p>   Make sure all questions are meant to be there</p>
+      <div class="container-fluid">
+        <div class="row" id="num_questions" style="align:center; text-align:center;">
+        </div>
+        <div class-"row" id="review_area">
+        </div>
+      </div>
+
+        </div>
+      </div>
+
+      <h1 style="text-align:center">Create An Exam</h1>
+      
+
+      
+
+
+      <h1>4. Name Your Exam</h1>   
+      <p>   Make sure to make it creative!</p>
+      <form method="post" id="create" role="form">
+        <input id="exam_name" type="type" maxlength=100 style="height:5vh; width:100%; font-size: 24px;" />
+        <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit_button" style="margin-top:2vh;">Create Exam</button>
+        <button class="btn btn-lg btn-danger btn-block" id="submit_button" style="margin-top:2vh;">Start Another Exam</button>
+      </form>
+    </section>
+
+  </body>
+
+  <script type="text/javascript">
+  var results;
+  var selected = new Array();
+  $(document).ready(function() {
+    ajax_call();
+
+    $('#submit_button').click(function(e) {
+      this.disabled = true;
+      e.preventDefault();
+      var name = document.getElementById('exam_name').value;
+      if (typeof name == 'undefined' || name =="") {
+        alert ("Your exam must have a name");
+      }
+      else if (selected['question_id'].length == 0) {
+        alert("Your exam must contain at least one question");
+      }
+      else {
+        console.log(name);
+        console.log(selected['question_id'].toString());
+        var type = document.getElementById('dropdown_large').value;
+        console.log (type);
+        $.ajax({
+          type: "get",
+          url: "includes/save_exam.php",
+          data: {name : JSON.stringify(name),
+           question_id : JSON.stringify(selected['question_id']),
+           length : JSON.stringify(selected['question_id'].length),
+           type : JSON.stringify(type)}
+         }).done(function(data){ 
+          var data = jQuery.parseJSON(data);
+          if (data == "failed") {
+            alert ("Exam name already exists - Pick another");
+            this.disabled = false;
+          }
+          else if (data == "success") {
+            alert("Exam has been saved!");
+          }
+        });
+       }
+     });
+
+$('#reset').click(function() {
+  location.reload();
+})
+  });
+
+$('#question_contains').keyup(function() {
+  ajax_call();
+});
+$('#dropdown').on('change', function() {
+  ajax_call();
+});
+$(document).on("click", ".btn-add-question", function() {
+  var current_id = this.id.match(/\d+/)[0];
+  console.log(current_id);
+  var current_index = $.inArray(current_id, results['question_id']);
+  console.log($.inArray(current_id, results['question_id']));
+  selected['question_id'].push(current_id);
+  selected['question'].push(results['questions'][current_index]);
+  selected['cluster'].push(results['cluster'][current_index]);
+  update();
+});
+$(document).on("click", ".btn-remove-question", function() {
+  var current_id = this.id.match(/\d+/)[0];
+  console.log(current_id);
+  var index = $.inArray(current_id, selected['question_id']);
+  selected['question_id'].splice(index, 1);
+  selected['question'].splice(index, 1);
+  selected['cluster'].splice(index, 1);
+  update();
+});
+
+function ajax_call() {
+  $('#question_area').html('');
+  var search_text = document.getElementById('question_contains').value;
+  var question_type = document.getElementById('dropdown').value;
+  selected['']
+  $.ajax({
+    type: "get",
+    url: "includes/search_users.php",
+    data: {search : JSON.stringify(search_text),
+      question_type : JSON.stringify(question_type)},
+      dataType : "json"
+    }).done(function(data){ 
+      results = jQuery.parseJSON(JSON.stringify(data));
+      update();
+    });
+  }
+
+  function update() {
+      //Add Questions Section
+        $('#question_area').html(`
+          <h3>Search found 0 Results</h3>
+          `);
+          $('#question_area').append("<h2 style='text-align:center; color:#3c8dbc'>" + results['count'] + " Results</h2>");
+        $('#question_area').html("");
+        for (var i = 0; i < results['count']; i++) {
+            $('#question_area').append(`
+              <div class="question_row">
+              <div class="row">
+              <div class="col-md-91" style="padding-left:3vw;">
+              <h3>` + results['first_name'][i] + `</h3>
+              <p>A: ` + results['last_name'][i] + `</p>
+              <br>
+              </div>
+              <div class="col-md-2" style="padding-top:3vh;">
+              <button class="btn btn-add-question"> Add to Exam </button>
+              </div>
+              <hr width="60%"></hr>
+              <br>
+              </div>
+              </div>
+              `)
+        
+        for (var i = 0; i < results['count']; i++) {
+
+        }
+      }
+
+      //Rearrange Questions Section
+      $('#review_area').html("");
+      $('#num_questions').html("");
+      if (selected['question_id'].length == 1) {
+        $('#num_questions').append('<h1> ' + selected['question_id'].length + ' Question</h1>');
+      }
+      else if (selected['question_id'].length > 1) {
+        $('#num_questions').append('<h1> ' + selected['question_id'].length + ' Questions</h1>');
+      }
+      if (selected['question_id'].length > 0) {
+        $('#num_questions').append('<h2 style="display:inline" >Marketing: ' + num_questions['marketing'] + ' &#124; &emsp;</h2>');
+        $('#num_questions').append('<h2 style="display:inline" >Business Admin: ' + num_questions['businessadmin'] + ' &#124; &emsp;</h2>');
+        $('#num_questions').append('<h2 style="display:inline" >Finance: ' + num_questions['finance'] + ' &#124; &emsp;</h2>');
+        $('#num_questions').append('<h2 style="display:inline" >Hospitality & Tourism: ' + num_questions['hospitality'] + '</h2>');
+      }
+      for (var i = 0; i < selected['question_id'].length; i++) {
+       $('#review_area').append(`
+        <div class="question_row" id="question_review_` + i + `">
+        <div class="row">
+        <div class="col-md-1" style="padding-left:1vw;">
+        <h1> ` + (i+1) + `. </h1>
+        </div>
+        <div class="col-md-9">
+        <h3 style="font-size:18px;">` + selected['question'][i] + `</h3>
+        <br>
+        </div>
+        <div class="col-md-2" style="padding-top:3vh; padding-left:2vw;">
+        <button class="btn btn-remove-question" id="button_remove_` + selected['question_id'][i] + `"> Remove from Exam </button>
+        </div>
+        </div>
+        </div>
+        `)
+     }
+   }
+
+   </script>
+
+
+
+   </html>

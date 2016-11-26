@@ -1,0 +1,58 @@
+body{
+    text-align: center;
+    background: #00ECB9;
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 100;
+}
+
+h1{
+  color: #396;
+  font-weight: 100;
+  font-size: 40px;
+  margin: 40px 0px 20px;
+  font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#clockdiv{
+    font-family: sans-serif;
+    color: #d9dcd5;
+    display: inline-block;
+    font-weight: 100;
+    text-align: center;
+    font-size: 68px;
+}
+
+/*Outside square*/
+#clockdiv > div{
+    padding: 10px;
+    border-radius: 10px;
+    background: #c1beb9;
+    display: inline-block;
+}
+
+/*inside square*/
+#clockdiv div > span{
+    padding: 15px;
+    border-radius: 7px;
+    background: #272424;
+    display: inline-block;
+}
+
+.smalltext{
+    padding-top: 5px;
+    font-size: 16px;
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: #272424;
+}
+
+.intro {
+    background: #d5d5d5;
+    background-image: url(../img/noise.png);
+}
+
+.intro .intro-body .intro-text {
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin-top: 50px;
+    font-size: 36px;
+    color: #2c2c2c;
+}
