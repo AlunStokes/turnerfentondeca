@@ -242,7 +242,11 @@ i:hover {
 	color: #fff !important;
 }
 
-#editor {
+#editor_edit {
+	height: 14vh;
+}
+
+#editor_post {
 	height: 14vh;
 }
 

@@ -1,81 +1,9 @@
 <?php
 
-include ('../includes/config.php');
 include ('includes/session.php');
 
 $active_page = 'classes';
 $page = 'timeline';
-
-$messages = array();
-$messages ['id'] = array();
-$messages ['poster'] = array();
-$messages ['poster_picture_path'] = array();
-$messages ['poster_first_name'] = array();
-$messages ['poster_last_name'] = array();
-$messages ['message'] = array();
-$messages ['class'] = array();
-$messages ['date'] = array();
-$messages ['time'] = array();
-
-
-$post_query = "SELECT class_posts.id as id, message, poster, UNIX_TIMESTAMP(class_posts.date) AS date_order, DATE_FORMAT(DATE, '%M %D %Y') AS date, DATE_FORMAT(DATE, '%H:%i') AS time, first_name, last_name, class_posts.class FROM class_posts JOIN members ON members.student_number = class_posts.poster WHERE class_posts.class = '".$_SESSION['class']."' OR class_posts.class = 'all' ORDER BY date_order DESC LIMIT 20;";
-if ($_SESSION['admin_boolean']) {
-  $post_query = "SELECT class_posts.id as id, message, poster, UNIX_TIMESTAMP(class_posts.date) AS date_order, DATE_FORMAT(DATE, '%M %D %Y') AS date, DATE_FORMAT(DATE, '%H:%i') AS time, first_name, last_name, class_posts.class FROM class_posts JOIN members ON members.student_number = class_posts.poster ORDER BY date_order DESC LIMIT 50;";
-}
-$results = mysqli_query($dbconfig, $post_query);
-if ($results != false) {
-  while ($row = mysqli_fetch_assoc($results)) {
-    array_push($messages ['id'], $row['id']);
-    array_push($messages ['poster'], $row['poster']);
-    array_push($messages ['poster_picture_path'], $row['poster'].".jpg");
-    array_push($messages ['poster_first_name'], $row['first_name']);
-    array_push($messages ['poster_last_name'], $row['last_name']);
-    array_push($messages['message'], $row['message']);
-    array_push($messages['date'], $row['date']);
-    array_push($messages['time'], $row['time']);
-    array_push($messages['class'], $row['class']);
-  }
-
-  for ($i = 0; $i < count($messages['class']); $i++) {
-
-    switch ($messages['class'][$i]) {
-      case "marketing":
-      $messages['class'][$i] = "Marketing";
-      break;
-      case "finance":
-      $messages['class'][$i] = "Finance";
-      break;
-      case "businessadmin":
-      $messages['class'][$i] = "Business Administration";
-      break;
-      case "hospitality":
-      $messages['class'][$i] = "Hospitality & Tourism";
-      break;
-      case "marketing_principles":
-      $messages['class'][$i] = "Principles of Marketing";
-      break;
-      case "finance_principles":
-      $messages['class'][$i] = "Principles of Finance";
-      break;
-      case "businessadmin_principles":
-      $messages['class'][$i] = "Principles of Business Admin";
-      break;
-      case "hospitality_principles":
-      $messages['class'][$i] = "Principles of Hospitality";
-      break;  
-      case "writtens":
-      $messages['class'][$i] = "Writtens";
-      break;    
-      case "all":
-      $messages['class'][$i] = "All Classes";
-      break;        
-    }
-
-    if (!file_exists("img/user_images/thumbnails/".$messages['poster_picture_path'][$i])) {
-      $messages['poster_picture_path'][$i] = "unresolved.jpg";
-    }
-  }
-}
 
 ?>
 
@@ -142,65 +70,6 @@ if ($results != false) {
 
         <ul class="timeline">
 
-          <?php
-
-          for ($i = 0; $i < count($messages['message']); $i++) {
-
-            if ($i > 0 && $messages['date'][$i] != $messages['date'][$i-1]) {
-              echo '
-              <!-- timeline time label -->
-              <li class="time-label">
-              <span class="bg-red">
-              '.$messages['date'][$i].'
-              </span>
-              </li>
-              <!-- /.timeline-label -->
-              ';
-            }
-            else if ($i == 0) {
-              echo '
-              <!-- timeline time label -->
-              <li class="time-label">
-              <span class="bg-red">
-              '.$messages['date'][$i].'
-              </span>
-              </li>
-              <!-- /.timeline-label -->
-              ';
-            }
-            echo '
-            <!-- timeline item -->
-            <li>
-            <!-- timeline icon -->
-            <i class="fa fa-circle-o-notch bg-blue"></i>
-            <div class="timeline-item">
-            ';
-            if ($_SESSION['admin_boolean']) {
-              echo '
-              <span class="delete" id="delete_'.$messages["id"][$i].'"><i class="fa fa-times"></i></span>
-              ';
-            }
-            echo '
-            <span class="time"><i class="fa fa-clock-o"></i>'.$messages['time'][$i].'</span>
-            <div class="pull-left image">
-            <img src="img/user_images/thumbnails/'.$messages['poster_picture_path'][$i].'" class="img-circle img-circle-message" alt="User Image">
-            </div>
-            <h3 class="timeline-header">'.$messages['poster_first_name'][$i].' '.$messages['poster_last_name'][$i].'</h3>
-
-            <div class="timeline-body">
-            <p id="post_body_'.$messages["id"][$i].'" style="font-size:15px;">'.$messages['message'][$i].'</p>
-            </div>
-
-            <div class="timeline-footer">
-            <p style="display: inline; color: #0073b7; margin-bottom: 0;"><b>'.$messages['class'][$i].'</b></p>
-            </div>
-            </div>
-            </li>
-            ';
-          }
-
-          ?>
-          
         </ul>
 
       </section>
@@ -231,7 +100,7 @@ if ($results != false) {
             <div class="option">
               <h2 style="text-align: center;">New Post</h2>
               <label for="cluster">Class:</label>
-              <select class="form-control" id="class">
+              <select class="form-control" id="class_post">
                 <option value="all">All Classes</option>
                 <option value="writtens">Writtens</option>
                 <option value="marketing">Marketing</option>
@@ -244,7 +113,7 @@ if ($results != false) {
                 <option value="hospitality_principles">Principles of Hospitality & Tourism</option>
               </select>
               <br>
-              <div id="editor">
+              <div id="editor_post">
               </div>
             </div>
 
@@ -259,127 +128,248 @@ if ($results != false) {
     </div>
   </div>
 
+
+  <!--Edit Post Modal -->
+  <div class="modal fade" id="edit-post-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form method="post" role="form">
+          <div class="modal-body">
+
+
+            <div class="option">
+              <h2 style="text-align: center;">Edit Post</h2>
+              <label for="cluster">Class:</label>
+              <select class="form-control" id="class_edit">
+                <option value="all">All Classes</option>
+                <option value="writtens">Writtens</option>
+                <option value="marketing">Marketing</option>
+                <option value="businessadmin">Business Administration</option>
+                <option value="finance">Finance</option>
+                <option value="hospitality">Hospitality & Tourism</option>
+                <option value="marketing_principles">Principles of Marketing</option>
+                <option value="businessadmin_principles">Principles of Business Administration</option>
+                <option value="finance_principles">Principles of Finance</option>
+                <option value="hospitality_principles">Principles of Hospitality & Tourism</option>
+              </select>
+              <br>
+              <div id="editor_edit">
+              </div>
+            </div>
+
+
+          </div>
+          <div class="modal-footer" id="footer" align:"center">
+            <button type="button" class="btn btn-submit" id="edit_message">Edit Message</button>
+            <button type="button" class="btn btn-cancel" data-dismiss="modal" id="close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script>
 
   $(document).ready(function() {
-/*
-    //Upload Picture
-    var dialog = new BootstrapDialog({
-      message: 'Why not complete your profile, and upload a photo?',
-      title: 'Photo Upload',
-      buttons: [{
-        id: 'sure',
-        label: 'Sure!'
-      },
-      {
-        id: 'later',
-        label: 'Later'
-      }]
-    });
-    dialog.realize();
-    var sure = dialog.getButton('sure');
-    var later = dialog.getButton('later');
-    sure.click(function(event){
-      window.location.href = "account.php";
-    });
-    later.click(function(event){
-      dialog.close();
-    });
 
-    if (<?php echo json_encode($_SESSION['image_file']); ?> == "unresolved.jpg") {
+    var user_class = "<?php echo $_SESSION['class']; ?>";
+    var admin = <?php echo $_SESSION['admin_boolean']; ?>;
 
-      dialog.open();
-    }
+    $.ajax({
+      type: "get",
+      url: "includes/load_posts.php",
+      data: {user_class : JSON.stringify(user_class),
+        admin : JSON.stringify(admin)},
+      }).done(function(data){ 
+        var messages = jQuery.parseJSON(data);
 
-*/
+        for (var i = 0; i < messages['message'].length; i++) {
 
-    var toolbarOptions = [
-    [{ header: [false, 1, 2] }],
-    ["bold", "italic", "underline"],
-    ["blockquote"],
-    ["link"],
-    ['clean']
-    ];
-
-    var quill = new Quill('#editor', {
-      modules: {
-        toolbar: toolbarOptions
-      },
-      theme: 'snow'
-    });
-
-
-    $('#new-post').click(function() {
-      $('#new-post-modal').modal('show');
-    });
-
-
-    $(".delete").click(function() {
-      var post_id = getNum(this.id);
-
-      BootstrapDialog.confirm({
-        title: "Delete Post",
-        message: "Are you sure you want to delete this post?",
-        type: BootstrapDialog.TYPE_WARNING,
-        closable: false,
-        btnOKLabel: 'Delete it!',
-        btnOKClass: "btn-cancel",
-        btnCancelLabel: 'Nope',
-        btnCancelClass: "btn-submit",
-        callback: function(result) {
-          if(result) {
-            $.ajax({
-              type: "get",
-              url: "includes/delete_post.php",
-              data: {post_id : JSON.stringify(post_id)},
-            }).done(function(data){ 
-              var data = jQuery.parseJSON(data);
-              if (data == "success") {
-                location.reload();
-              }
-              else {
-                alert("Cannot delete post at this time");
-              }
-            });
-          }else {
-
+          if (i > 0 && messages['date'][i] != messages['date'][i-1]) {
+            $(".timeline").append(`
+              <li class="time-label">
+              <span class="bg-red">
+              `+messages['date'][i]+`
+              </span>
+              </li>
+              `);
           }
+          else if (i == 0) {
+            $(".timeline").append(`
+              <li class="time-label">
+              <span class="bg-red">
+              `+messages['date'][i]+`
+              </span>
+              </li>
+              `);
+          }
+
+          var post = `
+          <!-- timeline item -->
+          <li>
+          <!-- timeline icon -->
+          <i class="fa fa-circle-o-notch bg-blue"></i>
+          <div class="timeline-item">
+          `;
+
+          if (<?php echo $_SESSION['admin_boolean']; ?>) {
+            post += `
+            <span class="delete" id="delete_`+messages["id"][i]+`"><i class="fa fa-times"></i></span>
+            `;
+          }
+
+          post += `
+          <span class="time"><i class="fa fa-clock-o"></i>`+messages['time'][i]+`</span>
+          <div class="pull-left image">
+          <img src="img/user_images/thumbnails/`+messages['poster_picture_path'][i]+`" class="img-circle img-circle-message" alt="User Image">
+          </div>
+          <h3 class="timeline-header">`+messages['poster_first_name'][i]+` `+messages['poster_last_name'][i]+`</h3>
+
+          <div class="timeline-body">
+          <p id="post_body_`+messages["id"][i]+`" style="font-size:15px;">`+messages['message'][i]+`</p>
+          </div>
+
+          <div class="timeline-footer">
+          <p style="display: inline; color: #0073b7; margin-bottom: 0;"><b>`+messages['class'][i]+`</b></p>
+          `;
+          if (messages['json_message'][i] !== null) {
+            post += `
+          <span class="edit" id="edit_`+messages["id"][i]+`"><i class="fa fa-pencil"></i></span>
+          `;
         }
+        post += `
+          </div>
+          </div>
+          </li>
+          `;
+
+          $(".timeline").append(post);
+
+        }
+
+        $(document).on('click', '.edit',function() {
+          var post_id = getNum(this.id);
+          var array_index = messages['id'].indexOf(post_id);
+          var text = JSON.parse(messages['json_message'][array_index]);
+          quill_edit.setContents(text);
+          $("#edit_message").attr("id", "edit_message_"+post_id);
+          $('#edit-post-modal').modal('show');
+        });
+
       });
-    });
 
-    $(".edit").click(function() {
-      var post_id = getNum(this.id);
-      var text = $("#post_body_"+post_id).text();
-    });
+var toolbarOptions = [
+[{ header: [false, 1, 2] }],
+["bold", "italic", "underline"],
+["blockquote"],
+["link"],
+['clean']
+];
 
-    $("#post_message").click(function() {
-      var post_message = quill.container.firstChild.innerHTML.replace(/\>\s+\</g, '>&nbsp;<');
-      if (post_message != "") {
-        var post_class = $("#class").val();
-        var poster = <?php echo json_encode($_SESSION['student_number']); ?>;
+var quill_post = new Quill('#editor_post', {
+  modules: {
+    toolbar: toolbarOptions
+  },
+  theme: 'snow'
+});
+
+var quill_edit = new Quill('#editor_edit', {
+  modules: {
+    toolbar: toolbarOptions
+  },
+  theme: 'snow'
+});
+
+
+$('#new-post').on('click',function() {
+  $('#new-post-modal').modal('show');
+});
+
+
+$(document).on('click', '.delete', function() {
+  var post_id = getNum(this.id);
+
+  BootstrapDialog.confirm({
+    title: "Delete Post",
+    message: "Are you sure you want to delete this post?",
+    type: BootstrapDialog.TYPE_WARNING,
+    closable: false,
+    btnOKLabel: 'Delete it!',
+    btnOKClass: "btn-cancel",
+    btnCancelLabel: 'Nope',
+    btnCancelClass: "btn-submit",
+    callback: function(result) {
+      if(result) {
         $.ajax({
           type: "get",
-          url: "includes/post_message.php",
-          data: {message : JSON.stringify(post_message),
-            poster : JSON.stringify(poster),
-            post_class : JSON.stringify(post_class)},
-          }).done(function(data){ 
-            result = jQuery.parseJSON(data);
-            if (result == "success") {
-              location.reload();
-            }
-            else {
-              alert ("Problem posting, please try again");
-            }
-          });
-        }
-        else {
-          alert ("Please put in some text");
-        }
-      });
+          url: "includes/delete_post.php",
+          data: {post_id : JSON.stringify(post_id)},
+        }).done(function(data){ 
+          var data = jQuery.parseJSON(data);
+          if (data == "success") {
+            location.reload();
+          }
+          else {
+            alert("Cannot delete post at this time");
+          }
+        });
+      }else {
 
+      }
+    }
   });
+});
+
+
+$("#post_message").on('click',function() {
+  var json_post_message = JSON.stringify(quill_post.getContents());
+  var post_message = quill_post.container.firstChild.innerHTML.replace(/\>\s+\</g, '>&nbsp;<');
+  var post_class = $("#class_post").val();
+  var poster = <?php echo json_encode($_SESSION['student_number']); ?>;
+  $.ajax({
+    type: "get",
+    url: "includes/post_message.php",
+    data: {json_message : json_post_message,
+      message : JSON.stringify(post_message),
+      poster : JSON.stringify(poster),
+      post_class : JSON.stringify(post_class),
+      ajax_id: JSON.stringify("post")},
+    }).done(function(data){ 
+      result = jQuery.parseJSON(data);
+      if (result == "success") {
+        location.reload();
+      }
+      else {
+        alert ("Problem posting, please try again");
+      }
+    });
+  });
+
+$("#edit_message").on('click',function() {
+  var post_id = getNum($(this).attr("id"));
+  var json_post_message = JSON.stringify(quill_edit.getContents());
+  var post_message = quill_edit.container.firstChild.innerHTML.replace(/\>\s+\</g, '>&nbsp;<');
+  var post_class = $("#class_edit").val();
+  $.ajax({
+    type: "get",
+    url: "includes/post_message.php",
+    data: {json_message : json_post_message,
+      message : JSON.stringify(post_message),
+      post_class : JSON.stringify(post_class),
+      post_id : JSON.stringify(post_id),
+      ajax_id: JSON.stringify("edit")},
+    }).done(function(data){ 
+      result = jQuery.parseJSON(data);
+      if (result == "success") {
+        location.reload();
+      }
+      else {
+        alert ("Problem posting, please try again");
+      }
+    });
+  });
+
+});
 
 function getNum(string) {
   var num = string.match(/\d+/)[0];
