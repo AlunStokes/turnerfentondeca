@@ -102,6 +102,7 @@ $page = 'timeline';
               <label for="cluster">Class:</label>
               <select class="form-control" id="class_post">
                 <option value="all">All Classes</option>
+                <option value="admin">Admin</option>
                 <option value="writtens">Writtens</option>
                 <option value="marketing">Marketing</option>
                 <option value="businessadmin">Business Administration</option>
@@ -142,6 +143,7 @@ $page = 'timeline';
               <label for="cluster">Class:</label>
               <select class="form-control" id="class_edit">
                 <option value="all">All Classes</option>
+                <option value="admin">Admin</option>
                 <option value="writtens">Writtens</option>
                 <option value="marketing">Marketing</option>
                 <option value="businessadmin">Business Administration</option>
@@ -173,14 +175,14 @@ $page = 'timeline';
   $(document).ready(function() {
 
     var user_class = "<?php echo $_SESSION['class']; ?>";
-    var admin = <?php echo $_SESSION['admin_boolean']; ?>;
+    var admin = <?php echo $_SESSION['admin']; ?>;
 
     $.ajax({
       type: "get",
       url: "includes/load_posts.php",
       data: {user_class : JSON.stringify(user_class),
         admin : JSON.stringify(admin)},
-      }).done(function(data){ 
+      }).done(function(data){
         var messages = jQuery.parseJSON(data);
 
         for (var i = 0; i < messages['message'].length; i++) {
@@ -212,7 +214,7 @@ $page = 'timeline';
           <div class="timeline-item">
           `;
 
-          if (<?php echo $_SESSION['admin_boolean']; ?>) {
+          if (admin == 1) {
             post += `
             <span class="delete" id="delete_`+messages["id"][i]+`"><i class="fa fa-times"></i></span>
             `;
@@ -230,9 +232,9 @@ $page = 'timeline';
           </div>
 
           <div class="timeline-footer">
-          <p style="display: inline; color: #0073b7; margin-bottom: 0;"><b>`+messages['class'][i]+`</b></p>
+          <p style="display: inline; color: #0073b7; margin-bottom: 0;"><b>`+messages['class_proper'][i]+`</b></p>
           `;
-          if (messages['json_message'][i] !== null) {
+          if (messages['json_message'][i] !== null && admin == 1) {
             post += `
           <span class="edit" id="edit_`+messages["id"][i]+`"><i class="fa fa-pencil"></i></span>
           `;
@@ -253,6 +255,7 @@ $page = 'timeline';
           var text = JSON.parse(messages['json_message'][array_index]);
           quill_edit.setContents(text);
           $("#edit_message").attr("id", "edit_message_"+post_id);
+           $("#class_edit").val(messages['class'][array_index]);
           $('#edit-post-modal').modal('show');
         });
 

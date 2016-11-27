@@ -14,6 +14,7 @@ $messages ['poster_last_name'] = array();
 $messages ['message'] = array();
 $messages ['json_message'] = array();
 $messages ['class'] = array();
+$messages ['class_proper'] = array();
 $messages ['date'] = array();
 $messages ['time'] = array();
 
@@ -31,7 +32,9 @@ if ($results != false) {
     array_push($messages ['poster_first_name'], $row['first_name']);
     array_push($messages ['poster_last_name'], $row['last_name']);
     array_push($messages['message'], $row['message']);
+    if ($admin == 1) {
     array_push($messages['json_message'], $row['json_message']);
+  }
     array_push($messages['date'], $row['date']);
     array_push($messages['time'], $row['time']);
     array_push($messages['class'], $row['class']);
@@ -41,35 +44,38 @@ if ($results != false) {
 
     switch ($messages['class'][$i]) {
       case "marketing":
-      $messages['class'][$i] = "Marketing";
+      $messages['class_proper'][$i] = "Marketing";
       break;
       case "finance":
-      $messages['class'][$i] = "Finance";
+      $messages['class_proper'][$i] = "Finance";
       break;
       case "businessadmin":
-      $messages['class'][$i] = "Business Administration";
+      $messages['class_proper'][$i] = "Business Administration";
       break;
       case "hospitality":
-      $messages['class'][$i] = "Hospitality & Tourism";
+      $messages['class_proper'][$i] = "Hospitality & Tourism";
       break;
       case "marketing_principles":
-      $messages['class'][$i] = "Principles of Marketing";
+      $messages['class_proper'][$i] = "Principles of Marketing";
       break;
       case "finance_principles":
-      $messages['class'][$i] = "Principles of Finance";
+      $messages['class_proper'][$i] = "Principles of Finance";
       break;
       case "businessadmin_principles":
-      $messages['class'][$i] = "Principles of Business Admin";
+      $messages['class_proper'][$i] = "Principles of Business Admin";
       break;
       case "hospitality_principles":
-      $messages['class'][$i] = "Principles of Hospitality";
+      $messages['class_proper'][$i] = "Principles of Hospitality";
       break;  
       case "writtens":
-      $messages['class'][$i] = "Writtens";
+      $messages['class_proper'][$i] = "Writtens";
       break;    
       case "all":
-      $messages['class'][$i] = "All Classes";
+      $messages['class_proper'][$i] = "All Classes";
       break;        
+      case "admin":
+      $messages['class_proper'][$i] = "Admin";
+      break;    
     }
 
     if (!file_exists("../img/user_images/thumbnails/".$messages['poster_picture_path'][$i])) {
