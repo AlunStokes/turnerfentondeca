@@ -119,11 +119,11 @@ if ($result != false) {
 
       $.ajax({
         type: "get",
-        url: "includes/attendance_ajax.php",
+        url: "includes/ajax.php",
         data: {code_word : JSON.stringify(code_word),
           student_number : JSON.stringify(student_number),
          student_class : JSON.stringify(student_class),
-         ajax_id : JSON.stringify("check")},
+         ajax_id : JSON.stringify("attendance_check")},
       }).done(function(data){ 
         result = jQuery.parseJSON(data);
         if (result == true) {

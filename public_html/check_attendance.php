@@ -277,28 +277,6 @@ $(function () {
 });
 $(document).ready(function() {
   $("#id_dropdown").val(<?php echo json_encode($current_id); ?>);
-  /*
-  $.ajax({
-    type: "get",
-    url: "includes/attendance_ajax.php",
-    data: {ajax_id : JSON.stringify("check_attendance"),
-    id : JSON.stringify(1)},
-  }).done(function(data){ 
-    result = jQuery.parseJSON(data);
-    $('#table_body').html('');
-    for (var i = 0; i < result['count']; i++) {
-      $('#table_body').append(`
-        <tr>
-        <td>`+result['first_name'][i]+`</td>
-        <td>`+result['last_name'][i]+`</td>
-        <td>`+result['student_number'][i]+`</td>
-        <td>`+result['cluster'][i]+`</td>
-        <td>`+result['present'][i]+`</td>
-        </tr>
-        `);
-    }    
-  });
-*/
 });
 
 function change_attendance() {
