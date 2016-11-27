@@ -18,7 +18,7 @@ if ($results) {
         echo '
         <div class="alert alert-'.$row['type'].' alert-dismissible">
         <abbr title="Click to Dismiss"><button type="button" id="'.$row['id'].'" class="close" data-dismiss="alert" aria-hidden="true">&times;</button></abbr>
-        <h4><i class="icon fa fa-exclamation"></i>'.$row['title'].'</h4>
+        <h4><i class="icon fa fa-exclamation" style="float:left;"></i>'.$row['title'].'</h4>
         <p>'.$row['body'].'</p>
         </div>
         ';
@@ -31,7 +31,7 @@ if ($results) {
       echo '
       <div class="alert alert-'.$row['type'].' alert-dismissible">
       <button type="button" id="'.$row['id'].'" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <h4><i class="icon fa fa-exclamation"></i>'.$row['title'].'</h4>
+      <h4><i class="icon fa fa-exclamation" style="float:left;"></i>'.$row['title'].'</h4>
       <p>'.$row['body'].'</p>
       </div>
       ';
