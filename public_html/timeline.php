@@ -86,6 +86,13 @@ $page = 'timeline';
     </a>
     </div>
     ';
+    echo '
+    <div class="fixed-action-btn" style="bottom: 115px; right: 24px;">
+    <a class="btn-floating btn-large blue" id="new-alert">
+    <i class="large material-icons circle-btn" style="font-size:32px;">+</i>
+    </a>
+    </div>
+    ';
   }
   ?>
 
@@ -163,6 +170,50 @@ $page = 'timeline';
           </div>
           <div class="modal-footer" id="footer" align:"center">
             <button type="button" class="btn btn-submit" id="edit_message">Edit Message</button>
+            <button type="button" class="btn btn-cancel" data-dismiss="modal" id="close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--New Alert Modal -->
+  <div class="modal fade" id="new-alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form method="post" role="form">
+          <div class="modal-body">
+
+
+            <div class="option">
+              <h2 style="text-align: center;">New Alert</h2>
+              <label for="admin">Who for?</label>
+              <select class="form-control" id="admin">
+                <option value="0">Everyone</option>
+                <option value="1">Admin Only</option>
+              </select>
+              <br>
+              <label for="type">What Type?</label>
+              <select class="form-control" id="type">
+                <option value="info">Infomation</option>
+                <option value="success">Success</option>
+                <option value="warning">Warning</option>
+                <option value="danger">Danger</option>
+              </select>
+              <br>
+              <label for="editor_alert_title">Title</label>
+              <div id="editor_alert_title">
+              </div>
+              <br>
+              <label for="editor_alert_body">Body</label>
+              <div id="editor_alert_body">
+              </div>
+            </div>
+
+
+          </div>
+          <div class="modal-footer" id="footer" align:"center">
+            <button type="button" class="btn btn-submit" id="post_alert">Post Alert</button>
             <button type="button" class="btn btn-cancel" data-dismiss="modal" id="close">Cancel</button>
           </div>
         </form>
@@ -276,6 +327,19 @@ var quill_post = new Quill('#editor_post', {
   theme: 'snow'
 });
 
+var quill_alert_title = new Quill('#editor_alert_title', {
+  modules: {
+    toolbar: toolbarOptions
+  },
+  theme: 'snow'
+});
+var quill_alert_body = new Quill('#editor_alert_body', {
+  modules: {
+    toolbar: toolbarOptions
+  },
+  theme: 'snow'
+});
+
 var quill_edit = new Quill('#editor_edit', {
   modules: {
     toolbar: toolbarOptions
@@ -286,6 +350,10 @@ var quill_edit = new Quill('#editor_edit', {
 
 $('#new-post').on('click',function() {
   $('#new-post-modal').modal('show');
+});
+
+$('#new-alert').on('click',function() {
+  $('#new-alert-modal').modal('show');
 });
 
 
@@ -337,6 +405,29 @@ $("#post_message").on('click',function() {
       poster : JSON.stringify(poster),
       post_class : JSON.stringify(post_class),
       ajax_id: JSON.stringify("post")},
+    }).done(function(data){ 
+      result = jQuery.parseJSON(data);
+      if (result == "success") {
+        location.reload();
+      }
+      else {
+        alert ("Problem posting, please try again");
+      }
+    });
+  });
+
+$("#post_alert").on('click',function() {
+  var title = quill_alert_title.container.firstChild.innerHTML.replace(/\>\s+\</g, '>&nbsp;<');
+  var body = quill_alert_body.container.firstChild.innerHTML.replace(/\>\s+\</g, '>&nbsp;<');
+  var admin = $("#admin").val();
+  var type = $("#type").val();
+  $.ajax({
+    type: "get",
+    url: "includes/post_alert.php",
+    data: {title : JSON.stringify(title),
+      body : JSON.stringify(body),
+      admin : JSON.stringify(admin),
+      type : JSON.stringify(type)},
     }).done(function(data){ 
       result = jQuery.parseJSON(data);
       if (result == "success") {

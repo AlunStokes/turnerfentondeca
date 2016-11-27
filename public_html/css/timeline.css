@@ -250,6 +250,10 @@ i:hover {
 	height: 14vh;
 }
 
+#editor_alert_body {
+	height: 14vh;
+}
+
 .edit {
 	    float: right;
         display: inline;
