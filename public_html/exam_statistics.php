@@ -160,7 +160,8 @@ while ($row = mysqli_fetch_assoc($results)) {
 
     $.ajax({
       type: "get",
-      url: "includes/get_exam_stats.php",
+      url: "includes/ajax.php",
+      data: {ajax_id : JSON.stringify("personal_exam_stats")},
     }).done(function(final){ 
       var final = jQuery.parseJSON(final);
       if (final['scores']) {

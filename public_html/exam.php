@@ -331,8 +331,9 @@ function submit_exam() {
   submitted = true;
   $.ajax({
     type: "post",
-    url: "includes/submit_exam.php",
-    data: {data : JSON.stringify(chosen)},
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("exam_submit"),
+    data : JSON.stringify(chosen)},
   }).done(function(data){ 
     $("html, body").animate({ scrollTop: 0 }, "slow");
     var data = jQuery.parseJSON(data);

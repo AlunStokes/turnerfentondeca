@@ -179,8 +179,9 @@ function load_scores() {
 
   $.ajax({
     type: "get",
-    url: "includes/get_exam_results.php",
-    data: {exam_id : JSON.stringify(exam_id)},
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("class_exam_results"),
+            exam_id : JSON.stringify(exam_id)},
   }).done(function(data){ 
     var data = jQuery.parseJSON(data);
   //Delete current Scores
@@ -200,29 +201,6 @@ function load_scores() {
     }
   });
 }
-
-/*
-function replace_options(dropdown, exam_type) {
-  $.ajax({
-    type: "get",
-    url: "includes/get_exams.php",
-    data: {exam_type : JSON.stringify(exam_type)},
-  }).done(function(data){ 
-    var data = jQuery.parseJSON(data);
-    var options = new Array();
-    options['exam_id'] = new Array();
-    options['exam_name'] = new Array();
-    for (var i = 0; i < data['exam_name'].length; i++) {
-      options['exam_id'].push (data['exam_id'][i]);
-      options['exam_name'].push (data['exam_name'][i]);
-    }
-    $("#"+dropdown).html('');
-    for (var i = 0 ; i < options['exam_id'].length; i++) {
-      $("#"+dropdown).append("<option value='"+options['exam_id'][i]+"'>"+options['exam_name'][i]+"</option>");
-    }
-  });
-}
-*/
 
   </script>
 

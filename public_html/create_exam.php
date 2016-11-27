@@ -204,8 +204,9 @@ if ($_SESSION['member'] == false) {
         console.log (type);
         $.ajax({
           type: "get",
-          url: "includes/save_exam.php",
-          data: {name : JSON.stringify(name),
+          url: "includes/ajax.php",
+          data: {ajax_id : JSON.stringify("create_exam_save"),
+            name : JSON.stringify(name),
            question_id : JSON.stringify(selected['question_id']),
            length : JSON.stringify(selected['question_id'].length),
            type : JSON.stringify(type)}
@@ -295,8 +296,9 @@ function ajax_call() {
   selected['']
   $.ajax({
     type: "get",
-    url: "includes/search_questions.php",
-    data: {search : JSON.stringify(search_text),
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("create_exam_search_question"),
+      search : JSON.stringify(search_text),
       question_type : JSON.stringify(question_type)},
       dataType : "json"
     }).done(function(data){ 
