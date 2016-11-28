@@ -18,7 +18,7 @@ else if (isset($_SESSION['exam_cluster'])) {
   $id_query = 'SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id WHERE cluster = "'.$_SESSION["exam_cluster"].'" ORDER BY RAND() LIMIT '.$_SESSION['num_questions'].'';
 }
 else {
-  header("Location: practice_simple.php");
+  header("Location: practice.php");
 }
 
 $time = floor($_SESSION['num_questions'] / 0.0222222222222222);
@@ -101,7 +101,7 @@ if ($_SESSION['member'] == false) {
     <header class="main-header">
 
       <!-- Logo -->
-      <a href="practice_simple.php" class="logo">
+      <a href="practice.php" class="logo">
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><i class="glyphicon glyphicon-chevron-left"></i> Back to Practice</span>
       </a>

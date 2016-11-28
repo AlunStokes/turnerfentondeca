@@ -255,7 +255,7 @@ while ($row = mysqli_fetch_assoc($results)) {
 
       }
       else {
-        $("#doughnut_chart_area").append("<h1>No exam data yet - <a href='practice_simple.php'>Try an exam now</a></h1>");
+        $("#doughnut_chart_area").append("<h1>No exam data yet - <a href='practice.php'>Try an exam now</a></h1>");
       }
     });
 
