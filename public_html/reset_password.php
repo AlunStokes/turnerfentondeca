@@ -48,7 +48,7 @@
 
 <body>
 
-    <?php include 'includes/navbar_password_reset.php'; ?>
+    <?php include "components/navbar_password_reset.php'; ?>
 
     <div class="row vertical-offset-70">
         <div class="col-md-8 col-md-offset-2">

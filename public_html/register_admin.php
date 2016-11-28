@@ -190,7 +190,7 @@ if (!$error) {
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
     <?php if (!isset($_SESSION['first_name'])) { include 'includes/admin_lock.php'; } ?>
-    <?php include 'includes/navbar_register.php'; ?>
+    <?php include "components/navbar_register.php'; ?>
 
     <div id="top-div">
         <div class="row vertical-offset-100">

@@ -55,7 +55,7 @@ $_SESSION['can_bring_device'] = $row['can_bring_device'];
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
-    <?php include "includes/navbar_register.php"; ?>
+    <?php include "components/navbar_register.php"; ?>
 
     <div>
         <div class="row vertical-offset-100">

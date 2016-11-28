@@ -97,7 +97,7 @@ switch ($_SESSION['area']) {
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
-    <?php include 'includes/navbar_applicant_home.php'; ?>
+    <?php include "components/navbar_applicant_home.php'; ?>
 
 
     <div>
