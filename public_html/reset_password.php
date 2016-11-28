@@ -48,7 +48,7 @@
 
 <body>
 
-    <?php include "components/navbar_password_reset.php'; ?>
+    <?php include "components/navbar_password_reset.php"; ?>
 
     <div class="row vertical-offset-70">
         <div class="col-md-8 col-md-offset-2">
@@ -81,8 +81,9 @@ $(document).ready(function() {
         var student_number = document.getElementById('student_number').value;
         $.ajax({
             type: "get",
-            url: "includes/send_reset.php",
-            data: {student_number : JSON.stringify(student_number)},
+            url: "includes/ajax.php",
+            data: {ajax_id : JSON.stringify("reset_send_reset"),
+            student_number : JSON.stringify(student_number)},
             dataType : "json"
         }).done(function(data){ 
             var result = jQuery.parseJSON(JSON.stringify(data));

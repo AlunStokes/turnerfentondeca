@@ -485,6 +485,204 @@ switch ($ajax_id) {
 	break;
 
 
+	//Password Reset
+	case 'reset_send_reset':
+	$student_number = json_decode($_GET['student_number']);
+	$random_hash = md5(openssl_random_pseudo_bytes(32));
+	$member = false;
+	$student_number_query = "SELECT email FROM members WHERE student_number = $student_number";
+	$result = mysqli_query($dbconfig, $student_number_query);
+	if (mysqli_num_rows($result) == 1) {
+		$email = mysqli_fetch_assoc($result)['email'];
+		$data = "success";
+		$member = true;
+	}
+	else {
+		$student_number_query = "SELECT email FROM applicants WHERE student_number = $student_number";
+		$result = mysqli_query($dbconfig, $student_number_query);
+		if (mysqli_num_rows($result) == 1) {
+			$email = mysqli_fetch_assoc($result)['email'];
+			$member = false;
+		}
+		else {
+			$data = "failed_find_student_number";
+			echo json_encode($data);
+			exit();
+		}
+	}
+	if ($member) {
+		$insert_code = "UPDATE members SET password_reset_code='$random_hash' WHERE student_number=$student_number";
+		mysqli_query($dbconfig, $insert_code) or die (mysqli_error($dbconfig));
+	}
+	else {
+		$insert_code = "UPDATE applicants SET password_reset_code='$random_hash' WHERE student_number=$student_number";
+		mysqli_query($dbconfig, $insert_code) or die (mysqli_error($dbconfig));
+	}
+	$to = $email;
+	$subject = "Password Reset";
+	$headers = "From: webmaster@turnerfentondeca.com\r\n";
+	$headers .= "Reply-To: tfssdeca@gmail.com\r\n";
+	$headers .= "MIME-Version: 1.0\r\n";
+	$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+	$message = "<h2>A password reset has been requested for your account.</h2>";
+	$message .= "<h4>If you have not requested this reset, please contact us at webmaster@turnerfentondeca.com.</h4>";
+	$message .= "<br>";
+	$message .= "<h4>Otherwise, please <a href ='turnerfentondeca.com/reset_password_form.php?reset_code=".$random_hash."' >click the here to finish your password reset.</a></h4>";
+	$message .= "<br>";
+	$message .= "<h4>Or, if the above doesn't work, click the following link: turnerfentondeca.com/reset_password_form.php?reset_code=".$random_hash."";
+	if (mail($to, $subject, $message, $headers)) {
+		$data = "success";
+	}
+	else {
+		$data = "failed";
+	}
+	echo json_encode($data);
+	break;
+
+
+
+	//Timeline
+	case 'timeline_load_posts':
+	$class = json_decode($_GET['user_class']);
+	$admin = json_decode($_GET['admin']);
+	$messages = array();
+	$messages ['id'] = array();
+	$messages ['poster'] = array();
+	$messages ['poster_picture_path'] = array();
+	$messages ['poster_first_name'] = array();
+	$messages ['poster_last_name'] = array();
+	$messages ['message'] = array();
+	$messages ['json_message'] = array();
+	$messages ['class'] = array();
+	$messages ['class_proper'] = array();
+	$messages ['date'] = array();
+	$messages ['time'] = array();
+	$post_query = "SELECT class_posts.id as id, message, poster, UNIX_TIMESTAMP(class_posts.date) AS date_order, DATE_FORMAT(DATE, '%M %D %Y') AS date, DATE_FORMAT(DATE, '%H:%i') AS time, first_name, last_name, class_posts.class FROM class_posts JOIN members ON members.student_number = class_posts.poster WHERE class_posts.class = '".$class."' OR class_posts.class = 'all' ORDER BY date_order DESC LIMIT 150;";
+	if ($admin == 1) {
+		$post_query = "SELECT class_posts.id as id, message, json_message, poster, UNIX_TIMESTAMP(class_posts.date) AS date_order, DATE_FORMAT(DATE, '%M %D %Y') AS date, DATE_FORMAT(DATE, '%H:%i') AS time, first_name, last_name, class_posts.class FROM class_posts JOIN members ON members.student_number = class_posts.poster ORDER BY date_order DESC LIMIT 150;";
+	}
+	$results = mysqli_query($dbconfig, $post_query);
+	if ($results != false) {
+		while ($row = mysqli_fetch_assoc($results)) {
+			array_push($messages ['id'], $row['id']);
+			array_push($messages ['poster'], $row['poster']);
+			array_push($messages ['poster_picture_path'], $row['poster'].".jpg");
+			array_push($messages ['poster_first_name'], $row['first_name']);
+			array_push($messages ['poster_last_name'], $row['last_name']);
+			array_push($messages['message'], $row['message']);
+			if ($admin == 1) {
+				array_push($messages['json_message'], $row['json_message']);
+			}
+			array_push($messages['date'], $row['date']);
+			array_push($messages['time'], $row['time']);
+			array_push($messages['class'], $row['class']);
+		}
+		for ($i = 0; $i < count($messages['class']); $i++) {
+			switch ($messages['class'][$i]) {
+				case "marketing":
+				$messages['class_proper'][$i] = "Marketing";
+				break;
+				case "finance":
+				$messages['class_proper'][$i] = "Finance";
+				break;
+				case "businessadmin":
+				$messages['class_proper'][$i] = "Business Administration";
+				break;
+				case "hospitality":
+				$messages['class_proper'][$i] = "Hospitality & Tourism";
+				break;
+				case "marketing_principles":
+				$messages['class_proper'][$i] = "Principles of Marketing";
+				break;
+				case "finance_principles":
+				$messages['class_proper'][$i] = "Principles of Finance";
+				break;
+				case "businessadmin_principles":
+				$messages['class_proper'][$i] = "Principles of Business Admin";
+				break;
+				case "hospitality_principles":
+				$messages['class_proper'][$i] = "Principles of Hospitality";
+				break;  
+				case "writtens":
+				$messages['class_proper'][$i] = "Writtens";
+				break;    
+				case "all":
+				$messages['class_proper'][$i] = "All Classes";
+				break;        
+				case "admin":
+				$messages['class_proper'][$i] = "Admin";
+				break;    
+			}
+			if (!file_exists("../img/user_images/thumbnails/".$messages['poster_picture_path'][$i])) {
+				$messages['poster_picture_path'][$i] = "unresolved.jpg";
+			}
+		}
+	}
+	echo json_encode($messages);
+	break;
+
+	case 'timeline_delete_post':
+	$post_id = json_decode($_GET['post_id']);
+	$data_query = "DELETE FROM class_posts WHERE id = $post_id";
+	if (mysqli_query($dbconfig, $data_query)) {
+		echo json_encode("success");
+	}
+	else {
+		echo json_encode("fail");
+	}
+	break;
+
+	case 'timeline_post_message':
+	$json_message = addslashes($_GET['json_message']);
+	$message = stripslashes(json_decode($_GET['message']));
+	$poster = stripslashes(json_decode($_GET['poster']));
+	$class = stripslashes(json_decode($_GET['post_class']));
+	$message = addslashes($message);
+	$message = nl2br($message);
+	$query = 'INSERT INTO class_posts (poster, message, json_message, class) VALUES ("'.$poster.'", "'.$message.'", "'.$json_message.'", "'.$class.'");';
+	if (mysqli_query($dbconfig, $query) or die(mysqli_error($dbconfig))) {
+		echo json_encode("success");
+	}
+	else {
+		echo json_encode("fail");
+	}
+	break;
+
+	case 'timeline_edit_message':
+	$json_message = addslashes($_GET['json_message']);
+	$message = stripslashes(json_decode($_GET['message']));
+	$class = stripslashes(json_decode($_GET['post_class']));
+	$post_id = stripslashes(json_decode($_GET['post_id']));
+	$message = addslashes($message);
+	$message = nl2br($message);
+	$query = 'UPDATE class_posts SET message="'.$message.'", json_message="'.$json_message.'", class="'.$class.'" WHERE id='.$post_id.';';
+	if (mysqli_query($dbconfig, $query) or die(mysqli_error($dbconfig))) {
+		echo json_encode("success");
+	}
+	else {
+		echo json_encode("fail");
+	}
+	break;
+
+	case 'timeline_post_alert':
+	$body = stripslashes(json_decode($_GET['body']));
+	$title = stripslashes(json_decode($_GET['title']));
+	$type = stripslashes(json_decode($_GET['type']));
+	$admin = stripslashes(json_decode($_GET['admin']));
+	$body = addslashes($body);
+	$body = nl2br($body);
+	$title = addslashes($title);
+	$title = nl2br($title);
+	$query = 'INSERT INTO alerts (type, title, body, page, admin) VALUES ("'.$type.'", "'.$title.'", "'.$body.'", "timeline", '.$admin.');';
+	if (mysqli_query($dbconfig, $query) or die(mysqli_error($dbconfig))) {
+		echo json_encode("success");
+	}
+	else {
+		echo json_encode("fail");
+	}
+	break;
+
+
 	default:
 		# code...
 	break;

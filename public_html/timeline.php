@@ -230,8 +230,9 @@ $page = 'timeline';
 
     $.ajax({
       type: "get",
-      url: "includes/load_posts.php",
-      data: {user_class : JSON.stringify(user_class),
+      url: "includes/ajax.php",
+      data: {ajax_id : JSON.stringify("timeline_load_posts"),
+        user_class : JSON.stringify(user_class),
         admin : JSON.stringify(admin)},
       }).done(function(data){
         var messages = jQuery.parseJSON(data);
@@ -373,8 +374,9 @@ $(document).on('click', '.delete', function() {
       if(result) {
         $.ajax({
           type: "get",
-          url: "includes/delete_post.php",
-          data: {post_id : JSON.stringify(post_id)},
+          url: "includes/ajax.php",
+          data: {ajax_id : JSON.stringify("timeline_delete_post"),
+          post_id : JSON.stringify(post_id)},
         }).done(function(data){ 
           var data = jQuery.parseJSON(data);
           if (data == "success") {
@@ -399,12 +401,12 @@ $("#post_message").on('click',function() {
   var poster = <?php echo json_encode($_SESSION['student_number']); ?>;
   $.ajax({
     type: "get",
-    url: "includes/post_message.php",
-    data: {json_message : json_post_message,
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("timeline_post_message"),
+      json_message : json_post_message,
       message : JSON.stringify(post_message),
       poster : JSON.stringify(poster),
-      post_class : JSON.stringify(post_class),
-      ajax_id: JSON.stringify("post")},
+      post_class : JSON.stringify(post_class)},
     }).done(function(data){ 
       result = jQuery.parseJSON(data);
       if (result == "success") {
@@ -423,8 +425,9 @@ $("#post_alert").on('click',function() {
   var type = $("#type").val();
   $.ajax({
     type: "get",
-    url: "includes/post_alert.php",
-    data: {title : JSON.stringify(title),
+    url: "includes/ajax.php",
+    data: {ajax_id: JSON.stringify("timeline_post_alert"),
+      title : JSON.stringify(title),
       body : JSON.stringify(body),
       admin : JSON.stringify(admin),
       type : JSON.stringify(type)},
@@ -446,12 +449,12 @@ $("#edit_message").on('click',function() {
   var post_class = $("#class_edit").val();
   $.ajax({
     type: "get",
-    url: "includes/post_message.php",
+    url: "includes/ajax.php",
     data: {json_message : json_post_message,
       message : JSON.stringify(post_message),
       post_class : JSON.stringify(post_class),
       post_id : JSON.stringify(post_id),
-      ajax_id: JSON.stringify("edit")},
+      ajax_id: JSON.stringify("timeline_edit_message")},
     }).done(function(data){ 
       result = jQuery.parseJSON(data);
       if (result == "success") {
