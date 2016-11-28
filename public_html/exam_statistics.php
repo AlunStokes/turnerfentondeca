@@ -62,8 +62,8 @@ while ($row = mysqli_fetch_assoc($results)) {
  <div class="wrapper">
 
   <!-- Header and Left Menu -->
-  <?php if ($_SESSION['admin_boolean']) { include 'includes/admin_menu.php'; }
-  else { include 'includes/member_menu.php'; } ?>
+  <?php if ($_SESSION['admin_boolean']) { include 'components/admin_menu.php'; }
+  else { include 'components/member_menu.php'; } ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -160,7 +160,8 @@ while ($row = mysqli_fetch_assoc($results)) {
 
     $.ajax({
       type: "get",
-      url: "includes/get_exam_stats.php",
+      url: "includes/ajax.php",
+      data: {ajax_id : JSON.stringify("personal_exam_stats")},
     }).done(function(final){ 
       var final = jQuery.parseJSON(final);
       if (final['scores']) {
@@ -254,7 +255,7 @@ while ($row = mysqli_fetch_assoc($results)) {
 
       }
       else {
-        $("#doughnut_chart_area").append("<h1>No exam data yet - <a href='practice_simple.php'>Try an exam now</a></h1>");
+        $("#doughnut_chart_area").append("<h1>No exam data yet - <a href='practice.php'>Try an exam now</a></h1>");
       }
     });
 

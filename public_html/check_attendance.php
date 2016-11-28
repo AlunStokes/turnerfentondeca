@@ -190,8 +190,8 @@ $active_page = 'attendance';
  <div class="wrapper">
 
   <!-- Header and Left Menu -->
-  <?php if ($_SESSION['admin_boolean']) { include 'includes/admin_menu.php'; }
-  else { include 'includes/member_menu.php'; } ?>
+  <?php if ($_SESSION['admin_boolean']) { include 'components/admin_menu.php'; }
+  else { include 'components/member_menu.php'; } ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -277,28 +277,6 @@ $(function () {
 });
 $(document).ready(function() {
   $("#id_dropdown").val(<?php echo json_encode($current_id); ?>);
-  /*
-  $.ajax({
-    type: "get",
-    url: "includes/attendance_ajax.php",
-    data: {ajax_id : JSON.stringify("check_attendance"),
-    id : JSON.stringify(1)},
-  }).done(function(data){ 
-    result = jQuery.parseJSON(data);
-    $('#table_body').html('');
-    for (var i = 0; i < result['count']; i++) {
-      $('#table_body').append(`
-        <tr>
-        <td>`+result['first_name'][i]+`</td>
-        <td>`+result['last_name'][i]+`</td>
-        <td>`+result['student_number'][i]+`</td>
-        <td>`+result['cluster'][i]+`</td>
-        <td>`+result['present'][i]+`</td>
-        </tr>
-        `);
-    }    
-  });
-*/
 });
 
 function change_attendance() {

@@ -51,7 +51,7 @@ session_destroy();
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
-  <?php include "includes/navbar_landing.php"; ?>
+  <?php include "components/navbar_landing.php"; ?>
 
   <!-- Intro Header -->
   <header class="intro" id="home">

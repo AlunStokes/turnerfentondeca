@@ -54,7 +54,7 @@ session_destroy();
 </head>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top" style="background-color: #3C8DBC;">
-  <?php include "includes/navbar_apply.php"; ?>
+  <?php include "components/navbar_apply.php"; ?>
 
 
   <section class="container" style="margin:0px; padding:0px; width:100%; background-color: #3C8DBC">

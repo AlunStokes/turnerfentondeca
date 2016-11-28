@@ -85,7 +85,7 @@
       <li id="home"><a href="home.php"><i class="fa fa-home"></i> <span>Home</span></a></li>
       <!--<li id="calendar"><a href="calendar.php"><i class="fa fa-calendar-minus-o"></i> <span>Calender</span></a></li>-->
       <!--<li id="competition"><a href="competition.php"><i class="fa fa-trophy"></i> <span>Event & Competition</span></a></li>-->
-      <li id="practice"><a href="practice_simple.php"><i class="fa fa-pencil"></i> <span>Practice</span></a></li>
+      <li id="practice"><a href="practice.php"><i class="fa fa-pencil"></i> <span>Practice</span></a></li>
       <li class="attendance" id="attendance">
         <a href="attendance.php"><i class="fa fa-calendar"></i><span>Attendance</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">

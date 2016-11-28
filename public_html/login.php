@@ -36,7 +36,7 @@
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
-    <?php include "includes/navbar_login.php"; ?>
+    <?php include "components/navbar_login.php"; ?>
 
 
     <div id="top-div">

@@ -85,7 +85,7 @@ mysqli_multi_query($dbconfig, $query) or die(mysqli_error($dbconfig));
     <header class="main-header">
 
       <!-- Logo -->
-      <a href="practice_simple.php" class="logo">
+      <a href="practice.php" class="logo">
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><i class="glyphicon glyphicon-chevron-left"></i> Back to Practice</span>
       </a>

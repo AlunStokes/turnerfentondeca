@@ -73,8 +73,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <body class="hold-transition skin-blue sidebar-mini" style="background-color: #222d32;">
   <!-- Header and Left Menu -->
-  <?php if ($_SESSION['admin_boolean']) { include 'includes/admin_menu.php'; }
-  else { include 'includes/member_menu.php'; } ?>
+  <?php if ($_SESSION['admin_boolean']) { include 'components/admin_menu.php'; }
+  else { include 'components/member_menu.php'; } ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

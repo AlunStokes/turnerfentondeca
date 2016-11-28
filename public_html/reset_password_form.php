@@ -111,7 +111,7 @@ if (isset($_POST['set_password'])) {
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
-    <?php include "includes/navbar_register.php"; ?>
+    <?php include "components/navbar_register.php"; ?>
 
 
     <div id="top-div">

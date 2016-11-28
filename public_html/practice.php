@@ -56,8 +56,8 @@ if ($_SESSION['member'] == false) {
   <div class="wrapper">
 
     <!-- Header and Left Menu -->
-    <?php if ($_SESSION['admin_boolean']) { include 'includes/admin_menu.php'; }
-  else { include 'includes/member_menu.php'; } ?>
+    <?php if ($_SESSION['admin_boolean']) { include 'components/admin_menu.php'; }
+  else { include 'components/member_menu.php'; } ?>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -229,8 +229,9 @@ $(document).ready(function() {
     var exam_id = this.id.match(/\d+/)[0];
     $.ajax({
       type: "get",
-      url: "includes/start_exam.php",
-      data: {exam_id : JSON.stringify(exam_id)},
+      url: "includes/ajax.php",
+      data: {ajax_id : JSON.stringify("practice_start_exam"),
+      exam_id : JSON.stringify(exam_id)},
       dataType : "json"
     }).done(function(data){ 
       window.location.assign("exam.php");
@@ -243,8 +244,9 @@ function question_list_ajax() {
   var question_type = document.getElementById('question_dropdown').value;
   $.ajax({
     type: "get",
-    url: "includes/search_questions.php",
-    data: {search : JSON.stringify(search_text),
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("practice_search_questions"),
+      search : JSON.stringify(search_text),
       question_type : JSON.stringify(question_type)},
       dataType : "json"
     }).done(function(data){ 
@@ -281,8 +283,9 @@ function exam_list_ajax() {
   var exam_type = document.getElementById('exam_dropdown').value;
   $.ajax({
     type: "get",
-    url: "includes/search_exams.php",
-    data: {search : JSON.stringify(exam_search_text),
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("practice_search_exams"),
+      search : JSON.stringify(exam_search_text),
       exam_type : JSON.stringify(exam_type)},
       dataType : "json"
     }).done(function(data){ 

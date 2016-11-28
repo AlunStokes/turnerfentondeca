@@ -45,8 +45,8 @@ $active_page = 'attendance';
  <div class="wrapper">
 
   <!-- Header and Left Menu -->
-  <?php if ($_SESSION['admin_boolean']) { include 'includes/admin_menu.php'; }
-  else { include 'includes/member_menu.php'; } ?>
+  <?php if ($_SESSION['admin_boolean']) { include 'components/admin_menu.php'; }
+  else { include 'components/member_menu.php'; } ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -166,8 +166,8 @@ $active_page = 'attendance';
     $("#start_session_button").click(function() {
       $.ajax({
         type: "get",
-        url: "includes/attendance_ajax.php",
-        data: {ajax_id : JSON.stringify("if_open"),
+        url: "includes/ajax.php",
+        data: {ajax_id : JSON.stringify("attendance_check_open"),
         code_word : JSON.stringify(code_word)},
       }).done(function(data){ 
         result = jQuery.parseJSON(data);
@@ -183,8 +183,8 @@ $active_page = 'attendance';
     $("#end_session_button").click(function() {
       $.ajax({
         type: "get",
-        url: "includes/attendance_ajax.php",
-        data: {ajax_id : JSON.stringify("if_open"),
+        url: "includes/ajax.php",
+        data: {ajax_id : JSON.stringify("attendance_check_open"),
         code_word : JSON.stringify(code_word)},
       }).done(function(data){ 
         result = jQuery.parseJSON(data);
@@ -213,8 +213,8 @@ function start_ajax (code_word) {
   }
   $.ajax({
     type: "get",
-    url: "includes/attendance_ajax.php",
-    data: {ajax_id : JSON.stringify("start"),
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("attendance_start"),
     code_word : JSON.stringify(code_word)},
   }).done(function(data) {
     result = jQuery.parseJSON(data);
@@ -231,8 +231,8 @@ function start_ajax (code_word) {
 function end_ajax () {
   $.ajax({
     type: "get",
-    url: "includes/attendance_ajax.php",
-    data: {ajax_id : JSON.stringify("end")},
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("attendance_end")},
   }).done(function(data) {
     result = jQuery.parseJSON(data);
     if (result) {
