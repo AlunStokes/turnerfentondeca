@@ -66,7 +66,7 @@ $page = 'timeline';
       <!-- Main content -->
       <section class="content">
 
-        <?php include "includes/alerts.php"; ?>
+        <?php include "components/alerts.php"; ?>
 
         <ul class="timeline">
 
