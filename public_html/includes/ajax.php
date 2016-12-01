@@ -251,13 +251,12 @@ switch ($ajax_id) {
 	else {
 		$search = "";
 	}
-	$offset = json_decode($_GET['offset']);
 	$question_type = json_decode($_GET['question_type']);
 	if ($question_type == 'mix') {
-		$question_query = "SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id WHERE question LIKE '%".$search."%' OR option_a LIKE '%".$search."%' OR option_b LIKE '%".$search."%' OR option_c LIKE '%".$search."%' OR option_d LIKE '%".$search."%' LIMIT 50 OFFSET $offset";
+		$question_query = "SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id WHERE question LIKE '%".$search."%' OR option_a LIKE '%".$search."%' OR option_b LIKE '%".$search."%' OR option_c LIKE '%".$search."%' OR option_d LIKE '%".$search."%' LIMIT 150";
 	}
 	else {
-		$question_query = "SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id WHERE (question LIKE '%".$search."%' OR option_a LIKE '%".$search."%' OR option_b LIKE '%".$search."%' OR option_c LIKE '%".$search."%' OR option_d LIKE '%".$search."%') AND cluster = '$question_type' LIMIT 50 OFFSET $offset";
+		$question_query = "SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id WHERE (question LIKE '%".$search."%' OR option_a LIKE '%".$search."%' OR option_b LIKE '%".$search."%' OR option_c LIKE '%".$search."%' OR option_d LIKE '%".$search."%') AND cluster = '$question_type' LIMIT 150";
 	}
 	$results = mysqli_query ($dbconfig, $question_query);
 	$data = array();
