@@ -228,3 +228,18 @@ label {
 	border: 0px;
 }
 
+.btn-wide-green {
+	margin-top: 1vh;
+	margin-bottom: 1vh;
+    background-color: #5cb85c;
+    color: #fff;
+    min-width: 100%;
+}
+.btn-wide-green:hover {
+    color: #fff;
+    background-color: #50A050;
+}
+.btn-wide-green:focus {
+    color: #fff;
+    background-color: #50A050;
+}

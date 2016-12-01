@@ -134,8 +134,9 @@ if ($_SESSION['member'] == false) {
 
         <br>
         <br>
-        <div class-"row" id="question_area">
+        <div class="row" id="question_area">
         </div>
+        <button class="btn btn-wide-green" id="load_more_questions">Load More  Questions</button>
       </div>
 
 
@@ -144,7 +145,7 @@ if ($_SESSION['member'] == false) {
       <div class="container-fluid">
         <div class="row" id="num_questions" style="align:center; text-align:center;">
         </div>
-        <div class-"row" id="review_area">
+        <div id="review_area">
         </div>
       </div>
 
@@ -178,6 +179,7 @@ if ($_SESSION['member'] == false) {
   num_questions['finance'] = 0;
   num_questions['businessadmin'] = 0;
   num_questions['hospitality'] = 0;
+  num_questions['total'] = 0;
   var selected = new Array();
   selected['question_id'] = new Array();
   selected['question'] = new Array();
@@ -237,6 +239,10 @@ $('#question_contains').keyup(function() {
 $('#dropdown').on('change', function() {
   ajax_call();
 });
+$('#load_more_questions').on('click', function() {
+  ajax_call();
+});
+
 $(document).on("click", ".btn-add-question", function() {
   var current_id = this.id.match(/\d+/)[0];
   console.log(current_id);
@@ -261,6 +267,7 @@ $(document).on("click", ".btn-add-question", function() {
   else {
     throw new Error("Question " + current_id + " didn't affect cluster count - Given cluster: " + results['cluster'][current_index] + " - " + results['question'][current_index]);
   }
+  num_questions['total']++;
   update();
 });
 $(document).on("click", ".btn-remove-question", function() {
@@ -299,6 +306,7 @@ function ajax_call() {
     url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("create_exam_search_question"),
       search : JSON.stringify(search_text),
+      offset : JSON.stringify(num_questions['total']),
       question_type : JSON.stringify(question_type)},
       dataType : "json"
     }).done(function(data){ 
@@ -333,6 +341,7 @@ function ajax_call() {
               <p>B: ` + results['option_b'][i] + `</p>
               <p>C: ` + results['option_c'][i] + `</p>
               <p>D: ` + results['option_d'][i] + `</p>
+              <i><p>Answer: ` + results['answers'][i] + `</p></i>
               <br>
               </div>
               <div class="col-md-2" style="padding-top:7vh; padding-left:2vw;">
