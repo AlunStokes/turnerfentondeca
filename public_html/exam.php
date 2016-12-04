@@ -88,23 +88,23 @@ include ('includes/session.php');
 
     <script type="text/javascript">
 
-   var submitted = false;
-   var chosen;
-   var data;
+    var submitted = false;
+    var chosen;
+    var data;
 
-   $(document).ready(function(){
+    $(document).ready(function(){
 
-    var exam_id = <?php if (isset($_POST['exam_id'])) { echo json_encode(intval($_POST['exam_id'])); } else { echo "null"; } ?>;
-    if (exam_id == null) {
-    window.location.assign("practice.php");
-    }
-    if (exam_id == 0) {
-      var exam_cluster = <?php if (isset($_POST['exam_cluster'])) { echo json_encode($_POST['exam_cluster']); } else { echo "null"; } ?>;
-    }
-    if (exam_cluster == "null") {
-      exam_cluster = null;
-    }
-    var admin = <?php echo $_SESSION['admin']; ?>;
+      var exam_id = <?php if (isset($_POST['exam_id'])) { echo json_encode(intval($_POST['exam_id'])); } else { echo "null"; } ?>;
+      if (exam_id == null) {
+        window.location.assign("practice.php");
+      }
+      if (exam_id == 0) {
+        var exam_cluster = <?php if (isset($_POST['exam_cluster'])) { echo json_encode($_POST['exam_cluster']); } else { echo "null"; } ?>;
+      }
+      if (exam_cluster == "null") {
+        exam_cluster = null;
+      }
+      var admin = <?php echo $_SESSION['admin']; ?>;
 
 //Load questions
 $.ajax({
@@ -116,11 +116,15 @@ $.ajax({
 }).done(function(data){ 
   data = jQuery.parseJSON(data);
   $("#timer_container").append(`<div class="timer" style="text-align:center; color:#333; font-size:40px;"data-seconds-left=`+data['time']+`></div>`);
-  $('.timer').startTimer({
-    onComplete: function() {
-      submit_exam();
+  if (data['unlocked'] == 1) {
+    if (admin == 0 || exam_id == 0) {
+      $('.timer').startTimer({
+        onComplete: function() {
+          submit_exam();
+        }
+      });
     }
-  });
+  }
   if (data['unlocked'] == 0 && admin == 0) {
     window.location.assign("practice.php");
   }
@@ -137,10 +141,11 @@ $.ajax({
 
 //Display Quesitons
 function writeQuestions(item,index) {
-  $('.container-fluid-body').append(`<div class="row">
+  $('.container-fluid-body').append(`
+    <div class="row">
 
 
-    <div class="col-md-5 question_box">
+    <div class="col-md-5 question_box_` + (item) + `">
     <h1 class="question_number">`+(counter+1)+`.</h1>
     <p class="question">` + data['question'][item] + `</p>
     </div>
@@ -175,7 +180,14 @@ function writeQuestions(item,index) {
 
 
     </div>
-    <hr width="70%"></hr>`);
+    <hr width="70%"></hr>
+    `);
+
+  if (admin == 1 && exam_id != 0) {
+  $('.question_box_' + (item)).append(`
+    <i><p>Answer: `+data['answer'][item]+`</p></i>
+    `);
+  }
 counter++;
 }
 
