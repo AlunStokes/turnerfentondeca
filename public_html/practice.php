@@ -33,8 +33,10 @@ $active_page = 'practice';
   <script src="js/jquery-2.2.3.min.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
-  <!-- AdminLTE App -->
+  <!-- admin App -->
   <script src="js/admin.min.js"></script>
+  <!-- redirect js -->
+  <script src="js/jquery.redirect.js"></script>
 
 </head>
 
@@ -201,11 +203,11 @@ $(document).ready(function() {
   });
   $(document).on("click", ".btn-choose-exam", function() {
     var exam_id = this.id.match(/\d+/)[0];
-      window.location.assign("exam.php?exam_id="+exam_id);
+      $.redirect("exam.php", {"exam_id" : exam_id}, "POST");
   });
   $(document).on("click", ".btn-begin-exam", function() {
-    var cluster = $(".random_exam_cluster_dropdown").text();
-    window.location.assign("exam.php?exam_cluster="+cluster+"&exam_id="+0);
+    var exam_cluster = $("#random_exam_cluster_dropdown").val();
+    $.redirect("exam.php", {"exam_cluster" : exam_cluster, "exam_id" : 0}, "POST");
   });
 });
 

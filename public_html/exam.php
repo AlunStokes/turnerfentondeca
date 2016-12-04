@@ -86,25 +86,20 @@ include ('includes/session.php');
 
     <script type="text/javascript">
 
-    $.urlParam = function(name){
-      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-      if (results==null){
-       return null;
-     }
-     else{
-       return results[1] || 0;
-     }
-   }
-
    var submitted = false;
    var chosen;
    var data;
 
    $(document).ready(function(){
-    var exam_id = $.urlParam("exam_id");
+
+    var exam_id = <?php echo json_encode(intval($_POST['exam_id'])); ?>;
     if (exam_id == 0) {
-      var exam_cluster = $.urlParam("exam_cluster");
+      var exam_cluster = <?php if (isset($_POST['exam_cluster'])) { echo json_encode($_POST['exam_cluster']); } else { echo "a"; } ?>;
     }
+    if (exam_cluster == "a") {
+      exam_cluster = null;
+    }
+
 //Load questions
 $.ajax({
   type: "post",
