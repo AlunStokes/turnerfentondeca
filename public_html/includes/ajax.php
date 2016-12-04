@@ -142,7 +142,6 @@ switch ($ajax_id) {
 			$final['hospitality_percent'] = round($percents['hospitality']/$percents['total']*100, 2, PHP_ROUND_HALF_UP);
 			$final['scores'] = true;
 
-
 			$all_scores = array();
 			$all_scores['total'] = 0;
 			$all_scores['sept16'] = array();
@@ -154,20 +153,11 @@ switch ($ajax_id) {
 			$all_scores['mar17'] = array();
 			$all_scores['apr17'] = array();
 			$all_scores['may17'] = array();
-			$final['exams'] = array();
-			$final['exams']['percentage'] = array();
-			$final['exams']['date'] = array();
-			$final['exams']['score'] = array();
-			$final['exams']['total'] = array();
-			$exam_score_query = "SELECT percentage, DATE_FORMAT(DATE, '%M %Y') AS date, DATE_FORMAT(DATE, '%D %M %Y') AS full_date, score, total FROM exam_results WHERE student_number = ".$_SESSION['student_number']." ORDER BY percentage DESC;";
+			$exam_score_query = "SELECT percentage, DATE_FORMAT(DATE, '%M %Y') AS date, DATE_FORMAT(DATE, '%D %M %Y') AS full_date, score, total FROM exam_results JOIN created_exams ON created_exams.exam_id = exam_results.exam_id WHERE student_number = ".$_SESSION['student_number']." AND include_stats = 1 ORDER BY percentage DESC;";
 			$results = mysqli_query($dbconfig, $exam_score_query);
 			$final['best_score'] = mysqli_fetch_assoc($results)['percentage'];
 			mysqli_data_seek($results, 0);
 			while ($row = mysqli_fetch_assoc($results)) {
-				array_push($final['exams']['percentage'], $row['percentage']);
-				array_push($final['exams']['date'], $row['full_date']);
-				array_push($final['exams']['score'], $row['score']);
-				array_push($final['exams']['total'], $row['total']);
 				switch($row['date']) {
 					case "September 2016":
 					array_push($all_scores['sept16'], $row['percentage']);
@@ -234,7 +224,7 @@ switch ($ajax_id) {
 		echo json_encode("failed");
 		exit();
 	}
-	$query_insert_name = "INSERT INTO created_exams (exam_name, num_questions, exam_type, unlocked, show_score) VALUES ('$name', $length, '$type', $unlocked, $show_score)";
+	$query_insert_name = "INSERT INTO created_exams (exam_name, num_questions, exam_type, unlocked, show_score, include_stats) VALUES ('$name', $length, '$type', $unlocked, $show_score, $show_score)";
 	mysqli_query($dbconfig, $query_insert_name) or die (mysqli_error($dbconfig));
 	$key = mysqli_fetch_array(mysqli_query($dbconfig, "SELECT exam_id FROM created_exams WHERE exam_name = '$name'"), MYSQLI_ASSOC)['exam_id'];
 	$query_insert_quesitons = "";
@@ -508,7 +498,6 @@ switch ($ajax_id) {
 	else {
 		$search = "";
 	}
-
 	$exam_query = "SELECT exam_id, exam_name, num_questions, exam_type, unlocked, show_score FROM created_exams WHERE exam_name LIKE '%".$search."%' ";
 
 	if($_SESSION['admin_boolean']) {
@@ -517,8 +506,11 @@ switch ($ajax_id) {
 	else if ($_SESSION['class'] == 'writtens') {
 		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = 'marketing' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
+	else if (strpos($_SESSION['class'], "principles")) {
+		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = 'principles' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
+	}
 	else {
-		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = '".$_SESSION['cluster']."' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
+		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = '".$_SESSION['class']."' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	$results = mysqli_query ($dbconfig, $exam_query);
 	$data = array();
@@ -814,5 +806,10 @@ switch ($ajax_id) {
 }
 
 exit();
+
+function contains($needle, $haystack)
+{
+    return strpos($haystack, $needle) !== false;
+}
 
 ?>

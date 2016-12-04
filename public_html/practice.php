@@ -254,12 +254,11 @@ function exam_list_ajax() {
     type: "get",
     url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("practice_search_exams"),
-    search : JSON.stringify(exam_search_text)},
-    dataType : "json"
+    search : JSON.stringify(exam_search_text)}
   }).done(function(data){ 
-    var results = jQuery.parseJSON(JSON.stringify(data));
+    var results = jQuery.parseJSON(data);
     $('#exam_area').html('');
-    if (typeof results['exam_name'][0] == 'undefined') {
+    if (typeof results["exam_name"][0] == 'undefined') {
       $('#exam_area').append(`
         <h3>Search found 0 Results</h3>
         `);

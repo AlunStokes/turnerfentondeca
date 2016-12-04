@@ -157,20 +157,21 @@ if ($_SESSION['member'] == false) {
               <option value="businessadmin">Business Administration</option>
               <option value="finance">Finance</option>
               <option value="hospitality">Hospitality & Tourism</option>
+              <option value="principles">Principles</option>
             </select>
         </div>
 
         <h1>4. Do you want this exam to be unlocked?</h1>
         <div class="row" id="num_questions" style="align:center; text-align:center;">
-          <select id="dropdown_unlocked">
+          <select id="dropdown_unlocked" class="dropdown_large">
               <option value="1">Yes</option>
               <option value="0">No</option>
             </select>
         </div>
 
-        <h1>4. Do you want this exam to scow a score when finished?</h1>
+        <h1>5. Do you want this exam to show a score when finished?</h1>
         <div class="row" id="num_questions" style="align:center; text-align:center;">
-          <select id="dropdown_show_score">
+          <select id="dropdown_show_score" class="dropdown_large">
               <option value="1">Yes</option>
               <option value="0">No</option>
             </select>

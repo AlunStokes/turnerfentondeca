@@ -241,7 +241,6 @@ function submit_exam() {
   $('#submit_button').disabled = true;
   $("input:radio").attr('disabled', 'disabled');
   submitted = true;
-  alert(data['include_stats']);
   $.ajax({
     type: "post",
     url: "includes/ajax.php",
