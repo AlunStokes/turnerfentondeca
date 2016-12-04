@@ -28,7 +28,8 @@
     <link href="css/navbar.css" rel="stylesheet">
 
     <!--JavaScript Files-->
-
+    <!-- jQuery 2.2.3 -->
+  <script src="js/jquery-2.2.3.min.js"></script>
     <!-- Plugin JavaScript -->
     <script src="js/jquery.easing.min.js"></script>
     <!-- Custom Theme JavaScript -->
