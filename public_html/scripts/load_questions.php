@@ -4,6 +4,10 @@ include("../../includes/config.php");
 
 $cluster = json_decode($_GET['cluster']);
 $num = json_decode($_GET['num']);
+$name = json_decode($_GET['name']);
+$type = json_decode($_GET['type']);
+$unlocked = json_decode($_GET['unlocked']);
+$show_score = json_decode($_GET['show_score']);
 
 if ($cluster == 'mix') {
 	$question_query = "SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id ORDER BY RAND() LIMIT $num";
@@ -32,6 +36,16 @@ while ($row = mysqli_fetch_assoc($results)) {
 	array_push($data['answers'], $row['answer']);
 	array_push($data['cluster'], $row['cluster']);
 }
+
+$query_insert_name = "INSERT INTO created_exams (exam_name, num_questions, exam_type, unlocked, show_score, include_stats) VALUES ('$name', $num, '$type', $unlocked, $show_score, $show_score)";
+	mysqli_query($dbconfig, $query_insert_name) or die (mysqli_error($dbconfig));
+	$key = mysqli_fetch_array(mysqli_query($dbconfig, "SELECT exam_id FROM created_exams WHERE exam_name = '$name'"), MYSQLI_ASSOC)['exam_id'];
+	$query_insert_quesitons = "";
+	foreach ($data['question_id'] as $row) {
+		$query_insert_quesitons .= "INSERT INTO created_exams_questions (exam_id, question_id) VALUES ('$key', '$row');";
+	}
+	if (mysqli_multi_query($dbconfig, $query_insert_quesitons)) {
+	}
 
 ?>
 

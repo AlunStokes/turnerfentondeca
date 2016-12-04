@@ -504,7 +504,7 @@ switch ($ajax_id) {
 		$exam_query .= "LIMIT 75";
 	}
 	else if ($_SESSION['class'] == 'writtens') {
-		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = 'marketing' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
+		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = 'writtens' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	else if (strpos($_SESSION['class'], "principles")) {
 		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = 'principles' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
@@ -537,6 +537,9 @@ switch ($ajax_id) {
 		}
 		else if ($row['exam_type'] == 'hospitality') {
 			array_push($data['exam_type'], 'Hospitality');
+		}
+		else if (strpos($row['exam_type'], "principles")) {
+			array_push($data['exam_type'], 'Principles');
 		}
 		else {
 			array_push($data['exam_type'], 'Mixed Clusters');

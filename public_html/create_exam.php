@@ -158,6 +158,7 @@ if ($_SESSION['member'] == false) {
               <option value="finance">Finance</option>
               <option value="hospitality">Hospitality & Tourism</option>
               <option value="principles">Principles</option>
+              <option value="writtens">Writtens</option>
             </select>
         </div>
 
