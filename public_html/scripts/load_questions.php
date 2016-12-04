@@ -51,7 +51,7 @@ $query_insert_name = "INSERT INTO created_exams (exam_name, num_questions, exam_
 
 <!DOCTYPE html>
 <html>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
 	<div class="wrapper">
 
 		<?php

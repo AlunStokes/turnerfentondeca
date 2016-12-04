@@ -76,7 +76,7 @@ mysqli_multi_query($dbconfig, $query) or die(mysqli_error($dbconfig));
 </head>
 
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
   <div class="wrapper">
 
 

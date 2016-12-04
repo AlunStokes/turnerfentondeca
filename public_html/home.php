@@ -71,7 +71,7 @@ if(mysqli_num_rows($reminder_query) > 0 ){
 </head>
 
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
   <div class="wrapper">
 
     <!-- Header and Left Menu -->

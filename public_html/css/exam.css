@@ -168,3 +168,7 @@ label {
 .modal-body p {
 	font-size: 26px
 }
+
+.navbar-top-buffer {
+	min-height: 50px;
+}

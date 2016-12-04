@@ -45,7 +45,7 @@ include ('includes/session.php');
 </head>
 
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
   <div class="wrapper">
 
 
@@ -70,6 +70,7 @@ include ('includes/session.php');
 
 
     <section class="container-fluid-body">
+      <div class="navbar-top-buffer"></div>
       <div id="timer_container">
       </div>
     </section>
