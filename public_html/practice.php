@@ -203,10 +203,6 @@ $(document).ready(function() {
   $('#exam_name_contains').keyup(function() {
     exam_list_ajax();
   });
-  $(document).on("click", ".btn-choose-exam", function() {
-    var exam_id = this.id.match(/\d+/)[0];
-      $.redirect("exam.php", {"exam_id" : exam_id}, "POST");
-  });
   $(document).on("click", ".btn-begin-exam", function() {
     var exam_cluster = $("#random_exam_cluster_dropdown").val();
     $.redirect("exam.php", {"exam_cluster" : exam_cluster, "exam_id" : 0}, "POST");
@@ -350,6 +346,7 @@ function exam_list_ajax() {
               </div>
               `);
           }
+          if (results['done'][i] == 0) {
           $('#exam_area').append(`
             <div class="col-md-2 col">
             <button class="btn btn-choose-exam" id="start_exam_` + results['exam_id'][i] + `"> Start Exam </button>
@@ -358,8 +355,22 @@ function exam_list_ajax() {
             <hr width="60%"></hr>
             `);
         }
+        else {
+          $('#exam_area').append(`
+            <div class="col-md-2 col">
+            <button class="btn btn-choose-exam" id="start_exam_` + results['exam_id'][i] + `" disabled> Start Exam </button>
+            </div>
+            </div>
+            <hr width="60%"></hr>
+            `);
+        }
+        }
       }
     }
+  $(document).on("click", ".btn-choose-exam", function() {
+    var exam_id = this.id.match(/\d+/)[0];
+      $.redirect("exam.php", {"exam_id" : exam_id, "done" : results['done'][results['exam_id'].indexOf(exam_id)]}, "POST");
+  });
   });
 }
 
