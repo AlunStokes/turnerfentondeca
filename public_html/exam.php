@@ -114,7 +114,6 @@ $.ajax({
   exam_id : JSON.stringify(exam_id)},
 }).done(function(data){ 
   data = jQuery.parseJSON(data);
-  data['time']=20;
   $("#timer_container").append(`<div class="timer" style="text-align:center; color:#333; font-size:40px;"data-seconds-left=`+data['time']+`></div>`);
   $('.timer').startTimer({
     onComplete: function() {
@@ -242,6 +241,7 @@ function submit_exam() {
   $('#submit_button').disabled = true;
   $("input:radio").attr('disabled', 'disabled');
   submitted = true;
+  alert(data['include_stats']);
   $.ajax({
     type: "post",
     url: "includes/ajax.php",
@@ -249,7 +249,8 @@ function submit_exam() {
     chosen : JSON.stringify(chosen),
     exam_id : JSON.stringify(exam_id),
     num_questions : JSON.stringify(data['num_questions']),
-    question_id : JSON.stringify(data['question_id'])},
+    question_id : JSON.stringify(data['question_id']),
+    include_stats : JSON.stringify(data['include_stats'])},
   }).done(function(data_submit){ 
     $("html, body").animate({ scrollTop: 0 }, "slow");
     alert("Your exam has been submitted.  You may leave the page.");
