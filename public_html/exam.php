@@ -45,7 +45,7 @@ include ('includes/session.php');
 </head>
 
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
   <div class="wrapper">
 
 
@@ -70,6 +70,7 @@ include ('includes/session.php');
 
 
     <section class="container-fluid-body">
+      <div class="navbar-top-buffer"></div>
       <div id="timer_container">
       </div>
     </section>
@@ -96,6 +97,12 @@ include ('includes/session.php');
 
     $(document).ready(function(){
 
+
+      var admin = <?php echo $_SESSION['admin']; ?>;
+      var done = <?php if (isset($_POST['done'])) { echo json_encode(intval($_POST['done'])); } else { echo "null"; } ?>;
+      if (done == 1 && admin == 0) {
+        window.location.assign("practice.php");
+      }
       var exam_id = <?php if (isset($_POST['exam_id'])) { echo json_encode(intval($_POST['exam_id'])); } else { echo "null"; } ?>;
       if (exam_id == null) {
         window.location.assign("practice.php");
@@ -106,7 +113,6 @@ include ('includes/session.php');
       if (exam_cluster == "null") {
         exam_cluster = null;
       }
-      var admin = <?php echo $_SESSION['admin']; ?>;
 
 //Load questions
 $.ajax({

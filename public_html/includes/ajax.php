@@ -498,19 +498,19 @@ switch ($ajax_id) {
 	else {
 		$search = "";
 	}
-	$exam_query = "SELECT exam_id, exam_name, num_questions, exam_type, unlocked, show_score FROM created_exams WHERE exam_name LIKE '%".$search."%' ";
+	$exam_query = "SELECT exam_id, exam_name, num_questions, exam_type, unlocked, show_score, EXISTS(SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) as done FROM created_exams WHERE exam_name LIKE '%".$search."%' ";
 
 	if($_SESSION['admin_boolean']) {
 		$exam_query .= "LIMIT 75";
 	}
 	else if ($_SESSION['class'] == 'writtens') {
-		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = 'writtens' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
+		$exam_query .= "AND (exam_type = 'writtens' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	else if (strpos($_SESSION['class'], "principles")) {
-		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = 'principles' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
+		$exam_query .= "AND (exam_type = 'principles' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	else {
-		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = '".$_SESSION['class']."' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
+		$exam_query .= "AND (exam_type = '".$_SESSION['class']."' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	$results = mysqli_query ($dbconfig, $exam_query);
 	$data = array();
@@ -520,12 +520,14 @@ switch ($ajax_id) {
 	$data['exam_type'] = array();
 	$data['unlocked'] = array();
 	$data['show_score'] = array();
+	$data['done'] = array();
 	while ($row = mysqli_fetch_assoc($results)) {
 		array_push($data['exam_id'], $row['exam_id']);
 		array_push($data['exam_name'], $row['exam_name']);
 		array_push($data['num_questions'], $row['num_questions']);
 		array_push($data['show_score'], $row['show_score']);
 		array_push($data['unlocked'], $row['unlocked']);
+		array_push($data['done'], $row['done']);
 		if ($row['exam_type'] == 'marketing') {
 			array_push($data['exam_type'], 'Marketing');
 		}
