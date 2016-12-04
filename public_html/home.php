@@ -43,6 +43,8 @@ if(mysqli_num_rows($reminder_query) > 0 ){
   <title>TFSS DECA | Home</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/favicon.png`" />
   <!--Open Sans Font -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <!-- Bootstrap 3.3.6 -->

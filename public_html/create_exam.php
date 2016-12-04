@@ -17,6 +17,8 @@ if ($_SESSION['member'] == false) {
   <title>TFSS DECA | Practice</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/favicon.png`" />
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <!-- jQuery UI CSS -->

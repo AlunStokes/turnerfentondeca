@@ -15,6 +15,8 @@ $page = 'timeline';
   <title>TFSS DECA | Timeline</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/favicon.png`" />
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -29,8 +31,6 @@ $page = 'timeline';
   <!-- Include Quill stylesheet -->
   <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
   <link href="https://cdn.quilljs.com/1.0.0/quill.bubble.css" rel="stylesheet">
-  <!-- Favicon -->
-  <link rel="shortcut icon" href="img/favicon.png`" />
 
 
   <!-- jQuery 2.2.3 -->
