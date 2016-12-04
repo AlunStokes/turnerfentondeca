@@ -334,7 +334,22 @@ function exam_list_ajax() {
             <p style="margin-bottom:0px;">` + results['exam_type'][i] + `</p>
             <p style="margin-bottom:0px;">` + results['num_questions'][i] + ` Questions</p>
             </div>
-            <div class="col-md-2 col-md-offset-2">
+            `);
+          if (results['show_score'][i] == 0) {
+            $('#exam_area').append(`
+              <div class="col-md-2">
+              <i><p>Score will not be shown</p></i>
+              </div>
+              `);
+          } 
+          else {
+            $('#exam_area').append(`
+              <div class="col-md-2">
+              </div>
+              `);
+          }
+          $('#exam_area').append(`
+            <div class="col-md-2 col">
             <button class="btn btn-choose-exam" id="start_exam_` + results['exam_id'][i] + `"> Start Exam </button>
             </div>
             </div>

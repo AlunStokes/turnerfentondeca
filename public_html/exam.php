@@ -1,5 +1,7 @@
 <?php
 
+ini_set("display_errors", 0);
+
 include ('../includes/config.php');
 include ('includes/session.php');
 
@@ -92,13 +94,17 @@ include ('includes/session.php');
 
    $(document).ready(function(){
 
-    var exam_id = <?php echo json_encode(intval($_POST['exam_id'])); ?>;
-    if (exam_id == 0) {
-      var exam_cluster = <?php if (isset($_POST['exam_cluster'])) { echo json_encode($_POST['exam_cluster']); } else { echo "a"; } ?>;
+    var exam_id = <?php if (isset($_POST['exam_id'])) { echo json_encode(intval($_POST['exam_id'])); } else { echo "null"; } ?>;
+    if (exam_id == null) {
+    window.location.assign("practice.php");
     }
-    if (exam_cluster == "a") {
+    if (exam_id == 0) {
+      var exam_cluster = <?php if (isset($_POST['exam_cluster'])) { echo json_encode($_POST['exam_cluster']); } else { echo "null"; } ?>;
+    }
+    if (exam_cluster == "null") {
       exam_cluster = null;
     }
+    var admin = <?php echo $_SESSION['admin']; ?>;
 
 //Load questions
 $.ajax({
@@ -115,7 +121,7 @@ $.ajax({
       submit_exam();
     }
   });
-  if (data['unlocked'] == 0) {
+  if (data['unlocked'] == 0 && admin == 0) {
     window.location.assign("practice.php");
   }
   chosen = new Array(data['num_questions']);

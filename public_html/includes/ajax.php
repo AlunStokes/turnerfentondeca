@@ -153,7 +153,7 @@ switch ($ajax_id) {
 			$all_scores['mar17'] = array();
 			$all_scores['apr17'] = array();
 			$all_scores['may17'] = array();
-			$exam_score_query = "SELECT percentage, DATE_FORMAT(DATE, '%M %Y') AS date, DATE_FORMAT(DATE, '%D %M %Y') AS full_date, score, total FROM exam_results JOIN created_exams ON created_exams.exam_id = exam_results.exam_id WHERE student_number = ".$_SESSION['student_number']." AND include_stats = 1 ORDER BY percentage DESC;";
+			$exam_score_query = "SELECT percentage, DATE_FORMAT(DATE, '%M %Y') AS date, DATE_FORMAT(DATE, '%D %M %Y') AS full_date, score, total FROM exam_results LEFT JOIN created_exams ON created_exams.exam_id = exam_results.exam_id WHERE student_number = ".$_SESSION['student_number']." AND (include_stats = 1 OR exam_results.exam_id = 0) ORDER BY percentage DESC;";
 			$results = mysqli_query($dbconfig, $exam_score_query);
 			$final['best_score'] = mysqli_fetch_assoc($results)['percentage'];
 			mysqli_data_seek($results, 0);
