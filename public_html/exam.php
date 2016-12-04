@@ -2,55 +2,6 @@
 
 include ('../includes/config.php');
 include ('includes/session.php');
-include ('includes/functions.php');
-
-if (isset($_SESSION['exam_id'])) {
- $id_query = 'SELECT created_exams_questions.question_id, question, option_a, option_b, option_c, option_d, answer FROM created_exams_questions LEFT JOIN questions ON questions.question_id = created_exams_questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_options ON questions_options.question_id = created_exams_questions.question_id WHERE exam_id = '.$_SESSION["exam_id"].' ORDER BY RAND()';
- $num_questions_query = 'SELECT num_questions FROM created_exams WHERE exam_id = '.$_SESSION['exam_id'].'';
- $num_questions_result = mysqli_query($dbconfig, $num_questions_query);
- $row = mysqli_fetch_assoc($num_questions_result);
- $_SESSION['num_questions'] = $row['num_questions'];
-}
-else if ($_SESSION['exam_cluster'] == 'mix') {
-  $id_query = 'SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id  ORDER BY RAND() LIMIT '.$_SESSION["num_questions"].'';
-}
-else if (isset($_SESSION['exam_cluster'])) {
-  $id_query = 'SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id WHERE cluster = "'.$_SESSION["exam_cluster"].'" ORDER BY RAND() LIMIT '.$_SESSION['num_questions'].'';
-}
-else {
-  header("Location: practice.php");
-}
-
-$time = floor($_SESSION['num_questions'] / 0.0222222222222222);
-
-unset($_SESSION['exam_cluster']);
-$_SESSION['questions_id'] = array();
-$_SESSION['questions'] = array();
-$_SESSION['option_a'] = array();
-$_SESSION['option_b'] = array();
-$_SESSION['option_c'] = array();
-$_SESSION['option_d'] = array();
-$_SESSION['answer'] = array();
-
-$id_result = mysqli_query($dbconfig, $id_query) or die (mysqli_error($dbconfig));
-
-while ($row = mysqli_fetch_assoc($id_result)) {
-  array_push($_SESSION['questions_id'], $row['question_id']);
-  $_SESSION['questions'][$row['question_id']] = $row['question'];
-  $_SESSION['option_a'][$row['question_id']] = $row['option_a'];
-  $_SESSION['option_b'][$row['question_id']] = $row['option_b'];
-  $_SESSION['option_c'][$row['question_id']] = $row['option_c'];
-  $_SESSION['option_d'][$row['question_id']] = $row['option_d'];
-  $_SESSION['answer'][$row['question_id']] = $row['answer'];
-}
-//sort($_SESSION['exam_questions_id']);
-
-if ($_SESSION['member'] == false) {
-  header("Location:applicant_home.php");
-}
-
-//print_r($_SESSION['answer']);
-
 
 ?>
 
@@ -115,9 +66,8 @@ if ($_SESSION['member'] == false) {
 
 
     <section class="container-fluid-body">
-
-      <div class="timer" style="text-align:center; color:#333; font-size:40px;"data-seconds-left=<?php echo $time; ?>></div>
-
+      <div id="timer_container">
+      </div>
     </section>
 
     <section class="container-fluid-submit">
@@ -136,100 +86,81 @@ if ($_SESSION['member'] == false) {
 
     <script type="text/javascript">
 
-    var submitted = false;
+    $.urlParam = function(name){
+      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+      if (results==null){
+       return null;
+     }
+     else{
+       return results[1] || 0;
+     }
+   }
 
-    var student_number = <?php echo json_encode($_SESSION['student_number']); ?>;
+   var submitted = false;
+   var chosen;
+   var data;
 
-    var num_questions = <?php echo json_encode($_SESSION['num_questions']); ?>;
-
-    var question_id = <?php echo json_encode($_SESSION['questions_id']); ?>;
-    var questions = <?php echo json_encode($_SESSION['questions']); ?>;
-    var option_a = <?php echo json_encode($_SESSION['option_a']); ?>;
-    var option_b = <?php echo json_encode($_SESSION['option_b']); ?>;
-    var option_c = <?php echo json_encode($_SESSION['option_c']); ?>;
-    var option_d = <?php echo json_encode($_SESSION['option_d']); ?>;
-    if (student_number == 498566) {
-      var answer = <?php echo json_encode($_SESSION['answer']); ?>;
+   $(document).ready(function(){
+    var exam_id = $.urlParam("exam_id");
+    if (exam_id == 0) {
+      var exam_cluster = $.urlParam("exam_cluster");
     }
-    var chosen = new Array(num_questions);
+//Load questions
+$.ajax({
+  type: "post",
+  url: "includes/ajax.php",
+  data: {ajax_id : JSON.stringify("exam_get_questions"),
+  exam_cluster : JSON.stringify(exam_cluster),
+  exam_id : JSON.stringify(exam_id)},
+}).done(function(data){ 
+  data = jQuery.parseJSON(data);
+  data['time']=20;
+  $("#timer_container").append(`<div class="timer" style="text-align:center; color:#333; font-size:40px;"data-seconds-left=`+data['time']+`></div>`);
+  $('.timer').startTimer({
+    onComplete: function() {
+      submit_exam();
+    }
+  });
+  if (data['unlocked'] == 0) {
+    window.location.assign("practice.php");
+  }
+  chosen = new Array(data['num_questions']);
+  $('.container-fluid-body').append(`
+    <h1 style="text-align:center">Exam - ` + data['num_questions'] + ` Questions</h1>
+    <h1 id="score" style="text-align:center;"></h1>
+    <hr width="100%" height="2px">
+    `);
+  var counter = 0;
+  data['question_id'].forEach(writeQuestions);
 
-    $(document).ready(function(){
 
-      $('.container-fluid-body').append(`<h1 style="text-align:center">Exam - ` + num_questions + ` Questions</h1>
-        <h1 id="score" style="text-align:center;"></h1>
-        <hr width="100%" height="2px">`);
-      var counter = 0;
-      question_id.forEach(writeQuestions);
 
 //Display Quesitons
 function writeQuestions(item,index) {
-  if (student_number == 498566) {
-    $('.container-fluid-body').append(`<div class="row">
-
-
-      <div class="col-md-5 question_box">
-      <h1 class="question_number"><abbr title="`+answer[item]+`" style="border-bottom: 0px;">`+(counter+1)+`.</abbr></h1>
-      <p class="question">` + questions[item] + `</p>
-      </div>
-
-
-      <div class="col-md-5 options_box">
-      <label>
-      <input type="radio" value="A" id="radiobutton_` + (item) + `_A" name="radiobutton_` + (item) + `"><p class="option">A: ` + option_a[item] + `</p><br>
-      </label>
-      <br>
-      <label>
-      <input type="radio" value="B" id="radiobutton_` + (item) + `_B" name="radiobutton_` + (item) + `"><p class="option">B: ` + option_b[item] + `</p><br>
-      </label>
-      <br>
-      <label>
-      <input type="radio" value="C" id="radiobutton_` + (item) + `_C" name="radiobutton_` + (item) + `"><p class="option">C: ` + option_c[item] + `</p><br>
-      </label>
-      <br>
-      <label>
-      <input type="radio" value="D" id="radiobutton_` + (item) + `_D" name="radiobutton_` + (item) + `"><p class="option">D: ` + option_d[item] + `</p><br>
-      </label>
-      <br>
-      </div>
-
-
-      <div class="col-md-2">
-      <p id="answer_text_` + (item) + `" style="margin-bottom:0px; margin-top: 15px"></p>
-      <h1 id="answer_` + (item) + `" style="margin-top:2px; margin-bottom:4vh; color:#d9534f;">-</h1>
-      <p id="correct_answer_text_` + (item) + `" style="margin-bottom:0px;"></p>
-      <h1 id="correct_answer_` + (item) + `" style="margin-top:2px;"></h1>
-      </div>
-
-
-      </div>
-      <hr width="70%"></hr>`);
-counter++;
-}
-else {
   $('.container-fluid-body').append(`<div class="row">
 
 
     <div class="col-md-5 question_box">
     <h1 class="question_number">`+(counter+1)+`.</h1>
-    <p class="question">` + questions[item] + `</p>
+    <p class="question">` + data['question'][item] + `</p>
     </div>
 
 
     <div class="col-md-5 options_box">
     <label>
-    <input type="radio" value="A" id="radiobutton_` + (item) + `_A" name="radiobutton_` + (item) + `"><p class="option">A: ` + option_a[item] + `</p><br>
+    <input type="radio" value="A" id="radiobutton_` + (item) + `_A" name="radiobutton_` + (item) + `"><p class="option">A: ` + data['option_a'][item] + `</p><br>
     </label>
     <br>
     <label>
-    <input type="radio" value="B" id="radiobutton_` + (item) + `_B" name="radiobutton_` + (item) + `"><p class="option">B: ` + option_b[item] + `</p><br>
+    <input type="radio" value="B" id="radiobutton_` + (item) + `_B" name="radiobutton_` + (item) + `"><p class="option">B: ` + data['option_b'][item] + `</p><br>
     </label>
     <br>
     <label>
-    <input type="radio" value="C" id="radiobutton_` + (item) + `_C" name="radiobutton_` + (item) + `"><p class="option">C: ` + option_c[item] + `</p><br>
+    <input type="radio" value="C" id="radiobutton_` + (item) + `_C" name="radiobutton_` + (item) + `"><p class="option">C: ` + data['option_c'][item] + `</p><br>
     </label>
     <br>
     <label>
-    <input type="radio" value="D" id="radiobutton_` + (item) + `_D" name="radiobutton_` + (item) + `"><p class="option">D: ` + option_d[item] + `</p><br>
+    <input type="radio" value="D" id="radiobutton_` + (item) + `_D" name="radiobutton_` + (item) + `"><p class="option">D: ` + data['option_d'][item] + `</p><br>
     </label>
     <br>
     </div>
@@ -247,42 +178,20 @@ else {
     <hr width="70%"></hr>`);
 counter++;
 }
-}
 
+$('input[type=radio]').change(function() {
+  var num = parseInt(this.id.replace(/\D/g, ''), 10);
+  chosen[num] = this.value;
+  $('#answer_'+num).html(this.value);
+  $('#answer_'+num).css('color', '#333');
 });
 
-$(document).ready(function() {
-  $('input[type=radio]').change(function() {
-    var num = parseInt(this.id.replace(/\D/g, ''), 10);
-    chosen[num] = this.value;
-    $('#answer_'+num).html(this.value);
-    $('#answer_'+num).css('color', '#333');
-  });
-
-
-  window.onbeforeunload = function() {
-    if (!submitted) {
-      return ("Reloading the page will cause your exam to be submitted as is - take caution");
-    }
-  }
-
-/*
-  $(window).focus(function() {
-    clearTimeout(window_timer);
-  });
-  $(window).blur(function() {
-    if (!submitted) {
-      alert ("If you leave, your exam will be submitted automatically");
-      window_timer = setTimeout(function(){ submit_exam() }, 3000);
-    }
-  });
-*/
-
-var chosen_unanswered = new Array (num_questions);
 $('#submit_button').on('click', function(evt) {
+  var chosen_unanswered = new Array (data['num_questions']);
   this.disabled = true;
+  $("input:radio").attr('disabled', 'disabled');
   var completed = true;
-  question_id.forEach(checkAnswered)
+  data['question_id'].forEach(checkAnswered)
   function checkAnswered(item,index) {
     if (typeof chosen[item] == 'undefined') {
         //alert (chosen[item]);
@@ -314,6 +223,7 @@ $('#submit_button').on('click', function(evt) {
         );
       $('#error_modal').modal('show');
       this.disabled = false;
+      $("input:radio").removeAttr('disabled');
     }
     else {
       if (!submitted) {
@@ -324,22 +234,33 @@ $('#submit_button').on('click', function(evt) {
       }
     }
   });
-});
 
 function submit_exam() {
+  if (submitted) {
+    return;
+  }
   $('#submit_button').disabled = true;
+  $("input:radio").attr('disabled', 'disabled');
   submitted = true;
   $.ajax({
     type: "post",
     url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("exam_submit"),
-    data : JSON.stringify(chosen)},
-  }).done(function(data){ 
+    chosen : JSON.stringify(chosen),
+    exam_id : JSON.stringify(exam_id),
+    num_questions : JSON.stringify(data['num_questions']),
+    question_id : JSON.stringify(data['question_id'])},
+  }).done(function(data_submit){ 
     $("html, body").animate({ scrollTop: 0 }, "slow");
-    var data = jQuery.parseJSON(data);
-    question_id.forEach(writeAnswers);
+    alert("Your exam has been submitted.  You may leave the page.");
+    $(".timer").stop();
+    var data_submit = jQuery.parseJSON(data_submit);
+    
+    if (data['show_score'] == 1) {
+      data['question_id'].forEach(writeAnswers);
+    }
     function writeAnswers(item,index) {
-      if (data['correct'][item] == 1) {
+      if (data_submit['correct'][item] == 1) {
         document.getElementById("answer_text_" + (item)).innerHTML = "Correct!";
         document.getElementById("answer_text_" + (item)).style.color = "#5cb85c";
         document.getElementById("answer_" + (item)).style.color = "#5cb85c";
@@ -350,29 +271,38 @@ function submit_exam() {
         document.getElementById("answer_" + (item)).style.color = "#d9534f";
         document.getElementById("correct_answer_text_" + (item)).innerHTML = "Correct Answer:";
         document.getElementById("correct_answer_text_" + (item)).style.color = "#5cb85c";
-        document.getElementById("correct_answer_" + (item)).innerHTML = data['answers'][item];
+        document.getElementById("correct_answer_" + (item)).innerHTML = data_submit['answers'][item];
         document.getElementById("correct_answer_" + (item)).style.color = "#5cb85c";
       }
     }
-    document.getElementById("score").innerHTML = data['num_correct'] + "/" + num_questions + " Answered Correctly - " + data['percent_correct'] + "%";
-    if (data['percent_correct'] >= 80) {
-      document.getElementById("score").style.color = "#5cb85c";
-    }
-    else if (data['percent_correct'] >= 65) {
-      document.getElementById("score").style.color = "#f0ad4e";
-    }
-    else {
-      document.getElementById("score").style.color = "#d9534f";
+    if (data['show_score'] == 1) {
+      document.getElementById("score").innerHTML = data_submit['num_correct'] + "/" + data['num_questions'] + " Answered Correctly - " + data_submit['percent_correct'] + "%";
+      if (data_submit['percent_correct'] >= 80) {
+        document.getElementById("score").style.color = "#5cb85c";
+      }
+      else if (data_submit['percent_correct'] >= 65) {
+        document.getElementById("score").style.color = "#f0ad4e";
+      }
+      else {
+        document.getElementById("score").style.color = "#d9534f";
+      }
     }
 
   });
 }
-/*
-$('.timer').startTimer({
-  onComplete: function() {
-    submit_exam();
-  }
+
 });
+});
+/*
+  $(window).focus(function() {
+    clearTimeout(window_timer);
+  });
+  $(window).blur(function() {
+    if (!submitted) {
+      alert ("If you leave, your exam will be submitted automatically");
+      window_timer = setTimeout(function(){ submit_exam() }, 3000);
+    }
+  });
 */
 
 </script>

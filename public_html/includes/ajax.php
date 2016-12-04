@@ -228,11 +228,13 @@ switch ($ajax_id) {
 	$question_id = json_decode($_GET['question_id']);
 	$length = json_decode($_GET['length']);
 	$type = json_decode($_GET['type']);
+	$unlocked = json_decode($_GET['unlocked']);
+	$show_score = json_decode($_GET['show_score']);
 	if (mysqli_num_rows(mysqli_query($dbconfig, "SELECT exam_name FROM created_exams WHERE exam_name = '$name'")) > 0) {
 		echo json_encode("failed");
 		exit();
 	}
-	$query_insert_name = "INSERT INTO created_exams (exam_name, num_questions, exam_type) VALUES ('$name', $length, '$type')";
+	$query_insert_name = "INSERT INTO created_exams (exam_name, num_questions, exam_type, unlocked, show_score) VALUES ('$name', $length, '$type', $unlocked, $show_score)";
 	mysqli_query($dbconfig, $query_insert_name) or die (mysqli_error($dbconfig));
 	$key = mysqli_fetch_array(mysqli_query($dbconfig, "SELECT exam_id FROM created_exams WHERE exam_name = '$name'"), MYSQLI_ASSOC)['exam_id'];
 	$query_insert_quesitons = "";
@@ -287,19 +289,21 @@ switch ($ajax_id) {
 
 	//Exam
 	case 'exam_submit':
-	$chosen = $_POST['data'];
-	$chosen = json_decode($chosen, true);
+	$chosen = json_decode($_POST['chosen']);
+	$exam_id = json_decode($_POST['exam_id']);
+	$num_questions = json_decode($_POST['num_questions']);
+	$question_id = json_decode($_POST['question_id']);
 	$data = array();
 	$data['answers'] = array();
 	$data['correct'] = array();
 	$data['num_correct'] = 0;
 	$data['percent_correct'] = 0;
-	$query_answers = 'SELECT question_id, answer FROM questions_answers WHERE question_id IN ('.implode(",",$_SESSION['questions_id']).')';
+	$query_answers = 'SELECT question_id, answer FROM questions_answers WHERE question_id IN ('.implode(",",$question_id).')';
 	$result = mysqli_query($dbconfig, $query_answers) or die (mysqli_error($dbconfig));
 	while ($row = mysqli_fetch_assoc($result)) {
 		$data['answers'][$row['question_id']] = $row['answer'];
 	}
-	foreach ($_SESSION['questions_id'] as $id) {
+	foreach ($question_id as $id) {
 		if ($data['answers'][$id] == $chosen[$id]) {
 			$data['correct'][$id] = 1;
 			$data['num_correct'] ++;
@@ -308,21 +312,19 @@ switch ($ajax_id) {
 			$data['correct'][$id] = 0;
 		}
 	}
-	$data['percent_correct'] = round(($data['num_correct']*100)/$_SESSION['num_questions'],1); 
-
-	if (isset($_SESSION['exam_id'])) {
-		$add_exam_query = 'INSERT INTO exam_results (student_number, exam_id, percentage, score, total) VALUES ('.$_SESSION["student_number"].', '.$_SESSION["exam_id"].', '.$data["percent_correct"].', '.$data["num_correct"].', '.$_SESSION["num_questions"].')';
-		unset($_SESSION['exam_id']);
+	$data['percent_correct'] = round(($data['num_correct']*100)/$num_questions,1); 
+	if ($exam_id != 0) {
+		$add_exam_query = 'INSERT INTO exam_results (student_number, exam_id, percentage, score, total) VALUES ('.$_SESSION["student_number"].', '.$exam_id.', '.$data["percent_correct"].', '.$data["num_correct"].', '.$num_questions.')';
 	}
 	else {
-		$add_exam_query = 'INSERT INTO exam_results (student_number, percentage, score, total) VALUES ('.$_SESSION["student_number"].', '.$data["percent_correct"].', '.$data["num_correct"].', '.$_SESSION["num_questions"].')';
+		$add_exam_query = 'INSERT INTO exam_results (student_number, percentage, score, total) VALUES ('.$_SESSION["student_number"].', '.$data["percent_correct"].', '.$data["num_correct"].', '.$num_questions.')';
 	}
 	mysqli_query($dbconfig, $add_exam_query) or die(mysqli_error($dbconfig));
 	echo json_encode($data);
 	$add_attempted_query = "";
 	$counter = 0;
-	foreach ($_SESSION['questions_id'] as $id) {
-		$add_attempted_query .= 'INSERT INTO questions_attempted (student_number, question_id, correct) VALUES ('.$_SESSION["student_number"].', '.$_SESSION["questions_id"][$counter].', '.$data["correct"][$id].');';
+	foreach ($question_id as $id) {
+		$add_attempted_query .= 'INSERT INTO questions_attempted (student_number, question_id, correct) VALUES ('.$_SESSION["student_number"].', '.$question_id[$counter].', '.$data["correct"][$id].');';
 		$counter++;
 	}
 	mysqli_multi_query($dbconfig, $add_attempted_query);
@@ -394,6 +396,58 @@ switch ($ajax_id) {
 
 
 
+	case "exam_get_questions":
+	$exam_id = json_decode($_POST['exam_id']);
+	if (isset($_POST['exam_cluster'])) {
+		$exam_cluster = json_decode($_POST['exam_cluster']);
+	}
+	if ($exam_id == 0) {
+		$num_questions = 100;
+	}
+	if ($exam_id != 0) {
+		$id_query = 'SELECT created_exams_questions.question_id, question, option_a, option_b, option_c, option_d, answer FROM created_exams_questions LEFT JOIN questions ON questions.question_id = created_exams_questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_options ON questions_options.question_id = created_exams_questions.question_id WHERE exam_id = '.$exam_id.' ORDER BY RAND()';
+		$exam_query = 'SELECT num_questions, show_score, unlocked FROM created_exams WHERE exam_id = '.$exam_id.'';
+		$exam_query_result = mysqli_query($dbconfig, $exam_query);
+		$row = mysqli_fetch_assoc($exam_query_result);
+		$num_questions = $row['num_questions'];
+		$unlocked = $row['unlocked'];
+		$show_score = $row['show_score'];
+	}
+	else if ($exam_cluster == 'mix') {
+		$id_query = 'SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id  ORDER BY RAND() LIMIT '.$num_questions.'';
+	}
+	else {
+		$id_query = 'SELECT questions.question_id, question, option_a, option_b, option_c, option_d, answer, cluster FROM questions LEFT JOIN questions_options ON questions_options.question_id = questions.question_id LEFT JOIN questions_answers ON questions_answers.question_id = questions.question_id LEFT JOIN questions_cluster ON questions_cluster.question_id = questions.question_id WHERE cluster = "'.$exam_cluster.'" ORDER BY RAND() LIMIT '.$num_questions.'';
+	}
+	$data['question_id'] = array();
+	$data['question'] = array();
+	$data['option_a'] = array();
+	$data['option_b'] = array();
+	$data['option_c'] = array();
+	$data['option_d'] = array();
+	$data['answer'] = array();
+	$data['num_questions'] = $num_questions;
+	$data['unlocked'] = $unlocked;
+	if ($_SESSION['admin_boolean']) {
+		$data['unlocked'] = 1;
+	}
+	$data['show_score'] = $show_score;
+	$data['time'] = floor($num_questions / 0.0222222222222222);
+	$id_result = mysqli_query($dbconfig, $id_query) or die (mysqli_error($dbconfig));
+	while ($row = mysqli_fetch_assoc($id_result)) {
+		array_push($data['question_id'], $row['question_id']);
+		$data['question'][$row['question_id']] = $row['question'];
+		$data['option_a'][$row['question_id']] = $row['option_a'];
+		$data['option_b'][$row['question_id']] = $row['option_b'];
+		$data['option_c'][$row['question_id']] = $row['option_c'];
+		$data['option_d'][$row['question_id']] = $row['option_d'];
+		$data['answer'][$row['question_id']] = $row['answer'];
+	}
+	echo json_encode($data);
+	break;
+
+
+
 	//Practice
 	case 'practice_start_exam':
 	$id = json_decode($_GET['exam_id']);
@@ -440,6 +494,7 @@ switch ($ajax_id) {
 	echo json_encode($data);
 	break;
 
+
 	case 'practice_search_exams':
 	if (isset($_GET['search'])) {
 		$search = json_decode($_GET['search']);
@@ -447,12 +502,17 @@ switch ($ajax_id) {
 	else {
 		$search = "";
 	}
-	$exam_type = json_decode($_GET['exam_type']);
-	if ($exam_type == "all") {
-		$exam_query = "SELECT exam_id, exam_name, num_questions, exam_type FROM created_exams WHERE NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND exam_name LIKE '%".$search."%' LIMIT 75";
+
+	$exam_query = "SELECT exam_id, exam_name, num_questions, exam_type, unlocked, show_score FROM created_exams WHERE exam_name LIKE '%".$search."%' ";
+
+	if($_SESSION['admin_boolean']) {
+		$exam_query .= "LIMIT 75";
+	}
+	else if ($_SESSION['class'] == 'writtens') {
+		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = 'marketing' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	else {
-		$exam_query = "SELECT exam_id, exam_name, num_questions, exam_type FROM created_exams WHERE NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND exam_name LIKE '%".$search."%' AND exam_type = '$exam_type' LIMIT 75";
+		$exam_query .= "AND NOT EXISTS (SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) AND (exam_type = '".$_SESSION['cluster']."' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	$results = mysqli_query ($dbconfig, $exam_query);
 	$data = array();
@@ -460,10 +520,14 @@ switch ($ajax_id) {
 	$data['exam_name'] = array();
 	$data['num_questions'] = array();
 	$data['exam_type'] = array();
+	$data['unlocked'] = array();
+	$data['show_score'] = array();
 	while ($row = mysqli_fetch_assoc($results)) {
 		array_push($data['exam_id'], $row['exam_id']);
 		array_push($data['exam_name'], $row['exam_name']);
 		array_push($data['num_questions'], $row['num_questions']);
+		array_push($data['show_score'], $row['show_score']);
+		array_push($data['unlocked'], $row['unlocked']);
 		if ($row['exam_type'] == 'marketing') {
 			array_push($data['exam_type'], 'Marketing');
 		}
@@ -482,6 +546,14 @@ switch ($ajax_id) {
 	}
 	$data['count'] = mysqli_num_rows($results);
 	echo json_encode($data);
+	break;
+
+
+	case 'practice_change_unlock_exam':
+	$exam_id = json_decode($_GET['exam_id']);
+	$unlocked = json_decode($_GET['unlocked']);
+	$exam_query = "UPDATE created_exams SET unlocked=$unlocked WHERE exam_id=$exam_id";
+	mysqli_query ($dbconfig, $exam_query);
 	break;
 
 

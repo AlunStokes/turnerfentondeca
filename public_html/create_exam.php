@@ -160,7 +160,23 @@ if ($_SESSION['member'] == false) {
             </select>
         </div>
 
-      <h1>4. Name Your Exam</h1>   
+        <h1>4. Do you want this exam to be unlocked?</h1>
+        <div class="row" id="num_questions" style="align:center; text-align:center;">
+          <select id="dropdown_unlocked">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+        </div>
+
+        <h1>4. Do you want this exam to scow a score when finished?</h1>
+        <div class="row" id="num_questions" style="align:center; text-align:center;">
+          <select id="dropdown_show_score">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+        </div>
+
+      <h1>6. Name Your Exam</h1>   
       <p>   Make sure to make it creative!</p>
       <form method="post" id="create" role="form">
         <input id="exam_name" type="type" maxlength=100 style="height:5vh; width:100%; font-size: 24px;" />
@@ -201,12 +217,16 @@ if ($_SESSION['member'] == false) {
         console.log(name);
         console.log(selected['question_id'].toString());
         var type = document.getElementById('dropdown_large').value;
+        var unlocked = document.getElementById('dropdown_unlocked').value;
+        var show_score = document.getElementById('dropdown_show_score').value;
         console.log (type);
         $.ajax({
           type: "get",
           url: "includes/ajax.php",
           data: {ajax_id : JSON.stringify("create_exam_save"),
             name : JSON.stringify(name),
+            unlocked : JSON.stringify(unlocked),
+            show_score : JSON.stringify(show_score),
            question_id : JSON.stringify(selected['question_id']),
            length : JSON.stringify(selected['question_id'].length),
            type : JSON.stringify(type)}
