@@ -36,8 +36,6 @@ session_destroy();
   <link href="css/landing.css" rel="stylesheet">
   <!-- Navbar CSS -->
   <link href="css/navbar.css" rel="stylesheet">
-  <!-- Genweal CSS -->
-  <link href="css/style.css" rel="stylesheet">
 
   <!--JavaScript Files-->
 
