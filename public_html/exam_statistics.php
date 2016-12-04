@@ -11,7 +11,7 @@ $exams['date'] = array();
 $exams['score'] = array();
 $exams['total'] = array();
 
-$exam_score_query = "SELECT percentage, DATE_FORMAT(DATE, '%D %M %Y') AS full_date, score, total FROM exam_results WHERE student_number = ".$_SESSION['student_number']."";
+$exam_score_query = "SELECT percentage, DATE_FORMAT(DATE, '%M %Y') AS date, DATE_FORMAT(DATE, '%D %M %Y') AS full_date, score, total FROM exam_results LEFT JOIN created_exams ON created_exams.exam_id = exam_results.exam_id WHERE student_number = ".$_SESSION['student_number']." AND (include_stats = 1 OR exam_results.exam_id = 0) ORDER BY percentage DESC;";
 $results = mysqli_query($dbconfig, $exam_score_query);
 while ($row = mysqli_fetch_assoc($results)) {
   array_push($exams['percentage'], $row['percentage']);
