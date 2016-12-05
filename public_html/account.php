@@ -244,9 +244,6 @@ $(my_form_id).on( "submit", function(event) {
 </section>
 <!-- /.content -->
 
-<!-- Rightside Hidden Menu -->
-<?php include 'includes/admin_sidebar.php'; ?>
-
 <script type="text/javascript">
 
 

@@ -85,7 +85,7 @@ $(document).ready(function() {
       recent_exams_html +=`
         <li>
               <a href="javascript::;">
-        <h4 class="menu-icon">`+data['percentage'][i]+`%</h4>
+        <i class="menu-icon exam-percentage">`+data['percentage'][i]+`%</i>
         <div class="menu-info">
         <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
         <p>`+data['time'][i]+`</p>

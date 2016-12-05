@@ -1,6 +1,8 @@
 <!-- Page Style -->
 <link rel="stylesheet" href="css/admin_menu.css">
-
+<?php 
+    include 'admin_sidebar.php'; 
+    ?>
 <!-- Main Header -->
 <header class="main-header">
 

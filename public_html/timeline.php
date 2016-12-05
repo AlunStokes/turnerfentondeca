@@ -53,7 +53,6 @@ $page = 'timeline';
   <?php 
   if ($_SESSION['admin_boolean']) { 
     include 'components/admin_menu.php'; 
-    include 'components/admin_sidebar.php'; 
   }
   else { 
     include 'components/member_menu.php'; 

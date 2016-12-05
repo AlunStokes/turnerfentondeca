@@ -4,7 +4,12 @@
     height: 0px;
     border-radius: 50%;
     text-align: center;
-    line-height: 0px;
+    line-height: 30px
+}
+
+.exam-percentage {
+	font-size: 18px;
+	color: #fff;
 }
 
 .control-sidebar-menu>li>a {
