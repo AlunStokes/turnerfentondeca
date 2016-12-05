@@ -804,6 +804,26 @@ switch ($ajax_id) {
 	echo json_encode($data);
 	break;
 
+	case "sidebar_recent_exams":
+	$query = "SELECT first_name, last_name, members.student_number, percentage, UNIX_TIMESTAMP(date) as unix_time, DATE_FORMAT(DATE, '%d %M %Y') AS time FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE DATE > DATE_ADD(CURDATE(), INTERVAL -5 DAY)  ORDER BY unix_time DESC;";
+	$result = mysqli_query($dbconfig, $query);
+	$data = array();
+	$data['first_name'] = array();
+	$data['last_name'] = array();
+	$data['percentage'] = array();
+	$data['time'] = array();
+	$data['student_number'] = array();
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['first_name'], $row['first_name']);
+		array_push($data['last_name'], $row['last_name']);
+		array_push($data['student_number'], $row['student_number']);
+		array_push($data['time'], $row['time']);
+		array_push($data['percentage'], $row['percentage']);
+	}
+	$data['num'] = mysqli_num_rows($result);
+	echo json_encode($data);
+	break;
+
 
 	default:
 		# code...

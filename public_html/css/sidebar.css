@@ -1,0 +1,17 @@
+.control-sidebar-menu .menu-icon {
+    float: left;
+    width: 35px;
+    height: 0px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 0px;
+}
+
+.control-sidebar-menu>li>a {
+    display: block;
+    padding: 10px 15px;
+    padding-top: 10px;
+    padding-right: 15px;
+    padding-bottom: 0px;
+    padding-left: 15px;
+}
