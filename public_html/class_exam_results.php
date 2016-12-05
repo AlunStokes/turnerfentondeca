@@ -14,6 +14,10 @@ $exam_list['exam_id'] = array();
 $exam_list['exam_name'] = array();
 $exam_list['num_questions'] = array();
 $exam_list['exam_type'] = array();
+array_push($exam_list['exam_id'], 0);
+  array_push($exam_list['exam_name'], "Random");
+  array_push($exam_list['num_questions'], 100);
+  array_push($exam_list['exam_type'], "All");
 $query_exams = "SELECT * FROM created_exams ORDER BY date_created";
 $result = mysqli_query($dbconfig, $query_exams);
 while ($row = mysqli_fetch_assoc($result)) {
