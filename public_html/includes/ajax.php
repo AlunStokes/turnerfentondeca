@@ -76,7 +76,7 @@ switch ($ajax_id) {
 	case 'class_exam_results':
 	$exam_id = json_decode($_GET['exam_id']);
 	$data = array();
-	$data_query = "SELECT first_name, last_name, exam_results.student_number, percentage, score, total FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE exam_id = ".$exam_id." ORDER BY percentage DESC;";
+	$data_query = "SELECT first_name, last_name, exam_results.student_number, percentage, score, total, UNIX_TIMESTAMP(exam_results.date) as time FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE exam_id = ".$exam_id." ORDER BY time DESC;";
 	$results = mysqli_query($dbconfig, $data_query);
 	if ($results != false) {
 		$name['first_name'] = array();
