@@ -274,7 +274,9 @@ $(function () {
     "searching": false,
     "ordering": true,
     "info": true,
-    "autoWidth": true
+    "autoWidth": true,
+    "iDisplayLength": 100,
+    "lengthMenu": [ [50, 100, -1], [50, 100, "All"] ]
   });
 });
 $(document).ready(function() {
