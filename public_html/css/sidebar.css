@@ -12,6 +12,15 @@
 	color: #fff;
 }
 
+#control-sidebar-home-tab {
+	overflow: auto;
+	overflow-x: hidden;
+	max-height: 88vh;
+}
+#control-sidebar-home-tab::-webkit-scrollbar { 
+    display: none; 
+}
+
 .control-sidebar-menu>li>a {
     display: block;
     padding: 10px 15px;
