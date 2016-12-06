@@ -131,7 +131,7 @@ var stillAlive = setInterval(function () {
   if ($("#refresh_users").is(':checked')) {
     loadOnline();
   }
-}, 4000);
+}, 50000);
 
 
 $('.control-sidebar, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
