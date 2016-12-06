@@ -177,6 +177,7 @@ $active_page = 'attendance';
 
   <!-- jQuery 2.2.3 -->
   <script src="js/jquery-2.2.3.min.js"></script>
+  <script src="components/all_pages.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- AdminLTE App -->

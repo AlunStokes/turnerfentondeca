@@ -769,6 +769,8 @@ switch ($ajax_id) {
 	echo json_encode($data);
 	break;
 
+
+	//Sidebar
 	case "sidebar_recent_exams":
 	$query = "SELECT first_name, last_name, members.student_number, percentage, UNIX_TIMESTAMP(date) as unix_time, DATE_FORMAT(DATE, '%d %M %Y') AS time FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE DATE > DATE_ADD(CURDATE(), INTERVAL -5 DAY)  ORDER BY unix_time DESC;";
 	$result = mysqli_query($dbconfig, $query);
@@ -789,6 +791,39 @@ switch ($ajax_id) {
 	echo json_encode($data);
 	break;
 
+	case "sidebar_online_users":
+	$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online FROM members WHERE last_online > NOW() - INTERVAL 5 MINUTE ORDER BY last_online DESC;";
+	$result = mysqli_query($dbconfig, $query);
+	$data = array();
+	$data['first_name'] = array();
+	$data['last_name'] = array();
+	$data['student_number'] = array();
+	$data['user_picture_file'] = array();
+	$data['online'] = array();
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['first_name'], $row['first_name']);
+		array_push($data['last_name'], $row['last_name']);
+		array_push($data['student_number'], $row['student_number']);
+		array_push($data['online'], $row['online']);
+	}
+	$data['num'] = mysqli_num_rows($result);
+	for ($i = 0; $i < $data['num']; $i++) {
+		if (!file_exists("../img/user_images/thumbnails/".$data['student_number'][$i].".jpg")) {
+			$data['user_picture_file'][$i] = "unresolved";
+		}
+		else {
+			$data['user_picture_file'][$i] = $data['student_number'][$i];
+		}
+	}
+	echo json_encode($data);
+	break;
+
+
+	case "still_alive":
+	$query = "UPDATE members SET last_online=NOW() WHERE student_number = ".$_SESSION['student_number'].";";
+	mysqli_query($dbconfig, $query);
+	break;
+
 
 	default:
 		# code...
@@ -799,7 +834,7 @@ exit();
 
 function contains($needle, $haystack)
 {
-    return strpos($haystack, $needle) !== false;
+	return strpos($haystack, $needle) !== false;
 }
 
 ?>

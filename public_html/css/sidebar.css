@@ -29,3 +29,19 @@
     padding-bottom: 0px;
     padding-left: 15px;
 }
+.img-circle-message {
+	max-width: 50px;
+}
+.img-circle-message-online {
+	max-width: 50px;
+	border: 3px solid #5cb85c;
+}
+.img-circle-message-offline {
+	max-width: 50px;
+	border: 3px solid #d9534f;
+}
+
+.menu-info-name {
+	padding-top: 4px;
+    padding-left: 15px;
+}

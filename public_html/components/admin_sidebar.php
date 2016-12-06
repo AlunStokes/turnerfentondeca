@@ -17,22 +17,8 @@
       </ul>
       <!-- /.control-sidebar-menu -->
 
-      <h3 class="control-sidebar-heading">Tasks Progress</h3>
-      <ul class="control-sidebar-menu">
-        <li>
-          <a href="javascript::;">
-            <h4 class="control-sidebar-subheading">
-              Custom Template Design
-              <span class="pull-right-container">
-                <span class="label label-danger pull-right">70%</span>
-              </span>
-            </h4>
-
-            <div class="progress progress-xxs">
-              <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-            </div>
-          </a>
-        </li>
+      <h3 class="control-sidebar-heading">Recent Users</h3>
+      <ul class="control-sidebar-menu" id="sidebar-online-users">
       </ul>
       <!-- /.control-sidebar-menu -->
     </div>
@@ -71,50 +57,89 @@
 </div>
 <!-- ./wrapper -->
 <script>
-
-$(document).ready(function() {
-
-  $.ajax({
-    type: "get",
-    url: "includes/ajax.php",
-    data: {ajax_id : JSON.stringify("sidebar_recent_exams")},
-  }).done(function(data){ 
-    var data = jQuery.parseJSON(data);
-    var recent_exams_html = ``;
-    for (var i = 0; i < data['num']; i++) {
-      recent_exams_html +=`
-        <li>
-              <a href="javascript::;">
-        <i class="menu-icon exam-percentage">`+data['percentage'][i]+`%</i>
-        <div class="menu-info">
-        <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
-        <p>`+data['time'][i]+`</p>
-        </div>
-        </a>
-        </li>
-        `;
-    }
-    $("#sidebar-recent-exmas").append(recent_exams_html);
-  });
-
-
-  $('.control-sidebar, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
-    var scrollTo = null;
-
-    if (e.type == 'mousewheel') {
-        scrollTo = (e.originalEvent.wheelDelta * -1);
-    }
-    else if (e.type == 'DOMMouseScroll') {
-        scrollTo = 40 * e.originalEvent.detail;
-    }
-
-    if (scrollTo) {
-        e.preventDefault();
-        $(this).scrollTop(scrollTo + $(this).scrollTop());
-    }
+$.ajax({
+  type: "get",
+  url: "includes/ajax.php",
+  data: {ajax_id : JSON.stringify("sidebar_recent_exams")},
+}).done(function(data){ 
+  var data = jQuery.parseJSON(data);
+  var recent_exams_html = ``;
+  for (var i = 0; i < data['num']; i++) {
+    recent_exams_html +=`
+    <li>
+    <a href="javascript::;">
+    <i class="menu-icon exam-percentage">`+data['percentage'][i]+`%</i>
+    <div class="menu-info">
+    <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
+    <p>`+data['time'][i]+`</p>
+    </div>
+    </a>
+    </li>
+    `;
+  }
+  $("#sidebar-recent-exmas").append(recent_exams_html);
 });
 
+function loadOnline() {
+$.ajax({
+  type: "get",
+  url: "includes/ajax.php",
+  data: {ajax_id : JSON.stringify("sidebar_online_users")},
+}).done(function(data){ 
+  var data = jQuery.parseJSON(data);
+  var online_users_html = ``;
+  for (var i = 0; i < data['num']; i++) {
+    if (data['online'][i] == 1) {
+    online_users_html +=`
+    <li>
+    <a href="javascript::;">
+    <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle img-circle-message-online" alt="User Image" style="float:left;">
+    <div class="menu-info menu-info-name">
+    <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
+    <p>`+data['student_number'][i]+`</p>
+    </div>
+    </a>
+    </li>
+    `;
+  }
+  else {
+    online_users_html +=`
+    <li>
+    <a href="javascript::;">
+    <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle img-circle-message-offline" alt="User Image" style="float:left;">
+    <div class="menu-info menu-info-name">
+    <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
+    <p>`+data['student_number'][i]+`</p>
+    </div>
+    </a>
+    </li>
+    `;
+  }
+  }
+  $("#sidebar-online-users").html(online_users_html);
+});
+}
 
+loadOnline();
+var stillAlive = setInterval(function () {
+  loadOnline();
+}, 90000);
+
+
+$('.control-sidebar, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
+  var scrollTo = null;
+
+  if (e.type == 'mousewheel') {
+    scrollTo = (e.originalEvent.wheelDelta * -1);
+  }
+  else if (e.type == 'DOMMouseScroll') {
+    scrollTo = 40 * e.originalEvent.detail;
+  }
+
+  if (scrollTo) {
+    e.preventDefault();
+    $(this).scrollTop(scrollTo + $(this).scrollTop());
+  }
 });
 
 </script>
