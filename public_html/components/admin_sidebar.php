@@ -18,7 +18,7 @@
       <!-- /.control-sidebar-menu -->
 
       <h3 class="control-sidebar-heading">Recent Users</h3>
-      <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Refresh User List</label>
+      <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Refresh User List Automatically</label>
       <ul class="control-sidebar-menu" id="sidebar-online-users">
       </ul>
       <!-- /.control-sidebar-menu -->
@@ -134,7 +134,7 @@ var stillAlive = setInterval(function () {
 }, 50000);
 
 
-$('.control-sidebar, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
+$('.control-sidebar, .tab-content, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
   var scrollTo = null;
 
   if (e.type == 'mousewheel') {

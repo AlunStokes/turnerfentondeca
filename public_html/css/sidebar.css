@@ -12,12 +12,15 @@
 	color: #fff;
 }
 
-#control-sidebar-home-tab {
+.tab-content {
 	overflow: auto;
 	overflow-x: hidden;
 	max-height: 88vh;
 }
-#control-sidebar-home-tab::-webkit-scrollbar { 
+.tab-content::-webkit-scrollbar { 
+    display: none; 
+}
+.control-sidebar::-webkit-scrollbar { 
     display: none; 
 }
 
