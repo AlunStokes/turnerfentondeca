@@ -18,6 +18,7 @@
       <!-- /.control-sidebar-menu -->
 
       <h3 class="control-sidebar-heading">Recent Users</h3>
+      <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Refresh User List</label>
       <ul class="control-sidebar-menu" id="sidebar-online-users">
       </ul>
       <!-- /.control-sidebar-menu -->
@@ -81,49 +82,56 @@ $.ajax({
 });
 
 function loadOnline() {
-$.ajax({
-  type: "get",
-  url: "includes/ajax.php",
-  data: {ajax_id : JSON.stringify("sidebar_online_users")},
-}).done(function(data){ 
-  var data = jQuery.parseJSON(data);
-  var online_users_html = ``;
-  for (var i = 0; i < data['num']; i++) {
-    if (data['online'][i] == 1) {
-    online_users_html +=`
-    <li>
-    <a href="javascript::;">
-    <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle img-circle-message-online" alt="User Image" style="float:left;">
-    <div class="menu-info menu-info-name">
-    <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
-    <p>`+data['student_number'][i]+`</p>
-    </div>
-    </a>
-    </li>
-    `;
-  }
-  else {
-    online_users_html +=`
-    <li>
-    <a href="javascript::;">
-    <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle img-circle-message-offline" alt="User Image" style="float:left;">
-    <div class="menu-info menu-info-name">
-    <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
-    <p>`+data['student_number'][i]+`</p>
-    </div>
-    </a>
-    </li>
-    `;
-  }
-  }
-  $("#sidebar-online-users").html(online_users_html);
-});
+  $.ajax({
+    type: "get",
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("sidebar_online_users")},
+  }).done(function(data){ 
+    var data = jQuery.parseJSON(data);
+    var online_users_html = ``;
+    for (var i = 0; i < data['num']; i++) {
+      if (data['online'][i] == 1) {
+        online_users_html +=`
+        <li>
+        <a href="javascript::;">
+        <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle img-circle-message-online" alt="User Image" style="float:left;">
+        <div class="menu-info menu-info-name">
+        <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
+        <p>`+data['student_number'][i]+`</p>
+        </div>
+        </a>
+        </li>
+        `;
+      }
+      else {
+        online_users_html +=`
+        <li>
+        <a href="javascript::;">
+        <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle img-circle-message-offline" alt="User Image" style="float:left;">
+        <div class="menu-info menu-info-name">
+        <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
+        <p>`+data['student_number'][i]+`</p>
+        </div>
+        </a>
+        </li>
+        `;
+      }
+    }
+    $("#sidebar-online-users").html(online_users_html);
+  });
 }
 
 loadOnline();
+$("#refresh_users").on("change", function() {
+  if ($("#refresh_users").is(':checked')) {
+    loadOnline();
+  }
+});
 var stillAlive = setInterval(function () {
-  loadOnline();
-}, 90000);
+  if ($("#refresh_users").is(':checked')) {
+    loadOnline();
+  }
+}, 4000);
 
 
 $('.control-sidebar, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
