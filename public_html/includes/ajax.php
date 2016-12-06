@@ -17,11 +17,12 @@ switch ($ajax_id) {
 	//Attendance
 	case 'attendance_check_open':
 	$data = array();
-	$check_query = "SELECT attendance_code, DATE_FORMAT(start_time, '%D %M at %h:%i %p') AS start_time FROM attendance_sessions WHERE end_time IS NULL;";
+	$check_query = "SELECT id, attendance_code, DATE_FORMAT(start_time, '%D %M at %h:%i %p') AS start_time FROM attendance_sessions WHERE end_time IS NULL;";
 	$result = mysqli_query($dbconfig, $check_query);
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
 		$data['exists'] = true;
+		$data['attendance_id'] = $row['id'];
 		$data['code_word'] = $row['attendance_code'];
 		$data['start_time'] = $row['start_time'];
 	}
@@ -43,8 +44,8 @@ switch ($ajax_id) {
 
 	case 'attendance_end':
 	$date = date_create();
-	$timestamp = date_timestamp_get($date);
-	$update_query = "UPDATE attendance_sessions SET end_time = from_unixtime(".$timestamp.") WHERE end_time IS NULL;";
+	$attendance_id = json_decode($_GET['attendance_id']);
+	$update_query = "UPDATE attendance_sessions SET end_time = NOW(), num_users = (SELECT COUNT(student_number) FROM attendance_individuals WHERE session_id = $attendance_id) WHERE id = $attendance_id;";
 	if (mysqli_query($dbconfig, $update_query)) {
 		echo json_encode(true);
 	}
@@ -815,6 +816,25 @@ switch ($ajax_id) {
 			$data['user_picture_file'][$i] = $data['student_number'][$i];
 		}
 	}
+	echo json_encode($data);
+	break;
+
+
+	case "sidebar_attendance":
+	$query = "SELECT attendance_code, DATE_FORMAT(start_time, '%d %M %Y') AS date, num_users, IF (end_time IS NOT NULL, 1, 0) as ended FROM attendance_sessions ORDER BY id DESC LIMIT 2;";
+	$result = mysqli_query($dbconfig, $query);
+	$data = array();
+	$data['attendance_code'] = array();
+	$data['date'] = array();
+	$data['num_users'] = array();
+	$data['ended'] = array();
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['attendance_code'], $row['attendance_code']);
+		array_push($data['date'], $row['date']);
+		array_push($data['num_users'], $row['num_users']);
+		array_push($data['ended'], $row['ended']);
+	}
+	$data['num'] = mysqli_num_rows($result);
 	echo json_encode($data);
 	break;
 

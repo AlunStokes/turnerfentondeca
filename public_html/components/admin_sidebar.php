@@ -17,6 +17,11 @@
       </ul>
       <!-- /.control-sidebar-menu -->
 
+      <h3 class="control-sidebar-heading">Attendance</h3>
+      <ul class="control-sidebar-menu" id="sidebar-attendance">
+      </ul>
+      <!-- /.control-sidebar-menu -->
+
       <h3 class="control-sidebar-heading">Recent Users</h3>
       <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Refresh User List Automatically</label>
       <ul class="control-sidebar-menu" id="sidebar-online-users">
@@ -81,6 +86,46 @@ $.ajax({
   $("#sidebar-recent-exmas").append(recent_exams_html);
 });
 
+function loadAttendance() {
+  $.ajax({
+    type: "get",
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("sidebar_attendance")},
+  }).done(function(data){ 
+    var data = jQuery.parseJSON(data);
+    var attendance_html = ``;
+    for (var i = 0; i < data['num']; i++) {
+      if (data['ended'][i] == 0) {
+        attendance_html +=`
+        <li>
+        <a href="javascript::;">
+        <div class="circle"></div>
+        <div class="menu-info menu-info-name">
+        <h4 class="control-sidebar-subheading">`+data['date'][i]+`</h4>
+        <p style="font-style:italic;">`+data['attendance_code'][i]+`</p>
+        </div>
+        </a>
+        </li>
+        `;
+      }
+      else {
+        attendance_html +=`
+        <li>
+        <a href="javascript::;">
+        <i class="menu-icon attendance-num-users">`+data['num_users'][i]+`</i>
+        <div class="menu-info menu-info-name">
+        <h4 class="control-sidebar-subheading">`+data['date'][i]+`</h4>
+        <p style="font-style:italic;">`+data['attendance_code'][i]+`</p>
+        </div>
+        </a>
+        </li>
+        `;
+      }
+    }
+    $("#sidebar-attendance").html(attendance_html);
+  });
+}
+
 function loadOnline() {
   $.ajax({
     type: "get",
@@ -122,6 +167,7 @@ function loadOnline() {
 }
 
 loadOnline();
+loadAttendance();
 $("#refresh_users").on("change", function() {
   if ($("#refresh_users").is(':checked')) {
     loadOnline();

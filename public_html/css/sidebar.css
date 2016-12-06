@@ -1,10 +1,10 @@
 .control-sidebar-menu .menu-icon {
-    float: left;
-    width: 35px;
-    height: 0px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 30px
+	float: left;
+	width: 35px;
+	height: 0px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 30px
 }
 
 .exam-percentage {
@@ -18,19 +18,19 @@
 	max-height: 88vh;
 }
 .tab-content::-webkit-scrollbar { 
-    display: none; 
+	display: none; 
 }
 .control-sidebar::-webkit-scrollbar { 
-    display: none; 
+	display: none; 
 }
 
 .control-sidebar-menu>li>a {
-    display: block;
-    padding: 10px 15px;
-    padding-top: 10px;
-    padding-right: 15px;
-    padding-bottom: 0px;
-    padding-left: 15px;
+	display: block;
+	padding: 10px 15px;
+	padding-top: 10px;
+	padding-right: 15px;
+	padding-bottom: 0px;
+	padding-left: 15px;
 }
 .img-circle-message {
 	max-width: 50px;
@@ -46,5 +46,20 @@
 
 .menu-info-name {
 	padding-top: 4px;
-    padding-left: 15px;
+	padding-left: 15px;
+}
+.attendance-num-users {
+	font-size: 32px;
+	color: #fff;
+}
+.circle {
+	    margin-left: 10px;
+    margin-top: 8px;
+	width: 20px;
+	height: 20px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	border-radius: 25px;
+	background: #5cb85c;
+	float:left;
 }
