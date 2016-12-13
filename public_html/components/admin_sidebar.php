@@ -137,7 +137,7 @@ function loadOnline() {
         online_users_html +=`
         <li>
         <a href="javascript::;">
-        <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle img-circle-message-online" alt="User Image" style="float:left;">
+        <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle sidebar-img-circle-message-online" alt="User Image" style="float:left;">
         <div class="menu-info menu-info-name">
         <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
         <p>`+data['student_number'][i]+`</p>
@@ -150,7 +150,7 @@ function loadOnline() {
         online_users_html +=`
         <li>
         <a href="javascript::;">
-        <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle img-circle-message-offline" alt="User Image" style="float:left;">
+        <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle sidebar-img-circle-message-offline" alt="User Image" style="float:left;">
         <div class="menu-info menu-info-name">
         <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
         <p>`+data['student_number'][i]+`</p>
