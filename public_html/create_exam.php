@@ -358,6 +358,7 @@ function ajax_call() {
               <p>B: ` + results['option_b'][i] + `</p>
               <p>C: ` + results['option_c'][i] + `</p>
               <p>D: ` + results['option_d'][i] + `</p>
+              <i><p>Answer: ` + results['answers'][i] + `</p></i>
               <br>
               </div>
               <div class="col-md-2" style="padding-top:7vh; padding-left:2vw;">

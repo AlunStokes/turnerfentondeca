@@ -465,12 +465,12 @@ switch ($ajax_id) {
 		$search = "";
 	}
 	$exam_query = "SELECT exam_id, exam_name, num_questions, exam_type, unlocked, show_score, EXISTS(SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) as done FROM created_exams WHERE exam_name LIKE '%".$search."%' ";
-
+	/*
 	if($_SESSION['admin_boolean']) {
 		$exam_query .= "LIMIT 75";
 	}
 	else if ($_SESSION['class'] == 'writtens') {
-		$exam_query .= "AND (exam_type = 'writtens' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
+		$exam_query .= "AND (exam_type = 'writtens' OR exam_type='marketing' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	else if (strpos($_SESSION['class'], "principles")) {
 		$exam_query .= "AND (exam_type = 'principles' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
@@ -478,6 +478,15 @@ switch ($ajax_id) {
 	else {
 		$exam_query .= "AND (exam_type = '".$_SESSION['class']."' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
+	*/
+
+	if($_SESSION['admin_boolean']) {
+		$exam_query .= "LIMIT 75";
+	}
+	else {
+		$exam_query .= "AND unlocked = 1 LIMIT 75";
+	}
+
 	$results = mysqli_query ($dbconfig, $exam_query);
 	$data = array();
 	$data['exam_id'] = array();
@@ -835,6 +844,22 @@ switch ($ajax_id) {
 		array_push($data['ended'], $row['ended']);
 	}
 	$data['num'] = mysqli_num_rows($result);
+	echo json_encode($data);
+	break;
+
+
+	case "sidebar_change_password":
+	$student_number = json_decode($_POST['student_number']);
+	$password = json_decode($_POST['password']);
+	$hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 11]);
+	$query = "UPDATE members SET password='$hashed_password' WHERE student_number = '$student_number' AND admin = 0";
+	$result = mysqli_query($dbconfig, $query);	
+	if (mysqli_affected_rows($dbconfig) > 0) {
+		$data = true;
+	}
+	else {
+		$data = false;
+	}
 	echo json_encode($data);
 	break;
 

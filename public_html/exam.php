@@ -69,7 +69,7 @@ include ('includes/session.php');
     </header>
 
 
-
+<div style="padding-left:1vw; padding-right:1vw;">
     <section class="container-fluid-body">
       <div class="navbar-top-buffer"></div>
       <div id="timer_container">
@@ -82,11 +82,12 @@ include ('includes/session.php');
         <div id="errors">
         </div>
 
-        <form method="post" id="submit" role="form">
+        <form id="submit" role="form">
           <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit_button" style="margin-top:2vh;">Submit</button>
         </form>
 
       </section>
+    </div>
     </div>
     <!-- /.content-wrapper -->
 

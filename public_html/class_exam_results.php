@@ -34,7 +34,7 @@ else {
   $exam_id = 0;
 }
 $data = array();
-$data_query = "SELECT first_name, last_name, exam_results.student_number, percentage, score, total, UNIX_TIMESTAMP(exam_results.date) as time, DATE_FORMAT(DATE, '%d %M %Y') AS date FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE exam_id = ".$exam_id." ORDER BY time DESC;";
+$data_query = "SELECT first_name, last_name, exam_results.student_number, percentage, score, total, UNIX_TIMESTAMP(exam_results.date) as time, DATE_FORMAT(DATE, '%d %M %Y') AS date, DATE_FORMAT(DATE, '%d %M %Y %H:%i:%s') AS timestamp FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE exam_id = ".$exam_id." ORDER BY time DESC;";
 $results = mysqli_query($dbconfig, $data_query);
 if ($results != false) {
   $data['first_name'] = array();
@@ -44,17 +44,39 @@ if ($results != false) {
   $data['total'] = array();
   $data['percentage'] = array();
   $data['date'] = array();
+  $data['timestamp'] = array();
   while ($row = mysqli_fetch_assoc($results)) {
     array_push($data['first_name'], $row['first_name']);
     array_push($data['last_name'], $row['last_name']);
-    array_push($data['student_number'], $row['student_number']);
+    array_push($data['student_number'], $row['student_number']); 
     array_push($data['score'], $row['score']);
     array_push($data['total'], $row['total']);
     array_push($data['percentage'], $row['percentage']);
     array_push($data['date'], $row['date']);
+    array_push($data['timestamp'], $row['timestamp']);
   }
   $data['count'] = mysqli_num_rows($results);
 }
+
+
+//Download Exam Scores
+if (isset($_GET['download_file']) && $_GET['download_file']==1) {
+
+// output headers so that the file is downloaded rather than displayed
+  header('Content-Type: text/csv; charset=utf-8');
+  header('Content-Disposition: attachment; filename='.$exam_list['exam_name'][$exam_id].'_'.time().'.csv');
+
+// create a file pointer connected to the output stream
+  $output = fopen('php://output', 'w');
+    fputcsv($output, array($exam_list['exam_name'][$exam_id]));
+    fputcsv($output, array("First Name", "Last Name", "Student Number", "Score", "Total Questions", "Percentage", "Time"));
+  for ($i = 0; $i < $data['count']; $i++) {
+    fputcsv($output, array($data['first_name'][$i],$data['last_name'][$i],$data['student_number'][$i],$data['score'][$i],$data['total'][$i],$data['percentage'][$i],$data['timestamp'][$i]));
+  }
+  fclose($output);
+  exit();
+}
+
 
 ?>
 
@@ -113,73 +135,78 @@ if ($results != false) {
 
     <!-- Main content -->
     <section class="content">
-      
+
       <div class="box">
-      <div class="box-header">
-        <div style="text-align:right;">
-          <select id="exam_id_dropdown" onchange="change_exam()">
-            <?php 
+        <div class="box-header">
+          <?php
+          echo '
+          <a href="?exam_id='.$exam_id.'&download_file=1">Download Spreadsheet</a>
+          ';
+          ?>
+          <div style="text-align:right;">
+            <select id="exam_id_dropdown" onchange="change_exam()">
+              <?php 
 
-            for ($i = 0; $i < count($exam_list['exam_id']); $i++) {
-              echo "<option value='".$exam_list['exam_id'][$i]."'>".$exam_list['exam_name'][$i]."</option>";
-            }
+              for ($i = 0; $i < count($exam_list['exam_id']); $i++) {
+                echo "<option value='".$exam_list['exam_id'][$i]."'>".$exam_list['exam_name'][$i]."</option>";
+              }
 
-            ?>
-          </select>
+              ?>
+            </select>
+          </div>
         </div>
-      </div>
-      <!-- /.box-header -->
-      <div class="box-body">
-        <table id="exam_results_table" class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Student Number</th>
-              <th>Score</th>
-              <th>Total</th>
-              <th>Percentage</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody id="table_body">
-            <?php for ($i = 0 ; $i < $data['count']; $i++) {
-              echo '
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="exam_results_table" class="table table-bordered table-hover">
+            <thead>
               <tr>
-              <td>'.$data['first_name'][$i].'</td>
-              <td>'.$data['last_name'][$i].'</td>
-              <td>'.$data['student_number'][$i].'</td>
-              <td>'.$data['score'][$i].'</td>
-              <td>'.$data['total'][$i].'</td>
-              <td>'.$data['percentage'][$i].'</td>
-              <td>'.$data['date'][$i].'</td>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Student Number</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Date</th>
               </tr>
-              ';
-            }
-            ?>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Student Number</th>
-              <th>Score</th>
-              <th>Total</th>
-              <th>Percentage</th>
-              <th>Date</th>
-            </tr>
-          </tfoot>
-        </table>
+            </thead>
+            <tbody id="table_body">
+              <?php for ($i = 0 ; $i < $data['count']; $i++) {
+                echo '
+                <tr>
+                <td>'.$data['first_name'][$i].'</td>
+                <td>'.$data['last_name'][$i].'</td>
+                <td>'.$data['student_number'][$i].'</td>
+                <td>'.$data['score'][$i].'</td>
+                <td>'.$data['total'][$i].'</td>
+                <td>'.$data['percentage'][$i].'</td>
+                <td>'.$data['date'][$i].'</td>
+                </tr>
+                ';
+              }
+              ?>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Student Number</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Date</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
       </div>
-      <!-- /.box-body -->
-    </div>
-    <!-- /.box -->
+      <!-- /.box -->
 
 
-  </section>
-  <!-- /.content -->
-</div>
-<!-- /.content-wrapper -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
 </div>
 
 <script>

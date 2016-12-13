@@ -12,24 +12,9 @@ if(!isset($_GET['reset_code'])) {
 }
 $reset_code = $_GET['reset_code'];
 
-$member;
-
 $reset_code_query = "SELECT password_reset_code FROM members WHERE password_reset_code = '$reset_code'";
 $result = mysqli_query($dbconfig, $reset_code_query);
 if (mysqli_num_rows($result) == 1) {
-    $member = true;
-}
-if (mysqli_num_rows($result) == 0) {
-    $reset_code_query = "SELECT password_reset_code FROM applicants WHERE password_reset_code = '$reset_code'";
-    $result = mysqli_query($dbconfig, $reset_code_query);
-    if (mysqli_num_rows($result) == 1) {
-        $member = false;
-    }
-    else {
-        $URL="login.php";
-        echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
-        echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
-    }
 }
 
 if (isset($_POST['set_password'])) {
@@ -40,12 +25,7 @@ if (isset($_POST['set_password'])) {
 
     $password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 11]);
 
-    if ($member) {
     $query = "UPDATE members SET password='$password', password_reset_code = NULL WHERE password_reset_code = '$reset_code'";
-    }
-    else {
-    $query = "UPDATE applicants SET password='$password', password_reset_code = NULL WHERE password_reset_code = '$reset_code'";
-    }
     $res = mysqli_query($dbconfig, $query) or die("Connection failed: " . mysqli_error($dbconfig));
 
     if ($res) {

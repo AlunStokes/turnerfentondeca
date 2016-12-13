@@ -28,30 +28,28 @@
       </ul>
       <!-- /.control-sidebar-menu -->
     </div>
-
-
-
     <!-- /.tab-pane -->
+
+
+
     <!-- Stats tab content -->
     <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
     <!-- /.tab-pane -->
+
     <!-- Settings tab content -->
     <div class="tab-pane" id="control-sidebar-settings-tab">
-      <form method="post">
-        <h3 class="control-sidebar-heading">General Settings</h3>
-
-        <div class="form-group">
-          <label class="control-sidebar-subheading">
-            Report panel usage
-            <input type="checkbox" class="pull-right" checked>
-          </label>
-
-          <p>
-            Some information about this general settings option
-          </p>
-        </div>
-        <!-- /.form-group -->
-      </form>
+      <h3 class="control-sidebar-heading">Change Password</h3>
+      <div class="form-group">
+        <label class="sidebar-label">
+          Student Number
+          <input type="text" class="sidebar-input" id="change_password_student_number">
+        </label>
+        <label class="sidebar-label">
+          New Password
+          <input type="password" class="sidebar-input" id="change_password_password">
+        </label>
+        <button class="btn btn-large btn-fullwidth" id="change_password_button">Change Password</button>
+      </div>
     </div>
     <!-- /.tab-pane -->
   </div>
@@ -166,6 +164,24 @@ function loadOnline() {
   });
 }
 
+function changePassword() {
+  $.ajax({
+    type: "post",
+    url: "includes/ajax.php",
+    data: {ajax_id : JSON.stringify("sidebar_change_password"),
+    password : JSON.stringify($("#change_password_password").val()),
+    student_number : JSON.stringify($("#change_password_student_number").val())},
+  }).done(function(data){ 
+    var data = jQuery.parseJSON(data);
+    if (data) {
+      alert ("Password successfully updated");
+    }
+    else {
+      alert ("Error updating password - Check the student number");
+    }
+  });
+}
+
 loadOnline();
 loadAttendance();
 $("#refresh_users").on("change", function() {
@@ -178,6 +194,18 @@ var stillAlive = setInterval(function () {
     loadOnline();
   }
 }, 50000);
+
+$("#change_password_button").on("click", function() {
+  if ($("#change_password_password").val().length < 5) {
+    alert ("Password must be at least 5 characters");
+  }
+  else if ($("#change_password_student_number").val().length != 6) {
+    alert ("Student number is 6 characters long");
+  }
+  else {
+    changePassword();
+  }
+});
 
 
 $('.control-sidebar, .tab-content, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
