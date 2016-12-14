@@ -66,7 +66,7 @@ $active_page = 'practice';
 
        <button class="btn btn-lg btn-primary btn-block btn-full-5" id="new_exam">Start New Exam</button>
        <button class="btn btn-lg btn-primary btn-block btn-full-5" id="search_exams">Search Exams</button>
-       <button class="btn btn-lg btn-primary btn-block btn-full-5" id="question_search">Find Specific Question</button>
+       <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" id="question_search">Find Specific Question</button>'; } ?>
        <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" onclick="location.href=`create_exam.php`">Create Exam</button>'; } ?>
        <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" onclick="location.href=`add_question.php`">Add Question</button>'; } ?>
 
