@@ -28,7 +28,8 @@ include ('includes/session.php');
   <link rel="stylesheet" href="css/skin-blue.min.css">
   <!-- Page Style -->
   <link rel="stylesheet" href="css/exam.css">
-
+  <!-- Spinner Style -->
+  <link rel="stylesheet" href="css/please-wait.css">
 
 
   <!-- jQuery 2.2.3 -->
@@ -42,17 +43,14 @@ include ('includes/session.php');
   <script src="js/jquery.easing.min.js"></script>
   <!-- jQuery Timer Javascript -->
   <script src="js/jquery.simple.timer.js"></script>
+  <!-- Please Wait JS -->
+  <script src="js/please-wait.min.js"></script>
 
 </head>
 
 
 <body class="hold-transition skin-blue sidebar-mini fixed">
   <div class="wrapper">
-
-
-
-
-
     <!-- Main Header -->
     <header class="main-header">
 
@@ -69,37 +67,48 @@ include ('includes/session.php');
     </header>
 
 
-<div style="padding-left:1vw; padding-right:1vw;">
-    <section class="container-fluid-body">
-      <div class="navbar-top-buffer"></div>
-      <div id="timer_container">
-      </div>
-    </section>
-
-    <section class="container-fluid-submit">
-      <h1>Once finished, submit the exam below.
-
-        <div id="errors">
+    <div style="padding-left:1vw; padding-right:1vw;">
+      <section class="container-fluid-body">
+        <div class="navbar-top-buffer"></div>
+        <div id="timer_container">
         </div>
-
-        <form id="submit" role="form">
-          <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit_button" style="margin-top:2vh;">Submit</button>
-        </form>
-
       </section>
-    </div>
+
+      <section class="container-fluid-submit">
+        <h1>Once finished, submit the exam below.
+
+          <div id="errors">
+          </div>
+
+          <form id="submit" role="form">
+            <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit_button" style="margin-top:2vh;">Submit</button>
+          </form>
+
+        </section>
+      </div>
     </div>
     <!-- /.content-wrapper -->
 
     <script type="text/javascript">
+    var spinner = `
+    <div class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+    </div>
+    `;
+    window.loading_screen = window.pleaseWait({
+      logo: "img/logo_medium_white.png",
+      backgroundColor: '#222d32',
+      loadingHtml: spinner
+    });
+
 
     var submitted = false;
     var chosen;
     var data;
 
     $(document).ready(function(){
-
-
       var admin = <?php echo $_SESSION['admin']; ?>;
       var done = <?php if (isset($_POST['done'])) { echo json_encode(intval($_POST['done'])); } else { echo "null"; } ?>;
       if (done == 1 && admin == 0) {
@@ -123,6 +132,9 @@ $.ajax({
   data: {ajax_id : JSON.stringify("exam_get_questions"),
   exam_cluster : JSON.stringify(exam_cluster),
   exam_id : JSON.stringify(exam_id)},
+  success : function(html){
+    loading_screen.finish();
+  }
 }).done(function(data){ 
   data = jQuery.parseJSON(data);
   $("#timer_container").append(`<div class="timer" style="text-align:center; color:#333; font-size:40px;"data-seconds-left=`+data['time']+`></div>`);
@@ -193,11 +205,11 @@ function writeQuestions(item,index) {
     <hr width="70%"></hr>
     `);
 
-  if (admin == 1 && exam_id != 0) {
+if (admin == 1 && exam_id != 0) {
   $('.question_box_' + (item)).append(`
     <i><p>Answer: `+data['answer'][item]+`</p></i>
     `);
-  }
+}
 counter++;
 }
 

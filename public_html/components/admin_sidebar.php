@@ -12,20 +12,26 @@
   <div class="tab-content">
     <!-- Home tab content -->
     <div class="tab-pane active" id="control-sidebar-home-tab">
+      <div id="sidebar-recent-exams-section">
       <h3 class="control-sidebar-heading">Recent Exams</h3>
       <ul class="control-sidebar-menu" id="sidebar-recent-exmas">
       </ul>
+    </div>
       <!-- /.control-sidebar-menu -->
 
+      <div id="sidebar-attendance-section">
       <h3 class="control-sidebar-heading">Attendance</h3>
       <ul class="control-sidebar-menu" id="sidebar-attendance">
       </ul>
+    </div>
       <!-- /.control-sidebar-menu -->
 
+      <div id="sidebar-recent-users-section">
       <h3 class="control-sidebar-heading">Recent Users</h3>
       <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Refresh User List Automatically</label>
       <ul class="control-sidebar-menu" id="sidebar-online-users">
       </ul>
+    </div>
       <!-- /.control-sidebar-menu -->
     </div>
     <!-- /.tab-pane -->
@@ -61,7 +67,9 @@
 </div>
 <!-- ./wrapper -->
 <script>
-$.ajax({
+
+function loadRecentExams() {
+  $.ajax({
   type: "get",
   url: "includes/ajax.php",
   data: {ajax_id : JSON.stringify("sidebar_recent_exams")},
@@ -81,8 +89,9 @@ $.ajax({
     </li>
     `;
   }
-  $("#sidebar-recent-exmas").append(recent_exams_html);
+  $("#sidebar-recent-exmas").html(recent_exams_html);
 });
+}
 
 function loadAttendance() {
   $.ajax({
@@ -184,6 +193,7 @@ function changePassword() {
 
 loadOnline();
 loadAttendance();
+loadRecentExams();
 $("#refresh_users").on("change", function() {
   if ($("#refresh_users").is(':checked')) {
     loadOnline();

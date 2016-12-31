@@ -782,7 +782,7 @@ switch ($ajax_id) {
 
 	//Sidebar
 	case "sidebar_recent_exams":
-	$query = "SELECT first_name, last_name, members.student_number, percentage, UNIX_TIMESTAMP(date) as unix_time, DATE_FORMAT(DATE, '%d %M %Y') AS time FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE DATE > DATE_ADD(CURDATE(), INTERVAL -5 DAY)  ORDER BY unix_time DESC;";
+	$query = "SELECT first_name, last_name, members.student_number, percentage, UNIX_TIMESTAMP(date) as unix_time, DATE_FORMAT(DATE, '%d %M %Y') AS time FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE DATE > DATE_ADD(CURDATE(), INTERVAL -7 DAY)  ORDER BY unix_time DESC;";
 	$result = mysqli_query($dbconfig, $query);
 	$data = array();
 	$data['first_name'] = array();
