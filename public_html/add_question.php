@@ -106,8 +106,7 @@ mysqli_multi_query($dbconfig, $query) or die(mysqli_error($dbconfig));
                   <img src="img/user_images/thumbnails/<?php echo $_SESSION['image_file']; ?>" class="img-circle" alt="User Image">
 
                   <p>
-                    <?php if ($_SESSION['event_boolean']) { echo $_SESSION['first_name'].' '.$_SESSION['last_name'].' - '.$_SESSION['cluster'].' ('.$_SESSION['event'].')'; }
-                    else { echo $_SESSION['first_name'].' '.$_SESSION['last_name'].'<br>Undecided'; } ?>
+                    <?php echo $_SESSION['first_name'].' '.$_SESSION['last_name'].' - '.$_SESSION['cluster'].' ('.$_SESSION['event'].')';  ?>
                     <small>Member since June. 2016</small>
                   </p>
                 </li>

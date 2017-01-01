@@ -11,28 +11,6 @@ if ($_SESSION['member'] == false) {
 
 header("Location: timeline.php");
 
-//include 'includes/admin_sidebar.php';
-//if (!$_SESSION['event_boolean']) { include 'includes/event_selection_modal.php'; }
-
-/*
-//Load messages and notifications
-$message_query = mysqli_query($dbconfig, "SELECT * FROM notifications WHERE receiver = '$student_number' AND notification_type = 'message' AND is_read = '0'");
-if(mysqli_num_rows($message_query) > 0 ){
-  $message_array = array();
-  while($row = mysqli_fetch_array($message_query, MYSQLI_ASSOC)){
-    $message_array[] = $row ;
-  }
-  $num_messages = sizeof($message_array);
-} 
-
-$reminder_query = mysqli_query($dbconfig, "SELECT * FROM notifications WHERE receiver = '$student_number' AND notification_type = 'reminder'");
-if(mysqli_num_rows($reminder_query) > 0 ){
-  while($row = mysqli_fetch_array($reminder_query, MYSQLI_ASSOC)){
-    $reminder_array[] = $row ;
-  }
-} 
-*/
-
 ?>
 
 <!DOCTYPE html>
