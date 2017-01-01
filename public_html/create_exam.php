@@ -3,7 +3,7 @@
 include ('includes/session.php');
 
 if ($_SESSION['member'] == false) {
-  header("Location:applicant_home.php");
+  header("Location:applicant_home");
 }
 
 
@@ -52,7 +52,7 @@ if ($_SESSION['member'] == false) {
     <header class="main-header">
 
       <!-- Logo -->
-      <a href="practice.php" class="logo">
+      <a href="practice" class="logo">
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><i class="glyphicon glyphicon-chevron-left"></i> Back to Practice</span>
       </a>
@@ -62,9 +62,6 @@ if ($_SESSION['member'] == false) {
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
-
-
-
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
               <!-- Menu Toggle Button -->
@@ -80,171 +77,172 @@ if ($_SESSION['member'] == false) {
                   <img src="img/user_images/thumbnails/<?php echo $_SESSION['image_file']; ?>" class="img-circle" alt="User Image">
 
                   <p>
-                    <?php if ($_SESSION['event_boolean']) { echo $_SESSION['first_name'].' '.$_SESSION['last_name'].' - '.$_SESSION['cluster'].' ('.$_SESSION['event'].')'; }
-                    else { echo $_SESSION['first_name'].' '.$_SESSION['last_name'].'<br>Undecided'; } ?>
-                    <small>Member since June. 2016</small>
+                    <?php echo $_SESSION['first_name'].' '.$_SESSION['last_name'].' <br> '.$_SESSION['cluster'].' ('.$_SESSION['event'].')'; ?>
+                    <!-- <small>Member since June. 2016</small> -->
                   </p>
                 </li>
 
                 <!-- Menu Footer-->
                 <li class="user-footer">
                   <div class="pull-left">
-                    <a href="account.php" class="btn btn-default btn-flat">Account</a>
+                    <a href="account" class="btn btn-default btn-menu">Account</a>
                   </div>
                   <div class="pull-right">
-                    <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
+                    <a href="logout" class="btn btn-default btn-menu">Sign out</a>
                   </div>
                 </li>
               </ul>
             </li>
-          </ul>
-        </div>
-      </nav>
-    </header>
-
-
-
-    <section class="container-fluid-body" id="top-div">
-
-      <h1 style="text-align:center">Create An Exam</h1>
-      <h1>1. Add Questions</h1>
-      <p>   Toggle switch to add question to exam</p>
-      <div class="container-fluid">
-        <div class="row" style="margin-top:1vh;">
-          <div class="col-md-6">
-            <input tpye="text" id="question_contains" class="question-search" placeholder="Write words in question" style="width:100%; font-size:14px; height:30px;" />
+            <!-- Control Sidebar Toggle Button -->
+            <li>
+            </ul>
           </div>
-          <div class="col-md-6" style="text-align:right; padding:8px;">
-            <select id="dropdown">
-              <option value="mix">All Clusters</option>
-              <option value="marketing">Marketing</option>
-              <option value="businessadmin">Business Administration</option>
-              <option value="finance">Finance</option>
-              <option value="hospitality">Hospitality & Tourism</option>
-            </select>
+        </nav>
+      </header>
+
+
+
+      <section class="container-fluid-body" id="top-div">
+
+        <h1 style="text-align:center">Create An Exam</h1>
+        <h1>1. Add Questions</h1>
+        <p>   Toggle switch to add question to exam</p>
+        <div class="container-fluid">
+          <div class="row" style="margin-top:1vh;">
+            <div class="col-md-6">
+              <input tpye="text" id="question_contains" class="question-search" placeholder="Write words in question" style="width:100%; font-size:14px; height:30px;" />
+            </div>
+            <div class="col-md-6" style="text-align:right; padding:8px;">
+              <select id="dropdown">
+                <option value="mix">All Clusters</option>
+                <option value="marketing">Marketing</option>
+                <option value="businessadmin">Business Administration</option>
+                <option value="finance">Finance</option>
+                <option value="hospitality">Hospitality & Tourism</option>
+              </select>
+            </div>
+          </div>
+
+          <br>
+          <br>
+          <div class-"row" id="question_area">
           </div>
         </div>
 
-        <br>
-        <br>
-        <div class-"row" id="question_area">
-        </div>
-      </div>
 
-
-      <h1>2. Review Questions</h1>
-      <p>   Make sure all questions are meant to be there</p>
-      <div class="container-fluid">
-        <div class="row" id="num_questions" style="align:center; text-align:center;">
+        <h1>2. Review Questions</h1>
+        <p>   Make sure all questions are meant to be there</p>
+        <div class="container-fluid">
+          <div class="row" id="num_questions" style="align:center; text-align:center;">
+          </div>
+          <div class-"row" id="review_area">
+          </div>
         </div>
-        <div class-"row" id="review_area">
-        </div>
-      </div>
 
-      <h1>3. What Type of Exam is This?</h1>
-      <p>   Choose a cluster, or mixed</p>
+        <h1>3. What Type of Exam is This?</h1>
+        <p>   Choose a cluster, or mixed</p>
         <div class="row" id="num_questions" style="align:center; text-align:center;">
           <select id="dropdown_large">
-              <option value="mix">Mixed Clusters</option>
-              <option value="marketing">Marketing</option>
-              <option value="businessadmin">Business Administration</option>
-              <option value="finance">Finance</option>
-              <option value="hospitality">Hospitality & Tourism</option>
-              <option value="principles">Principles</option>
-              <option value="writtens">Writtens</option>
-            </select>
+            <option value="mix">Mixed Clusters</option>
+            <option value="marketing">Marketing</option>
+            <option value="businessadmin">Business Administration</option>
+            <option value="finance">Finance</option>
+            <option value="hospitality">Hospitality & Tourism</option>
+            <option value="principles">Principles</option>
+            <option value="writtens">Writtens</option>
+          </select>
         </div>
 
         <h1>4. Do you want this exam to be unlocked?</h1>
         <div class="row" id="num_questions" style="align:center; text-align:center;">
           <select id="dropdown_unlocked" class="dropdown_large">
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
         </div>
 
         <h1>5. Do you want this exam to show a score when finished?</h1>
         <div class="row" id="num_questions" style="align:center; text-align:center;">
           <select id="dropdown_show_score" class="dropdown_large">
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
         </div>
 
-      <h1>6. Name Your Exam</h1>
-      <p>   Make sure to make it creative!</p>
-      <form method="post" id="create" role="form">
-        <input id="exam_name" type="type" maxlength=100 style="height:5vh; width:100%; font-size: 24px;" />
-        <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit_button" style="margin-top:2vh;">Create Exam</button>
-        <button class="btn btn-lg btn-danger btn-block" id="submit_button" style="margin-top:2vh;">Start Another Exam</button>
-      </form>
-    </section>
+        <h1>6. Name Your Exam</h1>
+        <p>   Make sure to make it creative!</p>
+        <form method="post" id="create" role="form">
+          <input id="exam_name" type="type" maxlength=100 style="height:5vh; width:100%; font-size: 24px;" />
+          <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit_button" style="margin-top:2vh;">Create Exam</button>
+          <button class="btn btn-lg btn-danger btn-block" id="submit_button" style="margin-top:2vh;">Start Another Exam</button>
+        </form>
+      </section>
 
-  </body>
+    </body>
 
-  <script type="text/javascript">
-  var results;
-  var num_questions = new Array();
-  num_questions['marketing'] = 0;
-  num_questions['finance'] = 0;
-  num_questions['businessadmin'] = 0;
-  num_questions['hospitality'] = 0;
-  var selected = new Array();
-  selected['question_id'] = new Array();
-  selected['question'] = new Array();
-  selected['cluster'] = new Array();
-  $(document).ready(function() {
-    ajax_call();
+    <script type="text/javascript">
+    var results;
+    var num_questions = new Array();
+    num_questions['marketing'] = 0;
+    num_questions['finance'] = 0;
+    num_questions['businessadmin'] = 0;
+    num_questions['hospitality'] = 0;
+    var selected = new Array();
+    selected['question_id'] = new Array();
+    selected['question'] = new Array();
+    selected['cluster'] = new Array();
+    $(document).ready(function() {
+      ajax_call();
 
-    $('#submit_button').click(function(e) {
-      this.disabled = true;
-      e.preventDefault();
-      var name = document.getElementById('exam_name').value;
-      if (typeof name == 'undefined' || name =="") {
-        alert ("Your exam must have a name");
-            this.disabled = false;
-      }
-      else if (selected['question_id'].length == 0) {
-        alert("Your exam must contain at least one question");
-            this.disabled = false;
-      }
-      else {
-        console.log(name);
-        console.log(selected['question_id'].toString());
-        var type = document.getElementById('dropdown_large').value;
-        var unlocked = document.getElementById('dropdown_unlocked').value;
-        var show_score = document.getElementById('dropdown_show_score').value;
-        console.log (type);
-        $.ajax({
-          type: "get",
-          url: "includes/ajax.php",
-          data: {ajax_id : JSON.stringify("create_exam_save"),
+      $('#submit_button').click(function(e) {
+        this.disabled = true;
+        e.preventDefault();
+        var name = document.getElementById('exam_name').value;
+        if (typeof name == 'undefined' || name =="") {
+          alert ("Your exam must have a name");
+          this.disabled = false;
+        }
+        else if (selected['question_id'].length == 0) {
+          alert("Your exam must contain at least one question");
+          this.disabled = false;
+        }
+        else {
+          console.log(name);
+          console.log(selected['question_id'].toString());
+          var type = document.getElementById('dropdown_large').value;
+          var unlocked = document.getElementById('dropdown_unlocked').value;
+          var show_score = document.getElementById('dropdown_show_score').value;
+          console.log (type);
+          $.ajax({
+            type: "get",
+            url: "includes/ajax",
+            data: {ajax_id : JSON.stringify("create_exam_save"),
             name : JSON.stringify(name),
             unlocked : JSON.stringify(unlocked),
             show_score : JSON.stringify(show_score),
-           question_id : JSON.stringify(selected['question_id']),
-           length : JSON.stringify(selected['question_id'].length),
-           type : JSON.stringify(type)}
-         }).done(function(data){
-          var data = jQuery.parseJSON(data);
-          if (data == "failed") {
-            alert ("Exam name already exists - Pick another");
-            this.disabled = false;
-          }
-          else if (data == "success") {
-            alert("Exam has been saved!");
-          }
-          else {
-            this.disabled = false;
-          }
-        });
-       }
-     });
+            question_id : JSON.stringify(selected['question_id']),
+            length : JSON.stringify(selected['question_id'].length),
+            type : JSON.stringify(type)}
+          }).done(function(data){
+            var data = jQuery.parseJSON(data);
+            if (data == "failed") {
+              alert ("Exam name already exists - Pick another");
+              this.disabled = false;
+            }
+            else if (data == "success") {
+              alert("Exam has been saved!");
+            }
+            else {
+              this.disabled = false;
+            }
+          });
+        }
+      });
 
 $('#reset').click(function() {
   location.reload();
 })
-  });
+});
 
 $('#question_contains').keyup(function() {
   ajax_call();
@@ -311,18 +309,18 @@ function ajax_call() {
   selected['']
   $.ajax({
     type: "get",
-    url: "includes/ajax.php",
+    url: "includes/ajax",
     data: {ajax_id : JSON.stringify("create_exam_search_question"),
-      search : JSON.stringify(search_text),
-      question_type : JSON.stringify(question_type)},
-      dataType : "json"
-    }).done(function(data){
-      results = jQuery.parseJSON(JSON.stringify(data));
-      update();
-    });
-  }
+    search : JSON.stringify(search_text),
+    question_type : JSON.stringify(question_type)},
+    dataType : "json"
+  }).done(function(data){
+    results = jQuery.parseJSON(JSON.stringify(data));
+    update();
+  });
+}
 
-  function update() {
+function update() {
       //Add Questions Section
       if (typeof results['questions'][0] == 'undefined') {
         $('#question_area').html(`

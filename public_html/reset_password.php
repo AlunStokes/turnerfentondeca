@@ -83,7 +83,7 @@ $(document).ready(function() {
         var student_number = document.getElementById('student_number').value;
         $.ajax({
             type: "get",
-            url: "includes/ajax.php",
+            url: "includes/ajax",
             data: {ajax_id : JSON.stringify("reset_send_reset"),
             student_number : JSON.stringify(student_number)},
             dataType : "json"

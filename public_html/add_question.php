@@ -78,7 +78,7 @@ mysqli_multi_query($dbconfig, $query) or die(mysqli_error($dbconfig));
     <header class="main-header">
 
       <!-- Logo -->
-      <a href="practice.php" class="logo">
+      <a href="practice" class="logo">
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><i class="glyphicon glyphicon-chevron-left"></i> Back to Practice</span>
       </a>
@@ -93,36 +93,37 @@ mysqli_multi_query($dbconfig, $query) or die(mysqli_error($dbconfig));
 
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
-              <!-- Menu Toggle Button -->
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <!-- The user image in the navbar-->
-                <img src="img/user_images/thumbnails/<?php echo $_SESSION['image_file']; ?>" class="user-image" alt="User Image" width="160px" height="160px">
-                <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs"><?php echo $_SESSION['first_name'].' '.$_SESSION['last_name']; ?></span>
-              </a>
-              <ul class="dropdown-menu">
-                <!-- The user image in the menu -->
-                <li class="user-header">
-                  <img src="img/user_images/thumbnails/<?php echo $_SESSION['image_file']; ?>" class="img-circle" alt="User Image">
+          <!-- Menu Toggle Button -->
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <!-- The user image in the navbar-->
+            <img src="img/user_images/thumbnails/<?php echo $_SESSION['image_file']; ?>" class="user-image" alt="User Image" width="160px" height="160px">
+            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+            <span class="hidden-xs"><?php echo $_SESSION['first_name'].' '.$_SESSION['last_name']; ?></span>
+          </a>
+          <ul class="dropdown-menu">
+            <!-- The user image in the menu -->
+            <li class="user-header">
+              <img src="img/user_images/thumbnails/<?php echo $_SESSION['image_file']; ?>" class="img-circle" alt="User Image">
 
-                  <p>
-                    <?php if ($_SESSION['event_boolean']) { echo $_SESSION['first_name'].' '.$_SESSION['last_name'].' - '.$_SESSION['cluster'].' ('.$_SESSION['event'].')'; }
-                    else { echo $_SESSION['first_name'].' '.$_SESSION['last_name'].'<br>Undecided'; } ?>
-                    <small>Member since June. 2016</small>
-                  </p>
-                </li>
-
-                <!-- Menu Footer-->
-                <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="account.php" class="btn btn-default btn-flat">Account</a>
-                  </div>
-                  <div class="pull-right">
-                    <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
-                  </div>
-                </li>
-              </ul>
+              <p>
+                <?php echo $_SESSION['first_name'].' '.$_SESSION['last_name'].' <br> '.$_SESSION['cluster'].' ('.$_SESSION['event'].')'; ?>
+                <!-- <small>Member since June. 2016</small> -->
+              </p>
             </li>
+
+            <!-- Menu Footer-->
+            <li class="user-footer">
+              <div class="pull-left">
+                <a href="account" class="btn btn-default btn-menu">Account</a>
+              </div>
+              <div class="pull-right">
+                <a href="logout" class="btn btn-default btn-menu">Sign out</a>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <!-- Control Sidebar Toggle Button -->
+        <li>
           </ul>
         </div>
       </nav>

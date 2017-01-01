@@ -5,7 +5,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                     Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand page-scroll" href="landing.php">
+                <a class="navbar-brand page-scroll" href="landing">
                     <img src="img/deca_logo_small_letters.png"></img>
                 </a>
             </div>
@@ -18,10 +18,10 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a href="landing.php">Home</a>
+                        <a href="landing">Home</a>
                     </li>
                     <li>
-                        <a href="reset_password.php">Account Recovery</a>
+                        <a href="reset_password">Account Recovery</a>
                     </li>
                 </ul>
             </div>
