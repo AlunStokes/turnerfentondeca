@@ -186,11 +186,14 @@ function loadOnline() {
         else if (time < 604800) {
           var time_text = Math.floor(time/86400)+" days";
         }
+        else if (time < 2419200) {
+          var time_text = Math.floor(time/604800)+" weeks";
+        }
         else {
           var time_text = data['last_online_formatted'][i]
         }
         online_users_html +=`
-        <p>Last Online: <i>`+time_text+`</i></p>
+        <p>Last Online: <span title="`+data['last_online_formatted'][i]+`"><i>`+time_text+`</i><span></p>
         </div>
         </a>
         </li>
