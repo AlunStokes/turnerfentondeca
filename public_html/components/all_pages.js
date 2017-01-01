@@ -1,7 +1,7 @@
 function setOnline() {
   $.ajax({
     type: "get",
-    url: "includes/ajax.php",
+    url: "includes/ajax",
     data: {ajax_id: JSON.stringify("still_alive")},
   }).done(function(data){
   });

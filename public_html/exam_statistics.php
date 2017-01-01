@@ -163,7 +163,7 @@ while ($row = mysqli_fetch_assoc($results)) {
 
     $.ajax({
       type: "get",
-      url: "includes/ajax.php",
+      url: "includes/ajax",
       data: {ajax_id : JSON.stringify("personal_exam_stats")},
     }).done(function(final){ 
       var final = jQuery.parseJSON(final);
@@ -258,7 +258,7 @@ while ($row = mysqli_fetch_assoc($results)) {
 
       }
       else {
-        $("#doughnut_chart_area").append("<h1>No exam data yet - <a href='practice.php'>Try an exam now</a></h1>");
+        $("#doughnut_chart_area").append("<h1>No exam data yet - <a href='practice'>Try an exam now</a></h1>");
       }
     });
 
