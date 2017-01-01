@@ -245,7 +245,7 @@ $("#change_password_button").on("click", function() {
 });
 
 
-$('.control-sidebar, .tab-content, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
+$('.tab-content, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {
   var scrollTo = null;
 
   if (e.type == 'mousewheel') {

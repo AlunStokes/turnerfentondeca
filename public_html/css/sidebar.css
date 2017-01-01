@@ -24,6 +24,12 @@
 	display: none;
 }
 
+.control-sidebar {
+	height: 100%;
+	padding-bottom: 0 !important;
+	overflow: hidden !important;
+}
+
 .control-sidebar-menu>li>a {
 	display: block;
 	padding: 10px 15px;
