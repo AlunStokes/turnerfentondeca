@@ -806,7 +806,7 @@ switch ($ajax_id) {
 	//Only show recently online
 	//$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online, last_online FROM members WHERE last_online > NOW() - INTERVAL 5 MINUTE ORDER BY last_online DESC;";
 	//Show all users
-	$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online, DATE_FORMAT(last_online, '%d %M %Y') AS last_online_formatted FROM members WHERE first_name LIKE '%$search%' OR last_name LIKE '%$search%' OR concat(first_name, ' ', last_name) LIKE '%$search%' ORDER BY last_online DESC;";
+	$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online, DATE_FORMAT(last_online, '%d %M %Y') AS last_online_formatted FROM members WHERE first_name LIKE '%$search%' OR last_name LIKE '%$search%' OR CONVERT(student_number, CHAR(6)) LIKE '%$search%' OR concat(first_name, ' ', last_name) LIKE '%$search%' ORDER BY last_online DESC;";
 	$result = mysqli_query($dbconfig, $query);
 	$data = array();
 	$data['first_name'] = array();
