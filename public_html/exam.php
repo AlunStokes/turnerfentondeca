@@ -89,6 +89,7 @@ include ('includes/session.php');
     </div>
     <!-- /.content-wrapper -->
 
+
     <script type="text/javascript">
     var spinner = `
     <div class="spinner">
@@ -131,11 +132,8 @@ $.ajax({
   url: "includes/ajax.php",
   data: {ajax_id : JSON.stringify("exam_get_questions"),
   exam_cluster : JSON.stringify(exam_cluster),
-  exam_id : JSON.stringify(exam_id)},
-  success : function(html){
-    loading_screen.finish();
-  }
-}).done(function(data){ 
+  exam_id : JSON.stringify(exam_id)}
+}).done(function(data){
   data = jQuery.parseJSON(data);
   $("#timer_container").append(`<div class="timer" style="text-align:center; color:#333; font-size:40px;"data-seconds-left=`+data['time']+`></div>`);
   if (data['unlocked'] == 1) {
@@ -159,7 +157,7 @@ $.ajax({
   var counter = 0;
   data['question_id'].forEach(writeQuestions);
 
-
+    loading_screen.finish();
 
 //Display Quesitons
 function writeQuestions(item,index) {
@@ -285,12 +283,12 @@ function submit_exam() {
     num_questions : JSON.stringify(data['num_questions']),
     question_id : JSON.stringify(data['question_id']),
     include_stats : JSON.stringify(data['include_stats'])},
-  }).done(function(data_submit){ 
+  }).done(function(data_submit){
     $("html, body").animate({ scrollTop: 0 }, "slow");
     alert("Your exam has been submitted.  You may leave the page.");
     $(".timer").stop();
     var data_submit = jQuery.parseJSON(data_submit);
-    
+
     if (data['show_score'] == 1) {
       data['question_id'].forEach(writeAnswers);
     }

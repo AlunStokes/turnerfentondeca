@@ -28,7 +28,8 @@
 
       <div id="sidebar-recent-users-section">
       <h3 class="control-sidebar-heading">Recent Users</h3>
-      <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Refresh User List Automatically</label>
+      <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Update automatically</label>
+      <input tpye="text" id="user-name-contains" class="user-search" placeholder="User name" />
       <ul class="control-sidebar-menu" id="sidebar-online-users">
       </ul>
     </div>
@@ -133,11 +134,22 @@ function loadAttendance() {
   });
 }
 
+$("#user-name-contains").keyup(function() {
+  loadOnline();
+});
+
 function loadOnline() {
+  if ($("#user-name-contains").val() != "") {
+    var user_name_search = $("#user-name-contains").val();
+  }
+  else {
+    var user_name_search = "";
+  }
   $.ajax({
     type: "get",
     url: "includes/ajax.php",
-    data: {ajax_id : JSON.stringify("sidebar_online_users")},
+    data: {ajax_id : JSON.stringify("sidebar_online_users"),
+    search : JSON.stringify(user_name_search)},
   }).done(function(data){ 
     var data = jQuery.parseJSON(data);
     var online_users_html = ``;
@@ -163,6 +175,7 @@ function loadOnline() {
         <div class="menu-info menu-info-name">
         <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
         <p>`+data['student_number'][i]+`</p>
+        <p>Last Online: <i>`+data['last_online_formatted'][i]+`</i></p>
         </div>
         </a>
         </li>

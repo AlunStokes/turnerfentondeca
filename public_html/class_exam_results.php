@@ -48,7 +48,7 @@ if ($results != false) {
   while ($row = mysqli_fetch_assoc($results)) {
     array_push($data['first_name'], $row['first_name']);
     array_push($data['last_name'], $row['last_name']);
-    array_push($data['student_number'], $row['student_number']); 
+    array_push($data['student_number'], $row['student_number']);
     array_push($data['score'], $row['score']);
     array_push($data['total'], $row['total']);
     array_push($data['percentage'], $row['percentage']);
@@ -145,7 +145,7 @@ if (isset($_GET['download_file']) && $_GET['download_file']==1) {
           ?>
           <div style="text-align:right;">
             <select id="exam_id_dropdown" onchange="change_exam()">
-              <?php 
+              <?php
 
               for ($i = 0; $i < count($exam_list['exam_id']); $i++) {
                 echo "<option value='".$exam_list['exam_id'][$i]."'>".$exam_list['exam_name'][$i]."</option>";

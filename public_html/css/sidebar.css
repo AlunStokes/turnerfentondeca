@@ -89,3 +89,15 @@
 	background-color: #669FB7;
 	color: #fff;
 }
+
+.user-search {
+    width: 100%;
+    color: #6d6d6d;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border-radius: 4px;
+    height: 15px;
+    font-size: 14px;
+    box-sizing: border-box;
+}

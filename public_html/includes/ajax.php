@@ -802,7 +802,11 @@ switch ($ajax_id) {
 	break;
 
 	case "sidebar_online_users":
-	$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online FROM members WHERE last_online > NOW() - INTERVAL 5 MINUTE ORDER BY last_online DESC;";
+	$search = json_decode($_GET['search']);
+	//Only show recently online
+	//$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online, last_online FROM members WHERE last_online > NOW() - INTERVAL 5 MINUTE ORDER BY last_online DESC;";
+	//Show all users
+	$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online, DATE_FORMAT(last_online, '%d %M %Y') AS last_online_formatted FROM members WHERE first_name LIKE '%$search%' OR last_name LIKE '%$search%' OR concat(first_name, ' ', last_name) LIKE '%$search%' ORDER BY last_online DESC;";
 	$result = mysqli_query($dbconfig, $query);
 	$data = array();
 	$data['first_name'] = array();
@@ -810,11 +814,13 @@ switch ($ajax_id) {
 	$data['student_number'] = array();
 	$data['user_picture_file'] = array();
 	$data['online'] = array();
+	$data['last_online_formatted'] = array();
 	while ($row = mysqli_fetch_assoc($result)) {
 		array_push($data['first_name'], $row['first_name']);
 		array_push($data['last_name'], $row['last_name']);
 		array_push($data['student_number'], $row['student_number']);
 		array_push($data['online'], $row['online']);
+		array_push($data['last_online_formatted'], $row['last_online_formatted']);
 	}
 	$data['num'] = mysqli_num_rows($result);
 	for ($i = 0; $i < $data['num']; $i++) {

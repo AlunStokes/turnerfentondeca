@@ -117,7 +117,7 @@ if ($_SESSION['member'] == false) {
     <section class="container-fluid-body" id="top-div">
 
       <h1 style="text-align:center">Create An Exam</h1>
-      <h1>1. Add Questions</h1>   
+      <h1>1. Add Questions</h1>
       <p>   Toggle switch to add question to exam</p>
       <div class="container-fluid">
         <div class="row" style="margin-top:1vh;">
@@ -142,7 +142,7 @@ if ($_SESSION['member'] == false) {
       </div>
 
 
-      <h1>2. Review Questions</h1>   
+      <h1>2. Review Questions</h1>
       <p>   Make sure all questions are meant to be there</p>
       <div class="container-fluid">
         <div class="row" id="num_questions" style="align:center; text-align:center;">
@@ -151,7 +151,7 @@ if ($_SESSION['member'] == false) {
         </div>
       </div>
 
-      <h1>3. What Type of Exam is This?</h1>   
+      <h1>3. What Type of Exam is This?</h1>
       <p>   Choose a cluster, or mixed</p>
         <div class="row" id="num_questions" style="align:center; text-align:center;">
           <select id="dropdown_large">
@@ -181,7 +181,7 @@ if ($_SESSION['member'] == false) {
             </select>
         </div>
 
-      <h1>6. Name Your Exam</h1>   
+      <h1>6. Name Your Exam</h1>
       <p>   Make sure to make it creative!</p>
       <form method="post" id="create" role="form">
         <input id="exam_name" type="type" maxlength=100 style="height:5vh; width:100%; font-size: 24px;" />
@@ -235,7 +235,7 @@ if ($_SESSION['member'] == false) {
            question_id : JSON.stringify(selected['question_id']),
            length : JSON.stringify(selected['question_id'].length),
            type : JSON.stringify(type)}
-         }).done(function(data){ 
+         }).done(function(data){
           var data = jQuery.parseJSON(data);
           if (data == "failed") {
             alert ("Exam name already exists - Pick another");
@@ -326,7 +326,7 @@ function ajax_call() {
       search : JSON.stringify(search_text),
       question_type : JSON.stringify(question_type)},
       dataType : "json"
-    }).done(function(data){ 
+    }).done(function(data){
       results = jQuery.parseJSON(JSON.stringify(data));
       update();
     });
