@@ -13,26 +13,26 @@
     <!-- Home tab content -->
     <div class="tab-pane active" id="control-sidebar-home-tab">
       <div id="sidebar-recent-exams-section">
-      <h3 class="control-sidebar-heading">Recent Exams</h3>
-      <ul class="control-sidebar-menu" id="sidebar-recent-exmas">
-      </ul>
-    </div>
+        <h3 class="control-sidebar-heading">Recent Exams</h3>
+        <ul class="control-sidebar-menu" id="sidebar-recent-exmas">
+        </ul>
+      </div>
       <!-- /.control-sidebar-menu -->
 
       <div id="sidebar-attendance-section">
-      <h3 class="control-sidebar-heading">Attendance</h3>
-      <ul class="control-sidebar-menu" id="sidebar-attendance">
-      </ul>
-    </div>
+        <h3 class="control-sidebar-heading">Attendance</h3>
+        <ul class="control-sidebar-menu" id="sidebar-attendance">
+        </ul>
+      </div>
       <!-- /.control-sidebar-menu -->
 
       <div id="sidebar-recent-users-section">
-      <h3 class="control-sidebar-heading">Recent Users</h3>
-      <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Update automatically</label>
-      <input tpye="text" id="user-name-contains" class="user-search" placeholder="User name" />
-      <ul class="control-sidebar-menu" id="sidebar-online-users">
-      </ul>
-    </div>
+        <h3 class="control-sidebar-heading">Recent Users</h3>
+        <label style="font-weight:400; color:#fff;"><input type="checkbox" id="refresh_users" style="float:left;">Update automatically</label>
+        <input tpye="text" id="user-name-contains" class="user-search" placeholder="User name" />
+        <ul class="control-sidebar-menu" id="sidebar-online-users">
+        </ul>
+      </div>
       <!-- /.control-sidebar-menu -->
     </div>
     <!-- /.tab-pane -->
@@ -71,27 +71,27 @@
 
 function loadRecentExams() {
   $.ajax({
-  type: "get",
-  url: "includes/ajax",
-  data: {ajax_id : JSON.stringify("sidebar_recent_exams")},
-}).done(function(data){ 
-  var data = jQuery.parseJSON(data);
-  var recent_exams_html = ``;
-  for (var i = 0; i < data['num']; i++) {
-    recent_exams_html +=`
-    <li>
-    <a href="javascript::;">
-    <i class="menu-icon exam-percentage">`+data['percentage'][i]+`%</i>
-    <div class="menu-info">
-    <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
-    <p>`+data['time'][i]+`</p>
-    </div>
-    </a>
-    </li>
-    `;
-  }
-  $("#sidebar-recent-exmas").html(recent_exams_html);
-});
+    type: "get",
+    url: "includes/ajax",
+    data: {ajax_id : JSON.stringify("sidebar_recent_exams")},
+  }).done(function(data){ 
+    var data = jQuery.parseJSON(data);
+    var recent_exams_html = ``;
+    for (var i = 0; i < data['num']; i++) {
+      recent_exams_html +=`
+      <li>
+      <a href="javascript::;">
+      <i class="menu-icon exam-percentage">`+data['percentage'][i]+`%</i>
+      <div class="menu-info">
+      <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
+      <p>`+data['time'][i]+`</p>
+      </div>
+      </a>
+      </li>
+      `;
+    }
+    $("#sidebar-recent-exmas").html(recent_exams_html);
+  });
 }
 
 function loadAttendance() {
@@ -177,13 +177,14 @@ function loadOnline() {
         <p>`+data['student_number'][i]+`</p>
         `;
         var time = Math.floor((new Date).getTime()/1000) - data['unix_time'][i];
-        if (time < 86400) {
-          if (time < 3600) {
-            var time_text = Math.floor(time/60)+" min";
-          }
-          else {
-            var time_text = Math.floor(time/3600)+" hrs";
-          }
+        if (time < 3600) {
+          var time_text = Math.floor(time/60)+" min";
+        }
+        else if (time < 86400) {
+          var time_text = Math.floor(time/3600)+" hrs";
+        }
+        else if (time < 604800) {
+          var time_text = Math.floor(time/86400)+" days";
         }
         else {
           var time_text = data['last_online_formatted'][i]
