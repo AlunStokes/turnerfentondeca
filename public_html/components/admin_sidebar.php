@@ -72,7 +72,7 @@
 function loadRecentExams() {
   $.ajax({
   type: "get",
-  url: "includes/ajax.php",
+  url: "includes/ajax",
   data: {ajax_id : JSON.stringify("sidebar_recent_exams")},
 }).done(function(data){ 
   var data = jQuery.parseJSON(data);
@@ -97,7 +97,7 @@ function loadRecentExams() {
 function loadAttendance() {
   $.ajax({
     type: "get",
-    url: "includes/ajax.php",
+    url: "includes/ajax",
     data: {ajax_id : JSON.stringify("sidebar_attendance")},
   }).done(function(data){ 
     var data = jQuery.parseJSON(data);
@@ -147,7 +147,7 @@ function loadOnline() {
   }
   $.ajax({
     type: "get",
-    url: "includes/ajax.php",
+    url: "includes/ajax",
     data: {ajax_id : JSON.stringify("sidebar_online_users"),
     search : JSON.stringify(user_name_search)},
   }).done(function(data){ 
@@ -203,7 +203,7 @@ function loadOnline() {
 function changePassword() {
   $.ajax({
     type: "post",
-    url: "includes/ajax.php",
+    url: "includes/ajax",
     data: {ajax_id : JSON.stringify("sidebar_change_password"),
     password : JSON.stringify($("#change_password_password").val()),
     student_number : JSON.stringify($("#change_password_student_number").val())},

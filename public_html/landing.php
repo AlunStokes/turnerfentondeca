@@ -244,7 +244,7 @@ session_destroy();
       <section id="join" class="container content-section text-center">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2">
-            <a href="login.php" class="btn btn-default btn-lg apply-btn" style="margin-bottom: 26vh;">Login</a>
+            <a href="login" class="btn btn-default btn-lg apply-btn" style="margin-bottom: 26vh;">Login</a>
           </div>
         </div>
       </section>

@@ -6,10 +6,10 @@ include ('includes/functions.php');
 $active_page = 'home';
 
 if ($_SESSION['member'] == false) {
-  header("Location: applicant_home.php");
+  header("Location: applicant_home");
 }
 
-header("Location: timeline.php");
+header("Location: timeline");
 
 ?>
 

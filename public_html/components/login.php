@@ -45,10 +45,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($_SESSION['member'] == true) {
                 $add_login = "INSERT INTO logins (student_number) VALUES (".$_SESSION['student_number'].");";
                 mysqli_query($dbconfig, $add_login);
-                $URL="home.php";
+                $URL="home";
             }
             else {
-                $URL="applicant_home.php";
+                $URL="applicant_home";
             }
             //include 'includes/send_data.php';
             header("Location:".$URL);
@@ -112,7 +112,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
     <p>
-        <a href="reset_password.php">Forgot your password?</a>
+        <a href="reset_password">Forgot your password?</a>
     </p>
     <p style="color: #FF6656; font-size: 22px;"><?php if (isset($errmsg)) { echo $errmsg; } ?> </p>
 </div>
