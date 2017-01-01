@@ -175,7 +175,21 @@ function loadOnline() {
         <div class="menu-info menu-info-name">
         <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
         <p>`+data['student_number'][i]+`</p>
-        <p>Last Online: <i>`+data['last_online_formatted'][i]+`</i></p>
+        `;
+        var time = Math.floor((new Date).getTime()/1000) - data['unix_time'][i];
+        if (time < 86400) {
+          if (time < 3600) {
+            var time_text = Math.floor(time/60)+" min";
+          }
+          else {
+            var time_text = Math.floor(time/3600)+" hrs";
+          }
+        }
+        else {
+          var time_text = data['last_online_formatted'][i]
+        }
+        online_users_html +=`
+        <p>Last Online: <i>`+time_text+`</i></p>
         </div>
         </a>
         </li>
