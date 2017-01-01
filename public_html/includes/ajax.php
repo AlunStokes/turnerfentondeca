@@ -17,11 +17,12 @@ switch ($ajax_id) {
 	//Attendance
 	case 'attendance_check_open':
 	$data = array();
-	$check_query = "SELECT attendance_code, DATE_FORMAT(start_time, '%D %M at %h:%i %p') AS start_time FROM attendance_sessions WHERE end_time IS NULL;";
+	$check_query = "SELECT id, attendance_code, DATE_FORMAT(start_time, '%D %M at %h:%i %p') AS start_time FROM attendance_sessions WHERE end_time IS NULL;";
 	$result = mysqli_query($dbconfig, $check_query);
 	if (mysqli_num_rows($result) > 0) {
 		$row = mysqli_fetch_assoc($result);
 		$data['exists'] = true;
+		$data['attendance_id'] = $row['id'];
 		$data['code_word'] = $row['attendance_code'];
 		$data['start_time'] = $row['start_time'];
 	}
@@ -43,8 +44,8 @@ switch ($ajax_id) {
 
 	case 'attendance_end':
 	$date = date_create();
-	$timestamp = date_timestamp_get($date);
-	$update_query = "UPDATE attendance_sessions SET end_time = from_unixtime(".$timestamp.") WHERE end_time IS NULL;";
+	$attendance_id = json_decode($_GET['attendance_id']);
+	$update_query = "UPDATE attendance_sessions SET end_time = NOW(), num_users = (SELECT COUNT(student_number) FROM attendance_individuals WHERE session_id = $attendance_id) WHERE id = $attendance_id;";
 	if (mysqli_query($dbconfig, $update_query)) {
 		echo json_encode(true);
 	}
@@ -69,41 +70,6 @@ switch ($ajax_id) {
 	else {
 		echo json_encode(false);
 	}
-	break;
-
-	
-	//Class Exam Results
-	case 'class_exam_results':
-	$exam_id = json_decode($_GET['exam_id']);
-	$data = array();
-	$data_query = "SELECT first_name, last_name, exam_results.student_number, percentage, score, total FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE exam_id = ".$exam_id." ORDER BY percentage DESC;";
-	$results = mysqli_query($dbconfig, $data_query);
-	if ($results != false) {
-		$name['first_name'] = array();
-		$name['last_name'] = array();
-		$data['name'] = array();
-		$data['student_number'] = array();
-		$data['score'] = array();
-		$data['total'] = array();
-		$data['percentage'] = array();
-		$data['success'] = true;
-		while ($row = mysqli_fetch_assoc($results)) {
-			array_push($name['first_name'], $row['first_name']);
-			array_push($name['last_name'], $row['last_name']);
-			array_push($data['student_number'], $row['student_number']);
-			array_push($data['score'], $row['score']);
-			array_push($data['total'], $row['total']);
-			array_push($data['percentage'], $row['percentage']);
-		}
-		for ($i = 0; $i < count($name['first_name']); $i++) {
-			$data['name'][$i] = $name['first_name'][$i]." ".$name['last_name'][$i];
-		}
-		$data['count'] = mysqli_num_rows($results);
-	}
-	else {
-		$data['success'] = false;
-	}
-	echo json_encode($data);
 	break;
 
 
@@ -499,12 +465,12 @@ switch ($ajax_id) {
 		$search = "";
 	}
 	$exam_query = "SELECT exam_id, exam_name, num_questions, exam_type, unlocked, show_score, EXISTS(SELECT * FROM exam_results WHERE student_number = ".$_SESSION['student_number']." AND exam_id = created_exams.exam_id) as done FROM created_exams WHERE exam_name LIKE '%".$search."%' ";
-
+	/*
 	if($_SESSION['admin_boolean']) {
 		$exam_query .= "LIMIT 75";
 	}
 	else if ($_SESSION['class'] == 'writtens') {
-		$exam_query .= "AND (exam_type = 'writtens' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
+		$exam_query .= "AND (exam_type = 'writtens' OR exam_type='marketing' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
 	else if (strpos($_SESSION['class'], "principles")) {
 		$exam_query .= "AND (exam_type = 'principles' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
@@ -512,6 +478,15 @@ switch ($ajax_id) {
 	else {
 		$exam_query .= "AND (exam_type = '".$_SESSION['class']."' OR exam_type='mix') AND unlocked = 1 LIMIT 75";
 	}
+	*/
+
+	if($_SESSION['admin_boolean']) {
+		$exam_query .= "LIMIT 75";
+	}
+	else {
+		$exam_query .= "AND unlocked = 1 LIMIT 75";
+	}
+
 	$results = mysqli_query ($dbconfig, $exam_query);
 	$data = array();
 	$data['exam_id'] = array();
@@ -805,6 +780,104 @@ switch ($ajax_id) {
 	break;
 
 
+	//Sidebar
+	case "sidebar_recent_exams":
+	$query = "SELECT first_name, last_name, members.student_number, percentage, UNIX_TIMESTAMP(date) as unix_time, DATE_FORMAT(DATE, '%d %M %Y') AS time FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE DATE > DATE_ADD(CURDATE(), INTERVAL -7 DAY)  ORDER BY unix_time DESC;";
+	$result = mysqli_query($dbconfig, $query);
+	$data = array();
+	$data['first_name'] = array();
+	$data['last_name'] = array();
+	$data['percentage'] = array();
+	$data['time'] = array();
+	$data['student_number'] = array();
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['first_name'], $row['first_name']);
+		array_push($data['last_name'], $row['last_name']);
+		array_push($data['student_number'], $row['student_number']);
+		array_push($data['time'], $row['time']);
+		array_push($data['percentage'], $row['percentage']);
+	}
+	$data['num'] = mysqli_num_rows($result);
+	echo json_encode($data);
+	break;
+
+	case "sidebar_online_users":
+	$search = json_decode($_GET['search']);
+	//Only show recently online
+	//$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online, last_online FROM members WHERE last_online > NOW() - INTERVAL 5 MINUTE ORDER BY last_online DESC;";
+	//Show all users
+	$query = "SELECT first_name, last_name, student_number, IF(last_online > NOW() - INTERVAL 1 MINUTE, 1, 0) as online, DATE_FORMAT(last_online, '%d %M %Y') AS last_online_formatted, UNIX_TIMESTAMP(last_online) as unix_time FROM members WHERE first_name LIKE '%$search%' OR last_name LIKE '%$search%' OR CONVERT(student_number, CHAR(6)) LIKE '%$search%' OR concat(first_name, ' ', last_name) LIKE '%$search%' ORDER BY last_online DESC;";
+	$result = mysqli_query($dbconfig, $query);
+	$data = array();
+	$data['first_name'] = array();
+	$data['last_name'] = array();
+	$data['student_number'] = array();
+	$data['user_picture_file'] = array();
+	$data['online'] = array();
+	$data['last_online_formatted'] = array();
+	$data['unix_time'] = array();
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['first_name'], $row['first_name']);
+		array_push($data['last_name'], $row['last_name']);
+		array_push($data['student_number'], $row['student_number']);
+		array_push($data['online'], $row['online']);
+		array_push($data['last_online_formatted'], $row['last_online_formatted']);
+		array_push($data['unix_time'], $row['unix_time']);
+	}
+	$data['num'] = mysqli_num_rows($result);
+	for ($i = 0; $i < $data['num']; $i++) {
+		if (!file_exists("../img/user_images/thumbnails/".$data['student_number'][$i].".jpg")) {
+			$data['user_picture_file'][$i] = "unresolved";
+		}
+		else {
+			$data['user_picture_file'][$i] = $data['student_number'][$i];
+		}
+	}
+	echo json_encode($data);
+	break;
+
+
+	case "sidebar_attendance":
+	$query = "SELECT attendance_code, DATE_FORMAT(start_time, '%d %M %Y') AS date, num_users, IF (end_time IS NOT NULL, 1, 0) as ended FROM attendance_sessions ORDER BY id DESC LIMIT 2;";
+	$result = mysqli_query($dbconfig, $query);
+	$data = array();
+	$data['attendance_code'] = array();
+	$data['date'] = array();
+	$data['num_users'] = array();
+	$data['ended'] = array();
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['attendance_code'], $row['attendance_code']);
+		array_push($data['date'], $row['date']);
+		array_push($data['num_users'], $row['num_users']);
+		array_push($data['ended'], $row['ended']);
+	}
+	$data['num'] = mysqli_num_rows($result);
+	echo json_encode($data);
+	break;
+
+
+	case "sidebar_change_password":
+	$student_number = json_decode($_POST['student_number']);
+	$password = json_decode($_POST['password']);
+	$hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 11]);
+	$query = "UPDATE members SET password='$hashed_password' WHERE student_number = '$student_number' AND admin = 0";
+	$result = mysqli_query($dbconfig, $query);	
+	if (mysqli_affected_rows($dbconfig) > 0) {
+		$data = true;
+	}
+	else {
+		$data = false;
+	}
+	echo json_encode($data);
+	break;
+
+
+	case "still_alive":
+	$query = "UPDATE members SET last_online=NOW() WHERE student_number = ".$_SESSION['student_number'].";";
+	mysqli_query($dbconfig, $query);
+	break;
+
+
 	default:
 		# code...
 	break;
@@ -814,7 +887,7 @@ exit();
 
 function contains($needle, $haystack)
 {
-    return strpos($haystack, $needle) !== false;
+	return strpos($haystack, $needle) !== false;
 }
 
 ?>

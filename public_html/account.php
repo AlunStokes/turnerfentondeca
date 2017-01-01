@@ -62,6 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <!-- jQuery 2.2.3 -->
   <script src="js/jquery-2.2.3.min.js"></script>
+  <script src="components/all_pages.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- AdminLTE App -->
@@ -243,9 +244,6 @@ $(my_form_id).on( "submit", function(event) {
 
 </section>
 <!-- /.content -->
-
-<!-- Rightside Hidden Menu -->
-<?php include 'includes/admin_sidebar.php'; ?>
 
 <script type="text/javascript">
 

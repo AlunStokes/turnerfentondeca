@@ -33,6 +33,7 @@ $active_page = 'practice';
 
   <!-- jQuery 2.2.3 -->
   <script src="js/jquery-2.2.3.min.js"></script>
+  <script src="components/all_pages.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- admin App -->
@@ -65,7 +66,7 @@ $active_page = 'practice';
 
        <button class="btn btn-lg btn-primary btn-block btn-full-5" id="new_exam">Start New Exam</button>
        <button class="btn btn-lg btn-primary btn-block btn-full-5" id="search_exams">Search Exams</button>
-       <button class="btn btn-lg btn-primary btn-block btn-full-5" id="question_search">Find Specific Question</button>
+       <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" id="question_search">Find Specific Question</button>'; } ?>
        <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" onclick="location.href=`create_exam.php`">Create Exam</button>'; } ?>
        <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" onclick="location.href=`add_question.php`">Add Question</button>'; } ?>
 

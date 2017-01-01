@@ -14,6 +14,10 @@ $exam_list['exam_id'] = array();
 $exam_list['exam_name'] = array();
 $exam_list['num_questions'] = array();
 $exam_list['exam_type'] = array();
+array_push($exam_list['exam_id'], 0);
+array_push($exam_list['exam_name'], "Random");
+array_push($exam_list['num_questions'], 100);
+array_push($exam_list['exam_type'], "All");
 $query_exams = "SELECT * FROM created_exams ORDER BY date_created";
 $result = mysqli_query($dbconfig, $query_exams);
 while ($row = mysqli_fetch_assoc($result)) {
@@ -22,6 +26,57 @@ while ($row = mysqli_fetch_assoc($result)) {
   array_push($exam_list['num_questions'], $row['num_questions']);
   array_push($exam_list['exam_type'], $row['exam_type']);
 }
+
+if (isset($_GET['exam_id'])) {
+  $exam_id = json_decode($_GET['exam_id']);
+}
+else {
+  $exam_id = 0;
+}
+$data = array();
+$data_query = "SELECT first_name, last_name, exam_results.student_number, percentage, score, total, UNIX_TIMESTAMP(exam_results.date) as time, DATE_FORMAT(DATE, '%d %M %Y') AS date, DATE_FORMAT(DATE, '%d %M %Y %H:%i:%s') AS timestamp FROM exam_results JOIN members ON members.student_number = exam_results.student_number WHERE exam_id = ".$exam_id." ORDER BY time DESC;";
+$results = mysqli_query($dbconfig, $data_query);
+if ($results != false) {
+  $data['first_name'] = array();
+  $data['last_name'] = array();
+  $data['student_number'] = array();
+  $data['score'] = array();
+  $data['total'] = array();
+  $data['percentage'] = array();
+  $data['date'] = array();
+  $data['timestamp'] = array();
+  while ($row = mysqli_fetch_assoc($results)) {
+    array_push($data['first_name'], $row['first_name']);
+    array_push($data['last_name'], $row['last_name']);
+    array_push($data['student_number'], $row['student_number']);
+    array_push($data['score'], $row['score']);
+    array_push($data['total'], $row['total']);
+    array_push($data['percentage'], $row['percentage']);
+    array_push($data['date'], $row['date']);
+    array_push($data['timestamp'], $row['timestamp']);
+  }
+  $data['count'] = mysqli_num_rows($results);
+}
+
+
+//Download Exam Scores
+if (isset($_GET['download_file']) && $_GET['download_file']==1) {
+
+// output headers so that the file is downloaded rather than displayed
+  header('Content-Type: text/csv; charset=utf-8');
+  header('Content-Disposition: attachment; filename='.$exam_list['exam_name'][$exam_id].'_'.time().'.csv');
+
+// create a file pointer connected to the output stream
+  $output = fopen('php://output', 'w');
+    fputcsv($output, array($exam_list['exam_name'][$exam_id]));
+    fputcsv($output, array("First Name", "Last Name", "Student Number", "Score", "Total Questions", "Percentage", "Time"));
+  for ($i = 0; $i < $data['count']; $i++) {
+    fputcsv($output, array($data['first_name'][$i],$data['last_name'][$i],$data['student_number'][$i],$data['score'][$i],$data['total'][$i],$data['percentage'][$i],$data['timestamp'][$i]));
+  }
+  fclose($output);
+  exit();
+}
+
 
 ?>
 
@@ -50,10 +105,14 @@ while ($row = mysqli_fetch_assoc($result)) {
 
   <!-- jQuery 2.2.3 -->
   <script src="js/jquery-2.2.3.min.js"></script>
+  <script src="components/all_pages.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- dashboard App -->
   <script src="js/admin.min.js"></script>
+  <!-- Datatables -->
+  <script src="js/jquery.dataTables.min.js"></script>
+  <script src="js/dataTables.bootstrap.min.js"></script>
 
 </head>
 
@@ -76,61 +135,72 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <!--
-        <div class="col-md-2 col-md-offset-6">
-          <select id="exam_type_dropdown">
-            <option value="all">All Clusters</option>
-            <option value="mix">Mixed Clusters</option>
-            <option value="marketing">Marketing</option>
-            <option value="businessadmin">Business Administration</option>
-            <option value="finance">Finance</option>
-            <option value="hospitality">Hospitality & Tourism</option>
-          </select>
-        </div>
-      -->
-        <div class="col-md-2">
-          <select id="exam_dropdown">
-            <?php 
 
-            for ($i = 0; $i < count($exam_list['exam_id']); $i++) {
-              echo "<option value='".$exam_list['exam_id'][$i]."'>".$exam_list['exam_name'][$i]."</option>";
-            }
+      <div class="box">
+        <div class="box-header">
+          <?php
+          echo '
+          <a href="?exam_id='.$exam_id.'&download_file=1">Download Spreadsheet</a>
+          ';
+          ?>
+          <div style="text-align:right;">
+            <select id="exam_id_dropdown" onchange="change_exam()">
+              <?php
 
-            ?>
-          </select>
+              for ($i = 0; $i < count($exam_list['exam_id']); $i++) {
+                echo "<option value='".$exam_list['exam_id'][$i]."'>".$exam_list['exam_name'][$i]."</option>";
+              }
+
+              ?>
+            </select>
+          </div>
         </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="exam_results_table" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Student Number</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="table_body">
+              <?php for ($i = 0 ; $i < $data['count']; $i++) {
+                echo '
+                <tr>
+                <td>'.$data['first_name'][$i].'</td>
+                <td>'.$data['last_name'][$i].'</td>
+                <td>'.$data['student_number'][$i].'</td>
+                <td>'.$data['score'][$i].'</td>
+                <td>'.$data['total'][$i].'</td>
+                <td>'.$data['percentage'][$i].'</td>
+                <td>'.$data['date'][$i].'</td>
+                </tr>
+                ';
+              }
+              ?>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Student Number</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Date</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
       </div>
-
-      <br>
-
-      <div class="row">
-        <div class="col-xs-2">
-          <h3>Name</h3>
-          <div id="name">
-          </div>
-        </div>
-        <div class="col-xs-4">
-          <h3>Student Number</h3>
-          <div id="student_number">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <h3>Score</h3>
-          <div id="score">
-          </div>
-        </div>
-        <div class="col-xs-1">
-          <h3>Total</h3>
-          <div id="total">
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <h3>Percentage</h3>
-          <div id="percentage">
-          </div>
-        </div>
-      </div>
+      <!-- /.box -->
 
 
     </section>
@@ -141,70 +211,44 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 <script>
 
-$('#exam_dropdown').on('change', function() {
-  load_scores();
-});
-/*
-$('#exam_type_dropdown').on('change', function() {
-  switch ($("#exam_type_dropdown").val()) {
-    case "all":
-    replace_options("exam_dropdown", "all");
-    break;
-    case "mix":
-    replace_options("exam_dropdown", "mix");
-    break;
-    case "marketing":
-    replace_options("exam_dropdown", "marketing");
-    break;
-    case "finance":
-    replace_options("exam_dropdown", "finance");
-    break;
-    case "businessadmin":
-    replace_options("exam_dropdown", "businessadmin");
-    break;
-    case "hospitality":
-    replace_options("exam_dropdown", "hospitality");
-    break;
-  }
-  load_scores();
-});
-*/
 
-$(document).ready(function() {
-  load_scores();
-});
-
-
-function load_scores() {
-  var exam_type = $("#exam_type_dropdown").val();
-  var exam_id = $("#exam_dropdown").val();
-
-  $.ajax({
-    type: "get",
-    url: "includes/ajax.php",
-    data: {ajax_id : JSON.stringify("class_exam_results"),
-            exam_id : JSON.stringify(exam_id)},
-  }).done(function(data){ 
-    var data = jQuery.parseJSON(data);
-  //Delete current Scores
-  $("#name").html("");
-  $("#student_number").html("");
-  $("#score").html("");
-  $("#total").html("");
-  $("#percentage").html("");
-
-    //Add new Scores
-    for (var i = 0; i < data['count']; i++) {
-      $("#name").append("<h4>"+data['name'][i]+"</h4>");
-      $("#student_number").append("<h4>"+data['student_number'][i]+"</h4>");
-      $("#score").append("<h4>"+data['score'][i]+"</h4>");
-      $("#total").append("<h4>"+data['total'][i]+"</h4>");
-      $("#percentage").append("<h4>"+data['percentage'][i]+"%</h4>");
-    }
+$(function () {
+  $('#exam_results_table').DataTable({
+    "paging": true,
+    "lengthChange": true,
+    "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": true,
+    "iDisplayLength": 100,
+    "lengthMenu": [ [50, 100, -1], [50, 100, "All"] ]
   });
+});
+$(document).ready(function() {
+  $("#exam_id_dropdown").val(<?php echo json_encode($exam_id); ?>);
+});
+
+function change_exam() {
+  var current_url = window.location.href;
+  var index = 0;
+  var url = current_url;
+  index = current_url.indexOf('?');
+  if(index == -1){
+    index = current_url.indexOf('#');
+  }
+  if(index != -1){
+    url = current_url.substring(0, index);
+  }
+  var id = $("#exam_id_dropdown").val();
+  if (url.indexOf('?') > -1){
+    url += '&exam_id='+id+''
+  }else{
+   url += '?exam_id='+id+''
+ }
+ window.location.href = url;
 }
 
-  </script>
+</script>
 
 </body>
 </html>

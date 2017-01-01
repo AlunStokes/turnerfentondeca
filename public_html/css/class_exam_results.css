@@ -219,3 +219,13 @@ h4 {
     font-size:3vw;
   }
 }
+
+.box {
+  background-color: #ecf0f5;
+  margin-bottom: 0px;
+  border: 0;
+  min-width: 100%;
+}
+select.input-sm {
+    min-width: 75px;
+}

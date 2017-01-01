@@ -35,6 +35,7 @@ $page = 'timeline';
 
   <!-- jQuery 2.2.3 -->
   <script src="js/jquery-2.2.3.min.js"></script>
+  <script src="components/all_pages.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- dashboard App -->
@@ -50,8 +51,14 @@ $page = 'timeline';
  <div class="wrapper">
 
   <!-- Header and Left Menu -->
-  <?php if ($_SESSION['admin_boolean']) { include 'components/admin_menu.php'; }
-  else { include 'components/member_menu.php'; } ?>
+  <?php 
+  if ($_SESSION['admin_boolean']) { 
+    include 'components/admin_menu.php'; 
+  }
+  else { 
+    include 'components/member_menu.php'; 
+  } 
+  ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -232,86 +239,86 @@ $page = 'timeline';
       type: "get",
       url: "includes/ajax.php",
       data: {ajax_id : JSON.stringify("timeline_load_posts"),
-        user_class : JSON.stringify(user_class),
-        admin : JSON.stringify(admin)},
-      }).done(function(data){
-        var messages = jQuery.parseJSON(data);
+      user_class : JSON.stringify(user_class),
+      admin : JSON.stringify(admin)},
+    }).done(function(data){
+      var messages = jQuery.parseJSON(data);
 
-        for (var i = 0; i < messages['message'].length; i++) {
+      for (var i = 0; i < messages['message'].length; i++) {
 
-          if (i > 0 && messages['date'][i] != messages['date'][i-1]) {
-            $(".timeline").append(`
-              <li class="time-label">
-              <span class="bg-red">
-              `+messages['date'][i]+`
-              </span>
-              </li>
-              `);
-          }
-          else if (i == 0) {
-            $(".timeline").append(`
-              <li class="time-label">
-              <span class="bg-red">
-              `+messages['date'][i]+`
-              </span>
-              </li>
-              `);
-          }
+        if (i > 0 && messages['date'][i] != messages['date'][i-1]) {
+          $(".timeline").append(`
+            <li class="time-label">
+            <span class="bg-red">
+            `+messages['date'][i]+`
+            </span>
+            </li>
+            `);
+        }
+        else if (i == 0) {
+          $(".timeline").append(`
+            <li class="time-label">
+            <span class="bg-red">
+            `+messages['date'][i]+`
+            </span>
+            </li>
+            `);
+        }
 
-          var post = `
-          <!-- timeline item -->
-          <li>
-          <!-- timeline icon -->
-          <i class="fa fa-circle-o-notch bg-blue"></i>
-          <div class="timeline-item">
-          `;
+        var post = `
+        <!-- timeline item -->
+        <li>
+        <!-- timeline icon -->
+        <i class="fa fa-circle-o-notch bg-blue"></i>
+        <div class="timeline-item">
+        `;
 
-          if (admin == 1) {
-            post += `
-            <span class="delete" id="delete_`+messages["id"][i]+`"><i class="fa fa-times"></i></span>
-            `;
-          }
-
+        if (admin == 1) {
           post += `
-          <span class="time"><i class="fa fa-clock-o"></i>`+messages['time'][i]+`</span>
-          <div class="pull-left image">
-          <img src="img/user_images/thumbnails/`+messages['poster_picture_path'][i]+`" class="img-circle img-circle-message" alt="User Image">
-          </div>
-          <h3 class="timeline-header">`+messages['poster_first_name'][i]+` `+messages['poster_last_name'][i]+`</h3>
-
-          <div class="timeline-body">
-          <p id="post_body_`+messages["id"][i]+`" style="font-size:15px;">`+messages['message'][i]+`</p>
-          </div>
-
-          <div class="timeline-footer">
-          <p style="display: inline; color: #0073b7; margin-bottom: 0;"><b>`+messages['class_proper'][i]+`</b></p>
+          <span class="delete" id="delete_`+messages["id"][i]+`"><i class="fa fa-times"></i></span>
           `;
-          if (messages['json_message'][i] !== null && admin == 1) {
-            post += `
+        }
+
+        post += `
+        <span class="time"><i class="fa fa-clock-o"></i>`+messages['time'][i]+`</span>
+        <div class="pull-left image">
+        <img src="img/user_images/thumbnails/`+messages['poster_picture_path'][i]+`" class="img-circle img-circle-message" alt="User Image">
+        </div>
+        <h3 class="timeline-header">`+messages['poster_first_name'][i]+` `+messages['poster_last_name'][i]+`</h3>
+
+        <div class="timeline-body">
+        <p id="post_body_`+messages["id"][i]+`" style="font-size:15px;">`+messages['message'][i]+`</p>
+        </div>
+
+        <div class="timeline-footer">
+        <p style="display: inline; color: #0073b7; margin-bottom: 0;"><b>`+messages['class_proper'][i]+`</b></p>
+        `;
+        if (messages['json_message'][i] !== null && admin == 1) {
+          post += `
           <span class="edit" id="edit_`+messages["id"][i]+`"><i class="fa fa-pencil"></i></span>
           `;
         }
         post += `
-          </div>
-          </div>
-          </li>
-          `;
+        </div>
+        </div>
+        </li>
+        `;
 
-          $(".timeline").append(post);
+        $(".timeline").append(post);
 
-        }
+      }
 
-        $(document).on('click', '.edit',function() {
-          var post_id = getNum(this.id);
-          var array_index = messages['id'].indexOf(post_id);
-          var text = JSON.parse(messages['json_message'][array_index]);
-          quill_edit.setContents(text);
-          $("#edit_message").attr("id", "edit_message_"+post_id);
-           $("#class_edit").val(messages['class'][array_index]);
-          $('#edit-post-modal').modal('show');
-        });
-
+      $(document).on('click', '.edit',function() {
+        var post_id = getNum(this.id);
+        var array_index = messages['id'].indexOf(post_id);
+        var text = JSON.parse(messages['json_message'][array_index]);
+        quill_edit.setContents(text);
+        $("#edit_message").attr("id", "edit_message_"+post_id);
+        $("#class_edit").val(messages['class'][array_index]);
+        $('#edit-post-modal').modal('show');
       });
+
+    });
 
 var toolbarOptions = [
 [{ header: [false, 1, 2] }],
@@ -403,20 +410,20 @@ $("#post_message").on('click',function() {
     type: "get",
     url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("timeline_post_message"),
-      json_message : json_post_message,
-      message : JSON.stringify(post_message),
-      poster : JSON.stringify(poster),
-      post_class : JSON.stringify(post_class)},
-    }).done(function(data){ 
-      result = jQuery.parseJSON(data);
-      if (result == "success") {
-        location.reload();
-      }
-      else {
-        alert ("Problem posting, please try again");
-      }
-    });
+    json_message : json_post_message,
+    message : JSON.stringify(post_message),
+    poster : JSON.stringify(poster),
+    post_class : JSON.stringify(post_class)},
+  }).done(function(data){ 
+    result = jQuery.parseJSON(data);
+    if (result == "success") {
+      location.reload();
+    }
+    else {
+      alert ("Problem posting, please try again");
+    }
   });
+});
 
 $("#post_alert").on('click',function() {
   var title = quill_alert_title.container.firstChild.innerHTML.replace(/\>\s+\</g, '>&nbsp;<');
@@ -427,20 +434,20 @@ $("#post_alert").on('click',function() {
     type: "get",
     url: "includes/ajax.php",
     data: {ajax_id: JSON.stringify("timeline_post_alert"),
-      title : JSON.stringify(title),
-      body : JSON.stringify(body),
-      admin : JSON.stringify(admin),
-      type : JSON.stringify(type)},
-    }).done(function(data){ 
-      result = jQuery.parseJSON(data);
-      if (result == "success") {
-        location.reload();
-      }
-      else {
-        alert ("Problem posting, please try again");
-      }
-    });
+    title : JSON.stringify(title),
+    body : JSON.stringify(body),
+    admin : JSON.stringify(admin),
+    type : JSON.stringify(type)},
+  }).done(function(data){ 
+    result = jQuery.parseJSON(data);
+    if (result == "success") {
+      location.reload();
+    }
+    else {
+      alert ("Problem posting, please try again");
+    }
   });
+});
 
 $("#edit_message").on('click',function() {
   var post_id = getNum($(this).attr("id"));

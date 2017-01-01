@@ -13,8 +13,6 @@ session_destroy();
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Favicon -->
-  <link rel="shortcut icon" href="img/favicon.png`" />
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -78,23 +76,24 @@ session_destroy();
     <div class="row">
       <div class="col-lg-10 col-lg-offset-1" style="text-align:left;">
         <h2 style="font-size:48px; font-weight: 100; color: #fff; text-align:center;">Turner Fenton's Largest Club</h2>
+        <p>   </p>
       </div>
     </div>
 
-    <div class="row landing-text-container">
+    <div class="row" style="position: relative; padding-left:10vw; padding-right:10vw;">
       <div class="col-md-12">
         <h1 style="text-align:left; font-weight: 600; color:#fff;">WHAT IS DECA?</h1>
-        <p>&emsp;&emsp;DECA is an international business competition that allows it's members to compete at a regional, provincial, and international level.  Turner Fenton DECA
+        <p style="text-align:left;">&emsp;&emsp;DECA is an international business competition that allows it's members to compete at a regional, provincial, and international level.  Turner Fenton DECA
           is a leading and innovative extra-curricular program that allows students to develop confidence and employability skills, and demonstrate leadership.  We foster a climate that encourages
           innovation and dilligence amongst our members, and always strive for the utmost from our entire chapter.</p>
         </div>
       </div>
 
-      <div class="landing-image-fullwidth">
+      <div style="width:100%; overflow:hidden; max-height:12vh;">
         <img src="img/deca_chapter_2_strip.jpg" style="" class="hover_image">
       </div>
 
-      <div class="row landing-text-container">
+      <div class="row" style="position: relative; padding-left:10vw; padding-right:10vw; margin-top:4vh;">
         <div class="col-md-12">
           <h1 style="text-align:left; font-weight: 600; color:#fff;">WHAT DO YOU DO?</h1>
           <p style="text-align:left;">&emsp;&emsp;Turner Fenton DECA is a leading and innovative extra-curricular program that allows students to develop confidence and employability skills, and 
@@ -103,12 +102,12 @@ session_destroy();
           </div>
         </div>
 
-        <div class="landing-image-fullwidth">
+        <div style="width:100%; overflow:hidden; max-height:12vh;">
           <img src="img/deca_chapter_3_strip.jpg" style="" class="hover_image">
         </div>
 
 
-        <div class="row landing-text-container">
+        <div class="row">
           <div class="col-md-12" id="button">
             <a href="#team" class="btn btn-circle-white page-scroll">
               <i class="fa fa-long-arrow-down"></i>

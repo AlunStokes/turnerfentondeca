@@ -35,6 +35,7 @@ $active_page = 'attendance';
 
   <!-- jQuery 2.2.3 -->
   <script src="js/jquery-2.2.3.min.js"></script>
+  <script src="components/all_pages.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- AdminLTE App -->
@@ -165,22 +166,11 @@ $active_page = 'attendance';
 
   $(document).ready(function() {
 
+    var attendance_id;
+
+    check_open();
     $("#start_session_button").click(function() {
-      $.ajax({
-        type: "get",
-        url: "includes/ajax.php",
-        data: {ajax_id : JSON.stringify("attendance_check_open"),
-        code_word : JSON.stringify(code_word)},
-      }).done(function(data){ 
-        result = jQuery.parseJSON(data);
-        if (result['exists']) {
-          $("#current_password_div").html("<h3>Session started: " + result['start_time'] + "</h3><p>Code is: <i>" + result['code_word'] + "</i></p>");
-          $('#start_session_set_modal').modal('show'); 
-        }
-        else {
-          $('#start_session_unset_modal').modal('show');        
-        }      
-      });
+      open_start();
     });
     $("#end_session_button").click(function() {
       $.ajax({
@@ -228,13 +218,15 @@ function start_ajax (code_word) {
       alert("Failed to start session");
     }
   });
+  check_open();
 }
 
 function end_ajax () {
   $.ajax({
     type: "get",
     url: "includes/ajax.php",
-    data: {ajax_id : JSON.stringify("attendance_end")},
+    data: {ajax_id : JSON.stringify("attendance_end"),
+        attendance_id : JSON.stringify(attendance_id)},
   }).done(function(data) {
     result = jQuery.parseJSON(data);
     if (result) {
@@ -245,6 +237,39 @@ function end_ajax () {
       alert("Failed to end session");
     }
   });
+}
+
+function check_open() {
+  $.ajax({
+        type: "get",
+        url: "includes/ajax.php",
+        data: {ajax_id : JSON.stringify("attendance_check_open"),
+        code_word : JSON.stringify(code_word)},
+      }).done(function(data){ 
+        result = jQuery.parseJSON(data);
+        if (result['exists']) {
+          attendance_id = result['attendance_id'];
+        }   
+      });
+}
+
+function open_start() {
+  $.ajax({
+        type: "get",
+        url: "includes/ajax.php",
+        data: {ajax_id : JSON.stringify("attendance_check_open"),
+        code_word : JSON.stringify(code_word)},
+      }).done(function(data){ 
+        result = jQuery.parseJSON(data);
+        if (result['exists']) {
+          $("#current_password_div").html("<h3>Session started: " + result['start_time'] + "</h3><p>Code is: <i>" + result['code_word'] + "</i></p>");
+          $('#start_session_set_modal').modal('show'); 
+          attendance_id = result['attendance_id'];
+        }
+        else {
+          $('#start_session_unset_modal').modal('show');        
+        }      
+      });
 }
 
 </script>

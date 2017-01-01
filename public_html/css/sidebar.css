@@ -1,0 +1,109 @@
+.control-sidebar-menu .menu-icon {
+	float: left;
+	width: 35px;
+	height: 0px;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 30px
+}
+
+.exam-percentage {
+	font-size: 18px;
+	color: #fff;
+}
+
+.tab-content {
+	overflow: auto;
+	overflow-x: hidden;
+	max-height: 88vh;
+}
+.tab-content::-webkit-scrollbar { 
+	display: none; 
+}
+.control-sidebar::-webkit-scrollbar { 
+	display: none;
+}
+
+.control-sidebar {
+	height: 100%;
+	padding-bottom: 0 !important;
+	overflow: hidden !important;
+}
+
+.control-sidebar-menu>li>a {
+	display: block;
+	padding: 10px 15px;
+	padding-top: 10px;
+	padding-right: 15px;
+	padding-bottom: 0px;
+	padding-left: 15px;
+}
+.sidebar-img-circle-message {
+	max-width: 50px;
+}
+.sidebar-img-circle-message-online {
+	max-width: 50px;
+	border: 3px solid #5cb85c;
+}
+.sidebar-img-circle-message-offline {
+	max-width: 50px;
+	border: 3px solid #d9534f;
+}
+
+.menu-info-name {
+	padding-top: 4px;
+	padding-left: 15px;
+}
+.attendance-num-users {
+	font-size: 32px;
+	color: #fff;
+}
+.circle {
+	margin-left: 10px;
+	margin-top: 8px;
+	width: 20px;
+	height: 20px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	border-radius: 25px;
+	background: #5cb85c;
+	float:left;
+}
+.sidebar-input {
+	color: #000;
+	font-weight: 300;
+	min-width: 100%;
+}
+.sidebar-label {
+	font-weight: 300;
+	color: #fff;
+}
+
+.btn-fullwidth {
+	min-width: 100%;
+	min-height: 30px;
+	background-color: #74B3CE;
+	color: #fff;
+	padding: 0;
+	margin: 0;
+}
+.btn-fullwidth:hover {
+	background-color: #669FB7;
+	color: #fff;
+}
+.btn-fullwidth:focus {
+	background-color: #669FB7;
+	color: #fff;
+}
+
+.user-search {
+    width: 100%;
+    color: #6d6d6d;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border-radius: 4px;
+    height: 15px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
