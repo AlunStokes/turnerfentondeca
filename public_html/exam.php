@@ -28,8 +28,10 @@ include ('includes/session.php');
   <link rel="stylesheet" href="css/skin-blue.min.css">
   <!-- Page Style -->
   <link rel="stylesheet" href="css/exam.css">
-  <!-- Spinner Style -->
+  <!-- Please Wait Style -->
   <link rel="stylesheet" href="css/please-wait.css">
+  <!-- Loading Screen Style -->
+  <link rel="stylesheet" href="css/loading_screen.css">
 
 
   <!-- jQuery 2.2.3 -->

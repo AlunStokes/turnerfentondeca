@@ -149,7 +149,6 @@ while ($row = mysqli_fetch_assoc($results)) {
     </div>
 
     <script>
-
     $(function () {
   $('#exam_results').DataTable({
     "paging": true,
