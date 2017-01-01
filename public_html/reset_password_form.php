@@ -6,11 +6,11 @@ include ('../includes/config.php');
 include ('includes/functions.php');
 
 if(!isset($_GET['reset_code'])) {
-    header("Location: login");
+    $URL="login.php";
+    echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
+    echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
 }
-else {
 $reset_code = $_GET['reset_code'];
-}
 
 $reset_code_query = "SELECT password_reset_code FROM members WHERE password_reset_code = '$reset_code'";
 $result = mysqli_query($dbconfig, $reset_code_query);
@@ -29,7 +29,11 @@ if (isset($_POST['set_password'])) {
     $res = mysqli_query($dbconfig, $query) or die("Connection failed: " . mysqli_error($dbconfig));
 
     if ($res) {
-        header("Location: login");
+        //$add_statistics_entry = "INSERT INTO user_statistics (student_number) values ('$student_number')";
+        //mysqli_query($dbconfig, $add_statistics_entry);
+        $URL="login.php";
+        echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $URL . '">';
+        echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
     }
 }
 

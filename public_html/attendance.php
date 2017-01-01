@@ -4,7 +4,7 @@ include ('../includes/config.php');
 include ('includes/session.php');
 
 if (!$_SESSION['admin_boolean']) {
-  header("Location: member_attendance");
+  header("Location: member_attendance.php");
 }
 
 $active_page = 'attendance';
@@ -68,7 +68,7 @@ $active_page = 'attendance';
 
        <button class="btn btn-lg btn-primary btn-block btn-full-5" id="start_session_button">Start Session</button>
        <button class="btn btn-lg btn-primary btn-block btn-full-5" id="end_session_button">End Session</button>
-       <button class="btn btn-lg btn-primary btn-block btn-full-5" id="check_attendance_button" onclick="window.location='check_attendance';" >Check Attendance</button>
+       <button class="btn btn-lg btn-primary btn-block btn-full-5" id="check_attendance_button" onclick="window.location='check_attendance.php';" >Check Attendance</button>
 
 
      </section>
@@ -175,7 +175,7 @@ $active_page = 'attendance';
     $("#end_session_button").click(function() {
       $.ajax({
         type: "get",
-        url: "includes/ajax",
+        url: "includes/ajax.php",
         data: {ajax_id : JSON.stringify("attendance_check_open"),
         code_word : JSON.stringify(code_word)},
       }).done(function(data){ 
@@ -205,7 +205,7 @@ function start_ajax (code_word) {
   }
   $.ajax({
     type: "get",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("attendance_start"),
     code_word : JSON.stringify(code_word)},
   }).done(function(data) {
@@ -224,7 +224,7 @@ function start_ajax (code_word) {
 function end_ajax () {
   $.ajax({
     type: "get",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("attendance_end"),
         attendance_id : JSON.stringify(attendance_id)},
   }).done(function(data) {
@@ -242,7 +242,7 @@ function end_ajax () {
 function check_open() {
   $.ajax({
         type: "get",
-        url: "includes/ajax",
+        url: "includes/ajax.php",
         data: {ajax_id : JSON.stringify("attendance_check_open"),
         code_word : JSON.stringify(code_word)},
       }).done(function(data){ 
@@ -256,7 +256,7 @@ function check_open() {
 function open_start() {
   $.ajax({
         type: "get",
-        url: "includes/ajax",
+        url: "includes/ajax.php",
         data: {ajax_id : JSON.stringify("attendance_check_open"),
         code_word : JSON.stringify(code_word)},
       }).done(function(data){ 

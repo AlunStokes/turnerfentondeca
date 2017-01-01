@@ -6,14 +6,14 @@ include ('includes/session.php');
 $active_page = 'attendance';
 
 if ($_SESSION['admin_boolean']) {
- header("Location: attendance");
+ header("Location: attendance.php");
 }
 
 $check_query = "SELECT * FROM attendance_individuals WHERE student_number = ".$_SESSION['student_number']." AND session_id = (SELECT id FROM attendance_sessions WHERE end_time IS NULL);";
 $result = mysqli_query($dbconfig, $check_query);
 if ($result != false) {
   if (mysqli_num_rows($result) > 0) {
-    header("Location: timeline");
+    header("Location: timeline.php");
   }
 }
 
@@ -122,7 +122,7 @@ if ($result != false) {
 
       $.ajax({
         type: "get",
-        url: "includes/ajax",
+        url: "includes/ajax.php",
         data: {code_word : JSON.stringify(code_word),
           student_number : JSON.stringify(student_number),
          student_class : JSON.stringify(student_class),

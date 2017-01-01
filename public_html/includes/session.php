@@ -5,7 +5,7 @@ include ('../includes/config.php');
 session_start();
 
 if (!isset($_SESSION['student_number'])) {
-	header("Location:login");
+	header("Location:login.php");
 }
 
 if (!isset($_SESSION['fist_name'])) {

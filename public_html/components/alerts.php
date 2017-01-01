@@ -49,7 +49,7 @@ $(document).ready(function() {
   $(".close").click(function() {
     $.ajax({
       type: "get",
-      url: "includes/ajax",
+      url: "includes/ajax.php",
       data: {ajax_id : JSON.stringify("alerts_add_seen"),
     alert_id : JSON.stringify($(this).attr('id'))},
     }).done(function(data){ 

@@ -55,7 +55,7 @@ include ('includes/session.php');
     <header class="main-header">
 
       <!-- Logo -->
-      <a href="practice" class="logo">
+      <a href="practice.php" class="logo">
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><i class="glyphicon glyphicon-chevron-left"></i> Back to Practice</span>
       </a>
@@ -113,11 +113,11 @@ include ('includes/session.php');
       var admin = <?php echo $_SESSION['admin']; ?>;
       var done = <?php if (isset($_POST['done'])) { echo json_encode(intval($_POST['done'])); } else { echo "null"; } ?>;
       if (done == 1 && admin == 0) {
-        window.location.assign("practice");
+        window.location.assign("practice.php");
       }
       var exam_id = <?php if (isset($_POST['exam_id'])) { echo json_encode(intval($_POST['exam_id'])); } else { echo "null"; } ?>;
       if (exam_id == null) {
-        window.location.assign("practice");
+        window.location.assign("practice.php");
       }
       if (exam_id == 0) {
         var exam_cluster = <?php if (isset($_POST['exam_cluster'])) { echo json_encode($_POST['exam_cluster']); } else { echo "null"; } ?>;
@@ -129,7 +129,7 @@ include ('includes/session.php');
 //Load questions
 $.ajax({
   type: "post",
-  url: "includes/ajax",
+  url: "includes/ajax.php",
   data: {ajax_id : JSON.stringify("exam_get_questions"),
   exam_cluster : JSON.stringify(exam_cluster),
   exam_id : JSON.stringify(exam_id)}
@@ -146,7 +146,7 @@ $.ajax({
     }
   }
   if (data['unlocked'] == 0 && admin == 0) {
-    window.location.assign("practice");
+    window.location.assign("practice.php");
   }
   chosen = new Array(data['num_questions']);
   $('.container-fluid-body').append(`
@@ -276,7 +276,7 @@ function submit_exam() {
   submitted = true;
   $.ajax({
     type: "post",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("exam_submit"),
     chosen : JSON.stringify(chosen),
     exam_id : JSON.stringify(exam_id),

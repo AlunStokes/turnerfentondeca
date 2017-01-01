@@ -1,5 +1,5 @@
 <?php
 
-    header("Location: landing");
+    header("Location: landing.php");
 
 ?>

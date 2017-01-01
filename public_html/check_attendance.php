@@ -4,7 +4,7 @@ include ('../includes/config.php');
 include ('includes/session.php');
 
 if (!$_SESSION['admin_boolean']) {
-  header("Location: member_attendance");
+  header("Location: member_attendance.php");
 }
 
 $sessions = array();

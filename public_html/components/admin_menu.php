@@ -1,13 +1,13 @@
 <!-- Page Style -->
 <link rel="stylesheet" href="css/admin_menu.css">
 <?php 
-include 'admin_sidebar.php'; 
-?>
+    include 'admin_sidebar.php'; 
+    ?>
 <!-- Main Header -->
 <header class="main-header">
 
   <!-- Logo -->
-  <a href="home" class="logo">
+  <a href="home.php" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
     <span class="logo-mini"><b>TF</b>D</span>
     <!-- logo for regular state and mobile devices -->
@@ -47,10 +47,10 @@ include 'admin_sidebar.php';
             <!-- Menu Footer-->
             <li class="user-footer">
               <div class="pull-left">
-                <a href="account" class="btn btn-default btn-menu">Account</a>
+                <a href="account.php" class="btn btn-default btn-menu">Account</a>
               </div>
               <div class="pull-right">
-                <a href="logout" class="btn btn-default btn-menu">Sign out</a>
+                <a href="logout.php" class="btn btn-default btn-menu">Sign out</a>
               </div>
             </li>
           </ul>
@@ -84,24 +84,26 @@ include 'admin_sidebar.php';
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu">
       <li class="header">Main</li>
-      <li id="home"><a href="home"><i class="fa fa-home"></i> <span>Home</span></a></li>
-      <li id="practice"><a href="practice"><i class="fa fa-pencil"></i> <span>Practice</span></a></li>
+      <li id="home"><a href="home.php"><i class="fa fa-home"></i> <span>Home</span></a></li>
+      <!--<li id="calendar"><a href="calendar.php"><i class="fa fa-calendar-minus-o"></i> <span>Calender</span></a></li>-->
+      <!--<li id="competition"><a href="competition.php"><i class="fa fa-trophy"></i> <span>Event & Competition</span></a></li>-->
+      <li id="practice"><a href="practice.php"><i class="fa fa-pencil"></i> <span>Practice</span></a></li>
       <li class="attendance" id="attendance">
-        <a href="attendance"><i class="fa fa-calendar"></i><span>Attendance</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <a href="attendance.php"><i class="fa fa-calendar"></i><span>Attendance</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">
-          <li><a href="attendance">Attendance</a></li>
-          <li><a href="check_attendance">Check Attendance</a></li>
+          <li><a href="attendance.php">Attendance</a></li>
+          <li><a href="check_attendance.php">Check Attendance</a></li>
         </ul>
       </li>
       <li class="classes" id="classes">
-        <a href="timeline"><i class="fa fa-book"></i><span>Classes</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <a href="timeline.php"><i class="fa fa-book"></i><span>Classes</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">
-          <li><a href="timeline">Timeline</a></li>
-          <li><a href="exam_statistics">Personal Exam Statistics</a></li>
-          <li><a href="class_exam_results">Class Exam Results</a></li>
+          <li><a href="timeline.php">Timeline</a></li>
+          <li><a href="exam_statistics.php">Personal Exam Statistics</a></li>
+          <li><a href="class_exam_results.php">Class Exam Results</a></li>
         </ul>
       </li>
-      <li id="account"><a href="account"><i class="fa fa-user"></i> <span>Account</span></a></li>
+      <li id="account"><a href="account.php"><i class="fa fa-user"></i> <span>Account</span></a></li>
     </ul>
     <!-- /.sidebar-menu -->
   </section>

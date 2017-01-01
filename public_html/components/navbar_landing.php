@@ -30,8 +30,11 @@
                         <a class="page-scroll" href="#join">Join Us</a>
                     </li>
                    <li>
-                        <a class="page-scroll" href="login">Login</a>
+                        <a class="page-scroll" href="login.php">Login</a>
                     </li>
+                    <!-- <li>
+                        <a class="page-scroll" href="register.php">Register</a>
+                    </li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

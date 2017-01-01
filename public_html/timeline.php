@@ -237,7 +237,7 @@ $page = 'timeline';
 
     $.ajax({
       type: "get",
-      url: "includes/ajax",
+      url: "includes/ajax.php",
       data: {ajax_id : JSON.stringify("timeline_load_posts"),
       user_class : JSON.stringify(user_class),
       admin : JSON.stringify(admin)},
@@ -381,7 +381,7 @@ $(document).on('click', '.delete', function() {
       if(result) {
         $.ajax({
           type: "get",
-          url: "includes/ajax",
+          url: "includes/ajax.php",
           data: {ajax_id : JSON.stringify("timeline_delete_post"),
           post_id : JSON.stringify(post_id)},
         }).done(function(data){ 
@@ -408,7 +408,7 @@ $("#post_message").on('click',function() {
   var poster = <?php echo json_encode($_SESSION['student_number']); ?>;
   $.ajax({
     type: "get",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("timeline_post_message"),
     json_message : json_post_message,
     message : JSON.stringify(post_message),
@@ -432,7 +432,7 @@ $("#post_alert").on('click',function() {
   var type = $("#type").val();
   $.ajax({
     type: "get",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {ajax_id: JSON.stringify("timeline_post_alert"),
     title : JSON.stringify(title),
     body : JSON.stringify(body),
@@ -456,7 +456,7 @@ $("#edit_message").on('click',function() {
   var post_class = $("#class_edit").val();
   $.ajax({
     type: "get",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {json_message : json_post_message,
       message : JSON.stringify(post_message),
       post_class : JSON.stringify(post_class),

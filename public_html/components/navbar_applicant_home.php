@@ -5,7 +5,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
                     Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand page-scroll" href="landing">
+                <a class="navbar-brand page-scroll" href="landing.php">
                     <img src="img/deca_logo_small_letters.png"></img>
                 </a>
             </div>
@@ -15,7 +15,7 @@
                 <ul class="nav navbar-nav">
                     <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
                     <li>
-                        <a class="page-scroll" href="logout">Logout</a>
+                        <a class="page-scroll" href="logout.php">Logout</a>
                     </li>
                 </ul>
             </div>

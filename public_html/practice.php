@@ -21,6 +21,8 @@ $active_page = 'practice';
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="css/admin.min.css">
   <link rel="stylesheet" href="css/skin-blue.min.css">
@@ -65,8 +67,8 @@ $active_page = 'practice';
        <button class="btn btn-lg btn-primary btn-block btn-full-5" id="new_exam">Start New Exam</button>
        <button class="btn btn-lg btn-primary btn-block btn-full-5" id="search_exams">Search Exams</button>
        <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" id="question_search">Find Specific Question</button>'; } ?>
-       <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" onclick="location.href=`create_exam`">Create Exam</button>'; } ?>
-       <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" onclick="location.href=`add_question`">Add Question</button>'; } ?>
+       <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" onclick="location.href=`create_exam.php`">Create Exam</button>'; } ?>
+       <?php if ($_SESSION['admin_boolean']) { echo '<button class="btn btn-lg btn-primary btn-block btn-full-5" onclick="location.href=`add_question.php`">Add Question</button>'; } ?>
 
 
      </section>
@@ -204,7 +206,7 @@ $(document).ready(function() {
   });
   $(document).on("click", ".btn-begin-exam", function() {
     var exam_cluster = $("#random_exam_cluster_dropdown").val();
-    $.redirect("exam", {"exam_cluster" : exam_cluster, "exam_id" : 0}, "POST");
+    $.redirect("exam.php", {"exam_cluster" : exam_cluster, "exam_id" : 0}, "POST");
   });
 });
 
@@ -213,7 +215,7 @@ function question_list_ajax() {
   var question_type = document.getElementById('question_dropdown').value;
   $.ajax({
     type: "get",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("practice_search_questions"),
     search : JSON.stringify(search_text),
     question_type : JSON.stringify(question_type)},
@@ -251,7 +253,7 @@ function exam_list_ajax() {
   var exam_search_text = document.getElementById('exam_name_contains').value;
   $.ajax({
     type: "get",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("practice_search_exams"),
     search : JSON.stringify(exam_search_text)}
   }).done(function(data){ 
@@ -368,7 +370,7 @@ function exam_list_ajax() {
     }
   $(document).on("click", ".btn-choose-exam", function() {
     var exam_id = this.id.match(/\d+/)[0];
-      $.redirect("exam", {"exam_id" : exam_id, "done" : results['done'][results['exam_id'].indexOf(exam_id)]}, "POST");
+      $.redirect("exam.php", {"exam_id" : exam_id, "done" : results['done'][results['exam_id'].indexOf(exam_id)]}, "POST");
   });
   });
 }
@@ -383,7 +385,7 @@ $(document).on('change', '.unlocked_slider', function() {
   var exam_id = getNum($(this).attr("id"));
   $.ajax({
     type: "get",
-    url: "includes/ajax",
+    url: "includes/ajax.php",
     data: {ajax_id : JSON.stringify("practice_change_unlock_exam"),
     unlocked : JSON.stringify(unlocked),
     exam_id : JSON.stringify(exam_id)}

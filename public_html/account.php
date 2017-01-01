@@ -23,7 +23,7 @@ if (isset($_POST['password'])) {
   mysqli_query($dbconfig, "UPDATE members SET password = '$password' WHERE student_number = '".$_SESSION['student_number']."'");
 }
 if ($_SESSION['member'] == false) {
-  header("Location:applicant_home");
+  header("Location:applicant_home.php");
 }
 
 
@@ -141,7 +141,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="col-md-2">
           <label>Profile Picture: </label>
         </div>
-        <form action="includes/upload_photo" method="post" enctype="multipart/form-data" id="upload_form">
+        <form action="includes/upload_photo.php" method="post" enctype="multipart/form-data" id="upload_form">
         <div class="col-md-4">
           <div class="form-wrap">
               <input name="__files[]" type="file" />

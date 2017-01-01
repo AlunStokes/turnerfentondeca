@@ -577,9 +577,9 @@ switch ($ajax_id) {
 	$message = "<h2>A password reset has been requested for your account.</h2>";
 	$message .= "<h4>If you have not requested this reset, please contact us at webmaster@turnerfentondeca.com.</h4>";
 	$message .= "<br>";
-	$message .= "<h4>Otherwise, please <a href ='turnerfentondeca.com/reset_password_form?reset_code=".$random_hash."' >click the here to finish your password reset.</a></h4>";
+	$message .= "<h4>Otherwise, please <a href ='turnerfentondeca.com/reset_password_form.php?reset_code=".$random_hash."' >click the here to finish your password reset.</a></h4>";
 	$message .= "<br>";
-	$message .= "<h4>Or, if the above doesn't work, click the following link: turnerfentondeca.com/reset_password_form?reset_code=".$random_hash."";
+	$message .= "<h4>Or, if the above doesn't work, click the following link: turnerfentondeca.com/reset_password_form.php?reset_code=".$random_hash."";
 	if (mail($to, $subject, $message, $headers)) {
 		$data = "success";
 	}
@@ -775,7 +775,7 @@ switch ($ajax_id) {
 		mysqli_query($dbconfig, $insert_email) or die (mysqli_error($dbconfig));
 		$data['status'] = "success";
 	}
-	$data['link'] = 'register?confirm_code='.$random_hash.'';
+	$data['link'] = 'register.php?confirm_code='.$random_hash.'';
 	echo json_encode($data);
 	break;
 

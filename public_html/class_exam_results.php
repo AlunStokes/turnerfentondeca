@@ -6,7 +6,7 @@ include ('includes/session.php');
 $active_page = 'classes';
 
 if (!$_SESSION['admin_boolean']) {
-  header("Location: exam_statistics");
+  header("Location: exam_statistics.php");
 }
 
 $exam_list = array();
