@@ -47,12 +47,6 @@ mysqli_multi_query($dbconfig, $query) or die(mysqli_error($dbconfig));
   <link rel="shortcut icon" href="img/favicon.png`" />
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
-  <!-- jQuery UI CSS -->
-  <link rel="stylesheet" hred="css/jquery-ui.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="css/admin.min.css">
   <link rel="stylesheet" href="css/skin-blue.min.css">
@@ -68,10 +62,6 @@ mysqli_multi_query($dbconfig, $query) or die(mysqli_error($dbconfig));
   <script src="js/bootstrap.min.js"></script>
   <!-- AdminLTE App -->
   <script src="js/admin.min.js"></script>
-  <!-- jQuery Easing Javascript -->
-  <script src="js/jquery.easing.min.js"></script>
-  <!-- jQuery UI Javascript -->
-  <script src="js/jquery-ui.min.js"></script>
 
 
 </head>
