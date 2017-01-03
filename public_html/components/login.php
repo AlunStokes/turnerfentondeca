@@ -14,42 +14,28 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     $student_number = sanitize ($_POST['student_number']);
     $password = sanitize($_POST['password']);
     $password_correct = false;
-    $_SESSION['member'] = false; 
 
     $salt_query = "SELECT password FROM members WHERE student_number = $student_number";
     $result = mysqli_query($dbconfig, $salt_query);
-    if (mysqli_num_rows($result) == 1) {
-        $_SESSION['member'] = true;
-    }
     if (mysqli_num_rows($result) == 0) {
-        $salt_query = "SELECT password FROM applicants WHERE student_number = $student_number";
-        $result = mysqli_query($dbconfig, $salt_query);
-        if (mysqli_num_rows($result) == 0) {
-            $errmsg="Student Number or Password is invalid";
-            //exit();
-        }
+        $errmsg="Student Number or Password is invalid";
     }
 
-    if (mysqli_num_rows($result) == 1) {
+    else if (mysqli_num_rows($result) == 1) {
         $row = mysqli_fetch_assoc($result);
-        $password_salt = $row['password'];
-        if (password_verify($password, $password_salt)) {
+        $password_hash = $row['password'];
+        if (password_verify($password, $password_hash)) {
             $password_correct = true;
         }
         else {
             $errmsg="Student Number or Password is invalid";
         }
-
         if ($password_correct) {
             $_SESSION['student_number']=$student_number;
-            if ($_SESSION['member'] == true) {
-                $add_login = "INSERT INTO logins (student_number) VALUES (".$_SESSION['student_number'].");";
-                mysqli_query($dbconfig, $add_login);
-                $URL="home";
-            }
-            else {
-                $URL="applicant_home";
-            }
+            $add_login = "INSERT INTO logins (student_number) VALUES (".$_SESSION['student_number'].");";
+            mysqli_query($dbconfig, $add_login);
+            
+            $URL="home";
             //include 'includes/send_data.php';
             header("Location:".$URL);
         }
@@ -75,7 +61,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- jQuery -->
 <script src="js/jquery-2.2.3.min.js"></script>
-  <script src="components/all_pages.js"></script>
+<script src="components/all_pages.js"></script>
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <!--Form Validation JavaScript -->
