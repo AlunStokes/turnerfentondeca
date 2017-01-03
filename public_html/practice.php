@@ -35,7 +35,7 @@ $active_page = 'practice';
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- admin App -->
-  <script src="js/admin.min.js"></script>
+  <script src="js/core/dashboard.js"></script>
   <!-- redirect js -->
   <script src="js/jquery.redirect.js"></script>
 

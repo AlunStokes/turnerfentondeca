@@ -61,7 +61,7 @@ mysqli_multi_query($dbconfig, $query) or die(mysqli_error($dbconfig));
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- AdminLTE App -->
-  <script src="js/admin.min.js"></script>
+  <script src="js/core/dashboard.js"></script>
 
 
 </head>

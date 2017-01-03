@@ -48,7 +48,7 @@ if ($result != false) {
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- dashboard App -->
-  <script src="js/admin.min.js"></script>
+  <script src="js/core/dashboard.js"></script>
   <script src="js/bootstrap-dialog.min.js"></script>
 
 </head>

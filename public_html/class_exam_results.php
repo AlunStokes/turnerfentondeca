@@ -109,7 +109,7 @@ if (isset($_GET['download_file']) && $_GET['download_file']==1) {
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- dashboard App -->
-  <script src="js/admin.min.js"></script>
+  <script src="js/core/dashboard.js"></script>
   <!-- Datatables -->
   <script src="js/jquery.dataTables.min.js"></script>
   <script src="js/dataTables.bootstrap.min.js"></script>

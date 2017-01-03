@@ -44,7 +44,7 @@ session_destroy();
   <!-- Plugin JavaScript -->
   <script src="js/jquery.easing.min.js"></script>
   <!-- Custom Theme JavaScript -->
-  <script src="js/grayscale.min.js"></script>
+  <script src="js/page-specific/landing.js"></script>
 
 
 </head>

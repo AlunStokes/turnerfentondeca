@@ -40,7 +40,7 @@ include ('includes/session.php');
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- AdminLTE App -->
-  <script src="js/admin.min.js"></script>
+  <script src="js/core/dashboard.js"></script>
   <!-- jQuery Easing Javascript -->
   <script src="js/jquery.easing.min.js"></script>
   <!-- jQuery Timer Javascript -->
