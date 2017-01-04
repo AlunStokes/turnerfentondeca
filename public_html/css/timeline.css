@@ -261,3 +261,10 @@ i:hover {
 .ql-snow .ql-out-bottom, .ql-snow .ql-out-top {
     visibility: visible !important;
 }
+
+.timeline-body {
+	padding-bottom: 0 !important;
+}
+.timeline-footer {
+	padding-top: 0 !important;
+}

@@ -287,7 +287,7 @@ $page = 'timeline';
         <h3 class="timeline-header">`+messages['poster_first_name'][i]+` `+messages['poster_last_name'][i]+`</h3>
 
         <div class="timeline-body">
-        <p id="post_body_`+messages["id"][i]+`" style="font-size:15px;">`+messages['message'][i]+`</p>
+        `+messages['message'][i]+`
         </div>
 
         <div class="timeline-footer">
