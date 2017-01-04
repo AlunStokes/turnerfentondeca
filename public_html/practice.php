@@ -22,7 +22,7 @@ $active_page = 'practice';
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="css/admin.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/skin-blue.min.css">
   <!-- Page Style -->
   <link rel="stylesheet" href="css/practice.css">

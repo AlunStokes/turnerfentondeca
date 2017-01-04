@@ -97,7 +97,7 @@ if (isset($_GET['download_file']) && $_GET['download_file']==1) {
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="css/admin.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/skin-blue.min.css">
   <!-- Page Style -->
   <link rel="stylesheet" href="css/class_exam_results.css">

@@ -22,7 +22,7 @@ if ($_SESSION['member'] == false) {
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="css/admin.min.css">
+  <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="css/skin-blue.min.css">
   <!-- Page Style -->
   <link rel="stylesheet" href="css/create_exam.css">
