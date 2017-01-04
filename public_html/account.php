@@ -22,9 +22,6 @@ if (isset($_POST['password'])) {
 
   mysqli_query($dbconfig, "UPDATE members SET password = '$password' WHERE student_number = '".$_SESSION['student_number']."'");
 }
-if ($_SESSION['member'] == false) {
-  header("Location:applicant_home");
-}
 
 
 
