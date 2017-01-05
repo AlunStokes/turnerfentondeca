@@ -53,6 +53,17 @@ $active_page = 'home';
   .direct-chat-msg {
     margin-bottom: 0;
   }
+  .direct-chat {
+        position: absolute;
+    max-width: 300px;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 0;
+  }
+  .direct-chat-messages {
+bottom: 0;
+    min-height: 80vh;
+  }
   </style>
 
 
