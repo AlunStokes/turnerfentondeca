@@ -874,7 +874,86 @@ switch ($ajax_id) {
 
 	case "still_alive":
 	$query = "UPDATE members SET last_online=NOW() WHERE student_number = ".$_SESSION['student_number'].";";
-	mysqli_query($dbconfig, $query);
+	if (mysqli_query($dbconfig, $query)) {
+		echo json_encode("success");
+	}
+	else {
+		echo json_encode("fail");
+	}
+	break;
+
+
+
+	case "messaging_load":
+	$user = json_decode($_POST['user']);
+	$partner = json_decode($_POST['partner']);
+
+	$data['message'] = array();
+	$data['sent_date'] = array();
+	$data['sent_date_timestamp'] = array();
+	$data['message_read'] = array();
+	$data['sender_name'] = array();
+	$data['sender_student_number'] = array();
+	$data['user_sent'] = array();
+
+	$query = "SELECT concat(first_name, ' ', last_name) as sender_name, sender as sender_student_number, message, DATE_FORMAT(sent_date, '%d %M %H:%i ') AS sent_date, sent_date as sent_date_timestamp, message_read, IF(sender = $user, 1, 0) as user_sent FROM messages JOIN members ON members.student_number = messages.sender WHERE (sender = $partner AND recipient = $user) OR (sender = $user AND recipient = $partner) ORDER BY sent_date ASC";
+	$result = mysqli_query($dbconfig, $query);
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['message'], $row['message']);
+		array_push($data['sent_date'], $row['sent_date']);
+		array_push($data['sent_date_timestamp'], $row['sent_date_timestamp']);
+		array_push($data['message_read'], $row['message_read']);
+		array_push($data['user_sent'], $row['user_sent']);
+		array_push($data['sender_name'], $row['sender_name']);
+		array_push($data['sender_student_number'], $row['sender_student_number']);
+	}
+	echo json_encode($data);
+	break;
+
+	case "messaging_update":
+	$user = json_decode($_POST['user']);
+	$partner = json_decode($_POST['partner']);
+	$last_message_timestamp = json_decode($_POST['last_message_timestamp']);
+
+	$data['message'] = array();
+	$data['sent_date'] = array();
+	$data['sent_date_timestamp'] = array();
+	$data['message_read'] = array();
+	$data['sender_name'] = array();
+	$data['sender_student_number'] = array();
+	$data['user_sent'] = array();
+
+	$query = "SELECT concat(first_name, ' ', last_name) as sender_name, sender as sender_student_number, message, DATE_FORMAT(sent_date, '%d %M %H:%i ') AS sent_date, sent_date as sent_date_timestamp, message_read, IF(sender = $user, 1, 0) as user_sent FROM messages JOIN members ON members.student_number = messages.sender WHERE ((sender = $partner AND recipient = $user) OR (sender = $user AND recipient = $partner)) AND sent_date > '$last_message_timestamp' ORDER BY sent_date ASC";
+
+	$result = mysqli_query($dbconfig, $query);
+	if (mysqli_num_rows($result) > 0) {
+		$data['empty'] = 0;
+	}
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['message'], $row['message']);
+		array_push($data['sent_date'], $row['sent_date']);
+		array_push($data['sent_date_timestamp'], $row['sent_date_timestamp']);
+		array_push($data['message_read'], $row['message_read']);
+		array_push($data['user_sent'], $row['user_sent']);
+		array_push($data['sender_name'], $row['sender_name']);
+		array_push($data['sender_student_number'], $row['sender_student_number']);
+	}
+	echo json_encode($data);
+
+	break;
+
+	case "messaging_send":
+	$user = json_decode($_POST['user']);
+	$partner = json_decode($_POST['partner']);
+	$message = json_decode($_POST['message']);
+	$query = "INSERT INTO messages (sender, recipient, message) VALUES ($user, $partner, '$message');";
+	$result = mysqli_query($dbconfig, $query);
+	if ($result) {
+		echo json_encode("success");
+	}
+	else {
+		echo json_encode("fail");
+	}
 	break;
 
 
