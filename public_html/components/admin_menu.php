@@ -1,7 +1,7 @@
 <!-- Page Style -->
 <link rel="stylesheet" href="css/admin_menu.css">
-<?php 
-include 'admin_sidebar.php'; 
+<?php
+include 'admin_sidebar.php';
 ?>
 <!-- Main Header -->
 <header class="main-header">
@@ -63,7 +63,7 @@ include 'admin_sidebar.php';
     </div>
   </nav>
 </header>
-<!-- Left side column. contains the logo and sidebar -->  
+<!-- Left side column. contains the logo and sidebar -->
 <aside class="main-sidebar">
 
   <!-- sidebar: style can be found in sidebar.less -->
@@ -94,7 +94,7 @@ include 'admin_sidebar.php';
         </ul>
       </li>
       <li class="classes" id="classes">
-        <a href="timeline"><i class="fa fa-book"></i><span>Classes</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <a href="timeline"><i class="fa fa-book"></i><span>plear</span> <i class="fa fa-angle-left pull-right"></i></a>
         <ul class="treeview-menu">
           <li><a href="timeline">Timeline</a></li>
           <li><a href="exam_statistics">Personal Exam Statistics</a></li>
