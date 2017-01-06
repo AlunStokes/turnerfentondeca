@@ -923,11 +923,24 @@ switch ($ajax_id) {
 	$data['sender_student_number'] = array();
 	$data['user_sent'] = array();
 
-	$query = "SELECT concat(first_name, ' ', last_name) as sender_name, sender as sender_student_number, message, DATE_FORMAT(sent_date, '%d %M %H:%i ') AS sent_date, sent_date as sent_date_timestamp, message_read, IF(sender = $user, 1, 0) as user_sent FROM messages JOIN members ON members.student_number = messages.sender WHERE ((sender = $partner AND recipient = $user) OR (sender = $user AND recipient = $partner)) AND sent_date > '$last_message_timestamp' ORDER BY sent_date ASC";
+	$timeout = 8;
+	$now = time();
 
-	$result = mysqli_query($dbconfig, $query);
-	if (mysqli_num_rows($result) > 0) {
-		$data['empty'] = 0;
+	while ((time() - $now) < $timeout) {
+		$query = "SELECT concat(first_name, ' ', last_name) as sender_name, sender as sender_student_number, message, DATE_FORMAT(sent_date, '%d %M %H:%i ') AS sent_date, sent_date as sent_date_timestamp, message_read, IF(sender = $user, 1, 0) as user_sent FROM messages JOIN members ON members.student_number = messages.sender WHERE ((sender = $partner AND recipient = $user) OR (sender = $user AND recipient = $partner)) AND sent_date > '$last_message_timestamp' ORDER BY sent_date ASC";
+		$result = mysqli_query($dbconfig, $query);
+		if (mysqli_num_rows($result) > 0) {
+			$data['empty'] = 0;
+			break;
+		}
+		else {
+			$data['empty'] = 1;
+			usleep(10000);
+		}
+	}
+	if (mysqli_num_rows($result) == 0) {
+		echo json_encode($data);
+		exit();
 	}
 	while ($row = mysqli_fetch_assoc($result)) {
 		array_push($data['message'], $row['message']);

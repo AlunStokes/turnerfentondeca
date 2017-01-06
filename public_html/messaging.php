@@ -39,7 +39,7 @@ $active_page = 'home';
   <!-- Bootstrap 3.3.6 -->
   <script src="js/bootstrap.min.js"></script>
   <!-- AdminLTE App -->
-  <script src="js/admin.min.js"></script>
+  <script src="js/dashboard.js"></script>
 
 </head>
 
@@ -54,14 +54,19 @@ $active_page = 'home';
     margin-bottom: 0;
   }
   .direct-chat {
-        position: absolute;
+    position: absolute;
     max-width: 300px;
     right: 0;
     bottom: 0;
     margin-bottom: 0;
+    transition: 0.3s;
+    transition-timing-function: ease-in-out;
+  }
+  .direct-chat-sidebar-open {
+    right: 230px;
   }
   .direct-chat-messages {
-bottom: 0;
+    bottom: 0;
     min-height: 80vh;
   }
   </style>
@@ -140,7 +145,7 @@ bottom: 0;
         var partner = 123456;
         $.ajax({
           type: "POST",
-          url: "includes/ajax",
+          url: "includes/newMessage",
           data: {user: JSON.stringify(user),
             partner: JSON.stringify(partner),
             message: JSON.stringify(message),
@@ -149,7 +154,7 @@ bottom: 0;
             var data = jQuery.parseJSON(data);
             $("#user-message").val("");
             if (data == "success") {
-              updateMessages();
+
             }
             else {
 
@@ -161,7 +166,7 @@ bottom: 0;
           var partner = 123456;
           $.ajax({
             type: "POST",
-            url: "includes/ajax.php",
+            url: "includes/updateMessages",
             data: {user: JSON.stringify(user),
               partner: JSON.stringify(partner),
               last_message_timestamp: JSON.stringify(last_message_timestamp),
@@ -237,6 +242,7 @@ bottom: 0;
               $(".direct-chat-messages").append(messageHTML);
               myscroll = $('.direct-chat-messages');
               myscroll.scrollTop(myscroll.get(0).scrollHeight);
+              updateMessages();
             });
 }
 
@@ -317,6 +323,7 @@ function loadMessages() {
       $(".direct-chat-messages").prepend(messageHTML);
       myscroll = $('.direct-chat-messages');
       myscroll.scrollTop(myscroll.get(0).scrollHeight);
+        updateMessages();
     });
 }
 
