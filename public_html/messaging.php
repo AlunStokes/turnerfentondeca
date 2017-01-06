@@ -130,6 +130,7 @@ $active_page = 'home';
       <script>
 
       var user = <?php echo $_SESSION['student_number']; ?>;
+      var user_name = "<?php echo $_SESSION['name']; ?>";
       var partner;
       if (user == 498566) {
         partner = 123456;
@@ -160,11 +161,12 @@ $active_page = 'home';
       console.log(JSON.stringify(data, null, 4));
       if (data.msgtype == "user-msg") {
         var sender = JSON.parse(data.sender); 
+        var sender_name = JSON.parse(data.sender_name); 
         var recipient = JSON.parse(data.recipient); 
         var message = JSON.parse(data.message); 
         var sent_date = data.sent_date; 
         var sent_by_user = 0;
-        updateMessages(sender, message, sent_date, sent_by_user);
+        updateMessages(sender, sender_name, message, sent_date, sent_by_user);
       }
     };
 
@@ -186,11 +188,14 @@ $active_page = 'home';
 
     function sendMessage() {
       var message = $("#user-message").val();
+      if (message != "") {
       var sender = user;
+      var sender_name = user_name;
       var recipient = partner;
       //var partner = 123456;
       var websocket_data = {
         sender: JSON.stringify(sender),
+        sender_name: JSON.stringify(sender_name),
         recipient: JSON.stringify(recipient),
         message: JSON.stringify(message),
         ajax_id: JSON.stringify("messaging_send")
@@ -210,7 +215,7 @@ $active_page = 'home';
           <!-- Message to the right -->
           <div class="direct-chat-msg right">
           <div class="direct-chat-info clearfix">
-          <span class="direct-chat-name pull-right">`+sender+`</span>
+          <span class="direct-chat-name pull-right">`+user_name+`</span>
           </div><!-- /.direct-chat-info -->
           <img class="direct-chat-img" src="img/user_images/thumbnails/`+sender+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
           <div class="direct-chat-text">
@@ -226,16 +231,17 @@ $active_page = 'home';
 
         }
       });
+    }
 }
 
-function updateMessages(sender, message, sent_date, sent_by_user) {
+function updateMessages(sender, sender_name, message, sent_date, sent_by_user) {
   messageHTML = ``;
   if (sent_by_user == 1) {
     messageHTML = `
     <!-- Message to the right -->
     <div class="direct-chat-msg right" style="margin-top: 10px;">
     <div class="direct-chat-info clearfix">
-    <span class="direct-chat-name pull-right">`+sender+`</span>
+    <span class="direct-chat-name pull-right">`+sender_name+`</span>
     <span class="direct-chat-timestamp pull-left">`+sent_date+`</span>
     </div><!-- /.direct-chat-info -->
     <img class="direct-chat-img" src="img/user_images/thumbnails/`+sender+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
@@ -251,7 +257,7 @@ function updateMessages(sender, message, sent_date, sent_by_user) {
     <!-- Message. Default to the left -->
     <div class="direct-chat-msg" style="margin-top: 10px;">
     <div class="direct-chat-info clearfix">
-    <span class="direct-chat-name pull-left">`+sender+`</span>
+    <span class="direct-chat-name pull-left">`+sender_name+`</span>
     <span class="direct-chat-timestamp pull-right">`+sent_date+`</span>
     </div><!-- /.direct-chat-info -->
     <img class="direct-chat-img" src="img/user_images/thumbnails/`+sender+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
@@ -296,7 +302,7 @@ function loadMessages() {
             `+data['message'][i]+`
             </div><!-- /.direct-chat-text -->
             </div><!-- /.direct-chat-msg -->
-            </div><!--/.direct-chat-messages-->
+            </div><!--/.direct-chat-messages--> 
             `;
           }
           else {

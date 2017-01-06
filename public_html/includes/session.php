@@ -15,6 +15,7 @@ if (!isset($_SESSION['fist_name'])) {
 
 	$_SESSION['first_name'] = $row['first_name'];
 	$_SESSION['last_name'] = $row['last_name'];
+	$_SESSION['name'] = $_SESSION['first_name']." ".$_SESSION['last_name'];
 	$_SESSION['email'] = $row['email'];
 	$_SESSION['student_number'] = $row['student_number'];
 	$_SESSION['cluster'] = $row['cluster'];
