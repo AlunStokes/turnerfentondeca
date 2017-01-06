@@ -885,7 +885,7 @@ switch ($ajax_id) {
 
 
 	case "messaging_load":
-	$user = json_decode($_POST['user']);
+	$user = $_SESSION['student_number'];
 	$partner = json_decode($_POST['partner']);
 
 	$data['message'] = array();
@@ -911,7 +911,7 @@ switch ($ajax_id) {
 	break;
 
 	case "messaging_update":
-	$user = json_decode($_POST['user']);
+	$user = $_SESSION['student_number'];
 	$partner = json_decode($_POST['partner']);
 	$last_message_timestamp = json_decode($_POST['last_message_timestamp']);
 
@@ -956,7 +956,7 @@ switch ($ajax_id) {
 	break;
 
 	case "messaging_send":
-	$user = json_decode($_POST['user']);
+	$user = $_SESSION['student_number'];
 	$partner = json_decode($_POST['partner']);
 	$message = json_decode($_POST['message']);
 	$query = "INSERT INTO messages (sender, recipient, message) VALUES ($user, $partner, '$message');";

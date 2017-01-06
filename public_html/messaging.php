@@ -130,7 +130,6 @@ $active_page = 'home';
       <script>
 
       var last_message_timestamp;
-      var user = <?php echo $_SESSION['student_number']; ?>;
 
       $(document).ready(function() {
         loadMessages();
@@ -146,8 +145,7 @@ $active_page = 'home';
         $.ajax({
           type: "POST",
           url: "includes/newMessage",
-          data: {user: JSON.stringify(user),
-            partner: JSON.stringify(partner),
+          data: {partner: JSON.stringify(partner),
             message: JSON.stringify(message),
             ajax_id: JSON.stringify("messaging_send")}
           }).done(function(data){
@@ -167,8 +165,7 @@ $active_page = 'home';
           $.ajax({
             type: "POST",
             url: "includes/updateMessages",
-            data: {user: JSON.stringify(user),
-              partner: JSON.stringify(partner),
+            data: {partner: JSON.stringify(partner),
               last_message_timestamp: JSON.stringify(last_message_timestamp),
               ajax_id: JSON.stringify("messaging_update")}
             }).done(function(data){
@@ -251,8 +248,7 @@ function loadMessages() {
   $.ajax({
     type: "POST",
     url: "includes/ajax.php",
-    data: {user: JSON.stringify(user),
-      partner: JSON.stringify(partner),
+    data: {partner: JSON.stringify(partner),
       ajax_id: JSON.stringify("messaging_load")}
     }).done(function(data){
       var data = jQuery.parseJSON(data);
@@ -323,7 +319,7 @@ function loadMessages() {
       $(".direct-chat-messages").prepend(messageHTML);
       myscroll = $('.direct-chat-messages');
       myscroll.scrollTop(myscroll.get(0).scrollHeight);
-        updateMessages();
+       updateMessages();
     });
 }
 
