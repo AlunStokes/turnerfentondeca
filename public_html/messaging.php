@@ -93,11 +93,11 @@ $active_page = 'home';
 
 
 
-        <div class="box box-danger direct-chat direct-chat-danger" style="float:bottom;">
+        <div class="box box-primary direct-chat direct-chat-primary" style="float:bottom;">
           <div class="box-header with-border">
             <h3 class="box-title"></h3>
             <div class="box-tools pull-right">
-              <span data-toggle="tooltip" title="3 New Messages" class="badge bg-red">3</span>
+              <span data-toggle="tooltip" title="3 New Messages" class="badge bg-blue">3</span>
               <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
             </div>
@@ -112,9 +112,9 @@ $active_page = 'home';
 
             <div class="box-footer">
               <div class="input-group">
-                <input type="text" name="message" placeholder="Type Message" class="form-control" id="user-message">
+                <input type="text" name="message" placeholder="Type Message" class="form-control" id="user-message" onkeydown = "if (event.keyCode == 13)$('#send-message').click()">
                 <span class="input-group-btn">
-                  <button type="button" class="btn btn-danger btn-flat" id="send-message">Send</button>
+                  <button type="button" class="btn btn-primary btn-flat" id="send-message">Send</button>
                 </span>
               </div>
             </div><!-- /.box-footer-->
@@ -129,122 +129,174 @@ $active_page = 'home';
 
       <script>
 
-      var last_message_timestamp;
+      var user = <?php echo $_SESSION['student_number']; ?>;
+      var partner;
+      if (user == 498566) {
+        partner = 123456;
+      }
+      else {
+        partner = 498566;
+      }
 
-      $(document).ready(function() {
-        loadMessages();
+      var wsUri = "ws://localhost:9000/turnerfentondeca/public_html/includes/websocket";   
+      websocket = new WebSocket(wsUri); 
+
+    //Connected to server
+    websocket.onopen = function(ev) {
+      alert('Connected to server ');
+      websocket.send(JSON.stringify({'student_number': user}));
+    }
+    
+    //Connection close
+    websocket.onclose = function(ev) { 
+      alert('Disconnected');
+    };
+    
+    //Message Receved
+    websocket.onmessage = function(ev) { 
+      //alert('Message '+ev.data);
+
+      var data = JSON.parse(ev.data); //PHP sends Json data
+      //console.log(JSON.stringify(data, null, 4));
+      
+    var user = data.user; //message type
+    var partner = data.partner; //message text
+    var message = JSON.parse(data.message); //user name
+    var sent_by_user = 0;
+
+
+  };
+
+    //Error
+    websocket.onerror = function(ev) { 
+      alert('Error '+ev.data);
+    };
+
+    var last_message_timestamp;
+    var user = <?php echo $_SESSION['student_number']; ?>;
+
+    $(document).ready(function() {
+      loadMessages();
+    });
+
+    $("#send-message").on("click", function() {
+      sendMessage();
+    });
+
+    function sendMessage() {
+      var message = $("#user-message").val();
+      //var partner = 123456;
+      var data = {
+        user: JSON.stringify(user),
+        partner: JSON.stringify(partner),
+        message: JSON.stringify(message),
+        ajax_id: JSON.stringify("messaging_send")
+      };
+      /*
+      $.ajax({
+        type: "POST",
+        url: "includes/ajax",
+        data: data
+      }).done(function(data){
+        var data = jQuery.parseJSON(data);
+        $("#user-message").val("");
+        if (data == "success") {
+          websocket.send(JSON.stringify(data));
+        }
+        else {
+
+        }
       });
+*/
+$("#user-message").val("");
+websocket.send(JSON.stringify(data));
+}
 
-      $("#send-message").on("click", function() {
-        sendMessage();
-      });
-
-      function sendMessage() {
-        var message = $("#user-message").val();
-        var partner = 123456;
-        $.ajax({
-          type: "POST",
-          url: "includes/newMessage",
-          data: {partner: JSON.stringify(partner),
-            message: JSON.stringify(message),
-            ajax_id: JSON.stringify("messaging_send")}
-          }).done(function(data){
-            var data = jQuery.parseJSON(data);
-            $("#user-message").val("");
-            if (data == "success") {
-
+function updateMessages() {
+      //var partner = 123456;
+      $.ajax({
+        type: "POST",
+        url: "includes/ajax.php",
+        data: {user: JSON.stringify(user),
+          partner: JSON.stringify(partner),
+          last_message_timestamp: JSON.stringify(last_message_timestamp),
+          ajax_id: JSON.stringify("messaging_update")}
+        }).done(function(data){
+          var data = jQuery.parseJSON(data);
+          if (data['empty'] == 0) {
+            last_message_timestamp = data['sent_date_timestamp'][data['sent_date_timestamp'].length-1];
+          }
+          messageHTML = ``;
+          for (var i = 0; i < data['message'].length; i++) {
+            if (data['user_sent'][i] == 1) {
+              if (data['user_sent'][i] != data['user_sent'][i-1] || i == 0) {
+                messageHTML += `
+                <!-- Message to the right -->
+                <div class="direct-chat-msg right" style="margin-top: 10px;">
+                <div class="direct-chat-info clearfix">
+                <span class="direct-chat-name pull-right">`+data['sender_name'][i]+`</span>
+                <span class="direct-chat-timestamp pull-left">`+data['sent_date'][i]+`</span>
+                </div><!-- /.direct-chat-info -->
+                <img class="direct-chat-img" src="img/user_images/thumbnails/`+data['sender_student_number'][i]+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
+                <div class="direct-chat-text">
+                `+data['message'][i]+`
+                </div><!-- /.direct-chat-text -->
+                </div><!-- /.direct-chat-msg -->
+                </div><!--/.direct-chat-messages-->
+                `;
+              }
+              else {
+                messageHTML += `
+                <!-- Message to the right -->
+                <div class="direct-chat-msg right">
+                <div class="direct-chat-info clearfix">
+                </div><!-- /.direct-chat-info -->
+                <div class="direct-chat-text">
+                `+data['message'][i]+`
+                </div><!-- /.direct-chat-text -->
+                </div><!-- /.direct-chat-msg -->
+                </div><!--/.direct-chat-messages-->
+                `;
+              }
             }
             else {
-
+              if (data['user_sent'][i] != data['user_sent'][i-1] || i == 0) {
+                messageHTML += `
+                <!-- Message. Default to the left -->
+                <div class="direct-chat-msg" style="margin-top: 10px;">
+                <div class="direct-chat-info clearfix">
+                <span class="direct-chat-name pull-left">`+data['sender_name'][i]+`</span>
+                <span class="direct-chat-timestamp pull-right">`+data['sent_date'][i]+`</span>
+                </div><!-- /.direct-chat-info -->
+                <img class="direct-chat-img" src="img/user_images/thumbnails/`+data['sender_student_number'][i]+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
+                <div class="direct-chat-text">
+                `+data['message'][i]+`
+                </div><!-- /.direct-chat-text -->
+                </div><!-- /.direct-chat-msg -->
+                `;
+              }
+              else {
+                messageHTML += `
+                <!-- Message. Default to the left -->
+                <div class="direct-chat-msg">
+                <div class="direct-chat-info clearfix">
+                </div><!-- /.direct-chat-info -->
+                <div class="direct-chat-text">
+                `+data['message'][i]+`
+                </div><!-- /.direct-chat-text -->
+                </div><!-- /.direct-chat-msg -->
+                `;
+              }
             }
-          });
-        }
-
-        function updateMessages() {
-          var partner = 123456;
-          $.ajax({
-            type: "POST",
-            url: "includes/updateMessages",
-            data: {partner: JSON.stringify(partner),
-              last_message_timestamp: JSON.stringify(last_message_timestamp),
-              ajax_id: JSON.stringify("messaging_update")}
-            }).done(function(data){
-              var data = jQuery.parseJSON(data);
-              if (data['empty'] == 0) {
-                last_message_timestamp = data['sent_date_timestamp'][data['sent_date_timestamp'].length-1];
-              }
-              messageHTML = ``;
-              for (var i = 0; i < data['message'].length; i++) {
-                if (data['user_sent'][i] == 1) {
-                  if (data['user_sent'][i] != data['user_sent'][i-1] || i == 0) {
-                    messageHTML += `
-                    <!-- Message to the right -->
-                    <div class="direct-chat-msg right" style="margin-top: 10px;">
-                    <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-right">`+data['sender_name'][i]+`</span>
-                    <span class="direct-chat-timestamp pull-left">`+data['sent_date'][i]+`</span>
-                    </div><!-- /.direct-chat-info -->
-                    <img class="direct-chat-img" src="img/user_images/thumbnails/`+data['sender_student_number'][i]+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
-                    <div class="direct-chat-text">
-                    `+data['message'][i]+`
-                    </div><!-- /.direct-chat-text -->
-                    </div><!-- /.direct-chat-msg -->
-                    </div><!--/.direct-chat-messages-->
-                    `;
-                  }
-                  else {
-                    messageHTML += `
-                    <!-- Message to the right -->
-                    <div class="direct-chat-msg right">
-                    <div class="direct-chat-info clearfix">
-                    </div><!-- /.direct-chat-info -->
-                    <div class="direct-chat-text">
-                    `+data['message'][i]+`
-                    </div><!-- /.direct-chat-text -->
-                    </div><!-- /.direct-chat-msg -->
-                    </div><!--/.direct-chat-messages-->
-                    `;
-                  }
-                }
-                else {
-                  if (data['user_sent'][i] != data['user_sent'][i-1] || i == 0) {
-                    messageHTML += `
-                    <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg" style="margin-top: 10px;">
-                    <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left">`+data['sender_name'][i]+`</span>
-                    <span class="direct-chat-timestamp pull-right">`+data['sent_date'][i]+`</span>
-                    </div><!-- /.direct-chat-info -->
-                    <img class="direct-chat-img" src="img/user_images/thumbnails/`+data['sender_student_number'][i]+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
-                    <div class="direct-chat-text">
-                    `+data['message'][i]+`
-                    </div><!-- /.direct-chat-text -->
-                    </div><!-- /.direct-chat-msg -->
-                    `;
-                  }
-                  else {
-                    messageHTML += `
-                    <!-- Message. Default to the left -->
-                    <div class="direct-chat-msg">
-                    <div class="direct-chat-info clearfix">
-                    </div><!-- /.direct-chat-info -->
-                    <div class="direct-chat-text">
-                    `+data['message'][i]+`
-                    </div><!-- /.direct-chat-text -->
-                    </div><!-- /.direct-chat-msg -->
-                    `;
-                  }
-                }
-              }
-              $(".direct-chat-messages").append(messageHTML);
-              myscroll = $('.direct-chat-messages');
-              myscroll.scrollTop(myscroll.get(0).scrollHeight);
-              updateMessages();
-            });
+          }
+          $(".direct-chat-messages").append(messageHTML);
+          myscroll = $('.direct-chat-messages');
+          myscroll.scrollTop(myscroll.get(0).scrollHeight);
+        });
 }
 
 function loadMessages() {
-  var partner = 123456;
+  //var partner = 123456;
   $.ajax({
     type: "POST",
     url: "includes/ajax.php",
@@ -319,7 +371,6 @@ function loadMessages() {
       $(".direct-chat-messages").prepend(messageHTML);
       myscroll = $('.direct-chat-messages');
       myscroll.scrollTop(myscroll.get(0).scrollHeight);
-       updateMessages();
     });
 }
 
