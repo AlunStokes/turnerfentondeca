@@ -143,13 +143,13 @@ $active_page = 'home';
 
     //Connected to server
     websocket.onopen = function(ev) {
-      alert('Connected to server ');
+      console.log('Connected to server ');
       websocket.send(JSON.stringify({'student_number': user}));
     }
     
     //Connection close
     websocket.onclose = function(ev) { 
-      alert('Disconnected');
+      console.log('Disconnected');
     };
     
     //Message Receved
@@ -157,19 +157,20 @@ $active_page = 'home';
       //alert('Message '+ev.data);
 
       var data = JSON.parse(ev.data); //PHP sends Json data
-      //console.log(JSON.stringify(data, null, 4));
-      
-    var user = data.user; //message type
-    var partner = data.partner; //message text
-    var message = JSON.parse(data.message); //user name
-    var sent_by_user = 0;
-
-
-  };
+      console.log(JSON.stringify(data, null, 4));
+      if (data.msgtype == "user-msg") {
+        var sender = JSON.parse(data.sender); 
+        var recipient = JSON.parse(data.recipient); 
+        var message = JSON.parse(data.message); 
+        var sent_date = data.sent_date; 
+        var sent_by_user = 0;
+        updateMessages(sender, message, sent_date, sent_by_user);
+      }
+    };
 
     //Error
     websocket.onerror = function(ev) { 
-      alert('Error '+ev.data);
+      console.log('Error '+ev.data);
     };
 
     var last_message_timestamp;
@@ -185,114 +186,88 @@ $active_page = 'home';
 
     function sendMessage() {
       var message = $("#user-message").val();
+      var sender = user;
+      var recipient = partner;
       //var partner = 123456;
-      var data = {
-        user: JSON.stringify(user),
-        partner: JSON.stringify(partner),
+      var websocket_data = {
+        sender: JSON.stringify(sender),
+        recipient: JSON.stringify(recipient),
         message: JSON.stringify(message),
         ajax_id: JSON.stringify("messaging_send")
       };
-      /*
+
       $.ajax({
         type: "POST",
         url: "includes/ajax",
-        data: data
+        data: websocket_data
       }).done(function(data){
         var data = jQuery.parseJSON(data);
         $("#user-message").val("");
         if (data == "success") {
-          websocket.send(JSON.stringify(data));
+          websocket.send(JSON.stringify(websocket_data));
+
+          messageHTML = `
+          <!-- Message to the right -->
+          <div class="direct-chat-msg right">
+          <div class="direct-chat-info clearfix">
+          <span class="direct-chat-name pull-right">`+sender+`</span>
+          </div><!-- /.direct-chat-info -->
+          <img class="direct-chat-img" src="img/user_images/thumbnails/`+sender+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
+          <div class="direct-chat-text">
+          `+message+`
+          </div><!-- /.direct-chat-text -->
+          </div><!-- /.direct-chat-msg -->
+          </div><!--/.direct-chat-messages-->
+          `;
+          $(".direct-chat-messages").append(messageHTML);
+          scrollToBottom();
         }
         else {
 
         }
       });
-*/
-$("#user-message").val("");
-websocket.send(JSON.stringify(data));
 }
 
-function updateMessages() {
-      //var partner = 123456;
-      $.ajax({
-        type: "POST",
-        url: "includes/ajax.php",
-        data: {user: JSON.stringify(user),
-          partner: JSON.stringify(partner),
-          last_message_timestamp: JSON.stringify(last_message_timestamp),
-          ajax_id: JSON.stringify("messaging_update")}
-        }).done(function(data){
-          var data = jQuery.parseJSON(data);
-          if (data['empty'] == 0) {
-            last_message_timestamp = data['sent_date_timestamp'][data['sent_date_timestamp'].length-1];
-          }
-          messageHTML = ``;
-          for (var i = 0; i < data['message'].length; i++) {
-            if (data['user_sent'][i] == 1) {
-              if (data['user_sent'][i] != data['user_sent'][i-1] || i == 0) {
-                messageHTML += `
-                <!-- Message to the right -->
-                <div class="direct-chat-msg right" style="margin-top: 10px;">
-                <div class="direct-chat-info clearfix">
-                <span class="direct-chat-name pull-right">`+data['sender_name'][i]+`</span>
-                <span class="direct-chat-timestamp pull-left">`+data['sent_date'][i]+`</span>
-                </div><!-- /.direct-chat-info -->
-                <img class="direct-chat-img" src="img/user_images/thumbnails/`+data['sender_student_number'][i]+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
-                <div class="direct-chat-text">
-                `+data['message'][i]+`
-                </div><!-- /.direct-chat-text -->
-                </div><!-- /.direct-chat-msg -->
-                </div><!--/.direct-chat-messages-->
-                `;
-              }
-              else {
-                messageHTML += `
-                <!-- Message to the right -->
-                <div class="direct-chat-msg right">
-                <div class="direct-chat-info clearfix">
-                </div><!-- /.direct-chat-info -->
-                <div class="direct-chat-text">
-                `+data['message'][i]+`
-                </div><!-- /.direct-chat-text -->
-                </div><!-- /.direct-chat-msg -->
-                </div><!--/.direct-chat-messages-->
-                `;
-              }
-            }
-            else {
-              if (data['user_sent'][i] != data['user_sent'][i-1] || i == 0) {
-                messageHTML += `
-                <!-- Message. Default to the left -->
-                <div class="direct-chat-msg" style="margin-top: 10px;">
-                <div class="direct-chat-info clearfix">
-                <span class="direct-chat-name pull-left">`+data['sender_name'][i]+`</span>
-                <span class="direct-chat-timestamp pull-right">`+data['sent_date'][i]+`</span>
-                </div><!-- /.direct-chat-info -->
-                <img class="direct-chat-img" src="img/user_images/thumbnails/`+data['sender_student_number'][i]+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
-                <div class="direct-chat-text">
-                `+data['message'][i]+`
-                </div><!-- /.direct-chat-text -->
-                </div><!-- /.direct-chat-msg -->
-                `;
-              }
-              else {
-                messageHTML += `
-                <!-- Message. Default to the left -->
-                <div class="direct-chat-msg">
-                <div class="direct-chat-info clearfix">
-                </div><!-- /.direct-chat-info -->
-                <div class="direct-chat-text">
-                `+data['message'][i]+`
-                </div><!-- /.direct-chat-text -->
-                </div><!-- /.direct-chat-msg -->
-                `;
-              }
-            }
-          }
-          $(".direct-chat-messages").append(messageHTML);
-          myscroll = $('.direct-chat-messages');
-          myscroll.scrollTop(myscroll.get(0).scrollHeight);
-        });
+function updateMessages(sender, message, sent_date, sent_by_user) {
+  messageHTML = ``;
+  if (sent_by_user == 1) {
+    messageHTML = `
+    <!-- Message to the right -->
+    <div class="direct-chat-msg right" style="margin-top: 10px;">
+    <div class="direct-chat-info clearfix">
+    <span class="direct-chat-name pull-right">`+sender+`</span>
+    <span class="direct-chat-timestamp pull-left">`+sent_date+`</span>
+    </div><!-- /.direct-chat-info -->
+    <img class="direct-chat-img" src="img/user_images/thumbnails/`+sender+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
+    <div class="direct-chat-text">
+    `+message+`
+    </div><!-- /.direct-chat-text -->
+    </div><!-- /.direct-chat-msg -->
+    </div><!--/.direct-chat-messages-->
+    `;
+  }
+  else {
+    messageHTML = `
+    <!-- Message. Default to the left -->
+    <div class="direct-chat-msg" style="margin-top: 10px;">
+    <div class="direct-chat-info clearfix">
+    <span class="direct-chat-name pull-left">`+sender+`</span>
+    <span class="direct-chat-timestamp pull-right">`+sent_date+`</span>
+    </div><!-- /.direct-chat-info -->
+    <img class="direct-chat-img" src="img/user_images/thumbnails/`+sender+`.jpg" alt="message user image"><!-- /.direct-chat-img -->
+    <div class="direct-chat-text">
+    `+message+`
+    </div><!-- /.direct-chat-text -->
+    </div><!-- /.direct-chat-msg -->
+    `;
+  }
+  $(".direct-chat-messages").append(messageHTML);
+  scrollToBottom();
+}
+
+function scrollToBottom() {
+  myscroll = $('.direct-chat-messages');
+  myscroll.scrollTop(myscroll.get(0).scrollHeight);
 }
 
 function loadMessages() {
