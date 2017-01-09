@@ -3,7 +3,7 @@
 include ('includes/session.php');
 include ('includes/functions.php');
 
-$active_page = 'home';
+$active_page = 'messaging';
 
 ?>
 
@@ -97,7 +97,7 @@ $active_page = 'home';
           <div class="box-header with-border">
             <h3 class="box-title"></h3>
             <div class="box-tools pull-right">
-              <span data-toggle="tooltip" title="3 New Messages" class="badge bg-blue">3</span>
+              <span data-toggle="tooltip" title="3 New Messages" class="badge bg-blue" id="num_messages"></span>
               <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
             </div>
@@ -132,6 +132,7 @@ $active_page = 'home';
       var user = <?php echo $_SESSION['student_number']; ?>;
       var user_name = "<?php echo $_SESSION['name']; ?>";
       var partner;
+      var num_messages = 0;
       if (user == 498566) {
         partner = 123456;
       }
@@ -168,7 +169,19 @@ $active_page = 'home';
         var sent_by_user = 0;
         updateMessages(sender, sender_name, message, sent_date, sent_by_user);
       }
+
+      if ($(".box").hasClass("collapsed-box")) {
+        num_messages++;
+        $("#num_messages").html(num_messages);
+      }
     };
+
+    $(".btn-box-tool").on("click", function() {
+      if ($(".btn-box-tool").data("widget") == "collapse") {
+        num_messages = 0;
+        $("#num_messages").html("");
+      }
+    });
 
     //Error
     websocket.onerror = function(ev) { 

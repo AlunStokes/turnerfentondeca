@@ -92,6 +92,7 @@
           <li><a href="exam_statistics">Exam Statistics</a></li>
         </ul>
       </li>
+      <li id="messaging"><a href="messaging"><i class="fa fa-user"></i> <span>Messaging</span></a></li>
       <li id="account"><a href="account"><i class="fa fa-user"></i> <span>Account</span></a></li>
     </ul>
     <!-- /.sidebar-menu -->
