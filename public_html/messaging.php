@@ -97,7 +97,7 @@ $active_page = 'messaging';
           <div class="box-header with-border">
             <h3 class="box-title"></h3>
             <div class="box-tools pull-right">
-              <span data-toggle="tooltip" title="3 New Messages" class="badge bg-blue" id="num_messages"></span>
+              <span data-toggle="tooltip" title="" class="badge bg-blue" id="num_messages"></span>
               <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
               <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
             </div>
@@ -173,6 +173,7 @@ $active_page = 'messaging';
       if ($(".box").hasClass("collapsed-box")) {
         num_messages++;
         $("#num_messages").html(num_messages);
+        $("#num_messages").attr("title", num_messages + " new messages");
       }
     };
 
@@ -180,6 +181,7 @@ $active_page = 'messaging';
       if ($(".btn-box-tool").data("widget") == "collapse") {
         num_messages = 0;
         $("#num_messages").html("");
+        $("#num_messages").attr("title","");
       }
     });
 
