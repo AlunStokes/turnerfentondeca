@@ -106,7 +106,7 @@ function loadAttendance() {
       if (data['ended'][i] == 0) {
         attendance_html +=`
         <li>
-        <a href="javascript::;">
+        <a href="javascript:;">
         <div class="circle"></div>
         <div class="menu-info menu-info-name">
         <h4 class="control-sidebar-subheading">`+data['date'][i]+`</h4>
@@ -119,7 +119,7 @@ function loadAttendance() {
       else {
         attendance_html +=`
         <li>
-        <a href="javascript::;">
+        <a href="javascript:;">
         <i class="menu-icon attendance-num-users">`+data['num_users'][i]+`</i>
         <div class="menu-info menu-info-name">
         <h4 class="control-sidebar-subheading">`+data['date'][i]+`</h4>
@@ -157,7 +157,7 @@ function loadOnline() {
       if (data['online'][i] == 1) {
         online_users_html +=`
         <li>
-        <a href="javascript::;">
+        <a href="javascript: openChat(`+data['student_number'][i]+`);">
         <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle sidebar-img-circle-message-online" alt="User Image" style="float:left;">
         <div class="menu-info menu-info-name">
         <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
@@ -170,7 +170,7 @@ function loadOnline() {
       else {
         online_users_html +=`
         <li>
-        <a href="javascript::;">
+        <a href="javascript: openChat(`+data['student_number'][i]+`);">
         <img src="img/user_images/thumbnails/`+data['user_picture_file'][i]+`.jpg" class="img-circle sidebar-img-circle-message-offline" alt="User Image" style="float:left;">
         <div class="menu-info menu-info-name">
         <h4 class="control-sidebar-subheading">`+data['first_name'][i]+` `+data['last_name'][i]+`</h4>
@@ -247,6 +247,7 @@ $("#change_password_button").on("click", function() {
     changePassword();
   }
 });
+
 
 
 $('.tab-content, .control-sidebar-bg').bind('mousewheel DOMMouseScroll', function(e) {

@@ -10,3 +10,9 @@ setOnline();
 var stillAlive = setInterval(function () {
   setOnline();
 }, 60000);
+
+
+
+function openChat(recipient) {
+  alert (recipient);
+}
