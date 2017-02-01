@@ -1,4 +1,4 @@
-    
+
 html {
   overflow: scroll;
   overflow-x: hidden;
@@ -193,7 +193,7 @@ h3 {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  background-position: center; 
+  background-position: center;
 }
 
 
@@ -291,7 +291,7 @@ h3 {
 
   .about_number {
     color: #fff;
-    width:20vw; 
+    width:20vw;
     margin:0px auto;
     margin-top: 20px;
     text-align:center;

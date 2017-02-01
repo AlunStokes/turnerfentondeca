@@ -59,7 +59,7 @@ session_destroy();
       <div class="container">
         <div class="row">
           <div class="col-md-8 col-md-offset-2">
-            <img src="img/deca_logo_large_circle_image.png" align="middle" height="100%" width="100%" style="margin-top:7vh;"></img>
+            <img src="img/deca_logo_wide.png" align="middle" height="100%" width="100%" style="margin-top:7vh;"></img>
           </div>
           <div class="col-md-12" id="button">
             <a href="#about" class="btn btn-circle-blue page-scroll">
@@ -96,8 +96,8 @@ session_destroy();
       <div class="row" style="position: relative; padding-left:10vw; padding-right:10vw; margin-top:4vh;">
         <div class="col-md-12">
           <h1 style="text-align:left; font-weight: 600; color:#fff;">WHAT DO YOU DO?</h1>
-          <p style="text-align:left;">&emsp;&emsp;Turner Fenton DECA is a leading and innovative extra-curricular program that allows students to develop confidence and employability skills, and 
-            demonstrate leadership.  Each member chooses an event of their liking, and will spend the proceeding months being taught in their subject area at our weekly meetings.  
+          <p style="text-align:left;">&emsp;&emsp;Turner Fenton DECA is a leading and innovative extra-curricular program that allows students to develop confidence and employability skills, and
+            demonstrate leadership.  Each member chooses an event of their liking, and will spend the proceeding months being taught in their subject area at our weekly meetings.
             They will compete at the regional level, and potentially the provincial and international after that.</p>
           </div>
         </div>

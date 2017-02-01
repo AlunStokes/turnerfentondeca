@@ -2,10 +2,6 @@
 
 include ('includes/session.php');
 
-if ($_SESSION['member'] == false) {
-  header("Location:applicant_home");
-}
-
 
 ?>
 
