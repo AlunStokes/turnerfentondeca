@@ -1,65 +1,50 @@
-.navbar-custom {
-  padding-bottom: 3vh;
-  border-bottom: 0px solid rgba(255, 255, 255, 0.3);
+/*Navbar*/
+nav {
+  top: 1vh;
+  right: 1vw;
+  height: 5vh;
+  z-index: 100;
+  position: fixed;
+}
+nav.scrolled {
+  width: 0;
+  font-size: 14px !important;
+  color: #eee !important;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+li {
+  float: right;
+  border-right:1px solid #444;
+}
+li:first-child {
+  border-right:0px solid #444;
+}
+li a {
+  -webkit-transition: all 0.3s ease-in-out;
+  display: block;
+  color: #444;
   text-transform: uppercase;
-  background-color: rgba(0,0,0,0.3);
+  text-align: center;
+  padding: 14px 32px;
+  text-decoration: none;
 }
-.navbar-custom .navbar-toggle {
-  color: white;
-  background-color: rgba(255, 255, 255, 0.2);
-  font-size: 12px;
+li a:hover:not(.active) {
+  background-color: rgba(255,255,255,0.3);
 }
-.navbar-custom .navbar-toggle:focus,
-.navbar-custom .navbar-toggle:active {
-  outline: none;
+.active {
+  background-color: #444;
+  color: #eee;
 }
-.navbar-custom .navbar-brand {
-  font-weight: 700;
-}
-.navbar-custom .navbar-brand:focus {
-  outline: none;
-}
-.navbar-custom a {
-  color: white;
-}
-.navbar-custom .nav li a {
-  -webkit-transition: background 0.3s ease-in-out;
-  -moz-transition: background 0.3s ease-in-out;
-  transition: background 0.3s ease-in-out;
-}
-.navbar-custom .nav li a:hover {
-  color: rgba(255, 255, 255, 0.8);
-  outline: none;
-  background-color: rgba(255, 255, 255, .6); 
-}
-.navbar-custom .nav li a:focus,
-.navbar-custom .nav li a:active {
-  outline: none;
-  background-color: rgba(255, 255, 255, .6);
-}
-.navbar-custom .nav li.active {
-  outline: none;
-}
-.navbar-custom .nav li.active a {
-  background-color: rgba(255, 255, 255, 0.3);
-}
-.navbar-custom .nav li.active a:hover {
-  color: white;
-}
-@media (min-width: 768px) {
-  .navbar-custom {
-    padding: 20px 0;
-    border-bottom: none;
-    letter-spacing: 1px;
-    background: transparent;
-    -webkit-transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
-    -moz-transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
-    transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
-  }
-  .navbar-custom.top-nav-collapse {
-    padding: 0;
-    background: transparent;
-    border-bottom: 0px solid rgba(255, 255, 255, 0.3);
-    background-color: rgba(255, 255, 255, 0);
-  }
+#navbar-logo {
+  float: left;
+  display: inline;
+  position: absolute;
+  z-index: 100;
+  top: 2vh;
+  left: 3vw;
 }
