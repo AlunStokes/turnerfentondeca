@@ -882,6 +882,29 @@ switch ($ajax_id) {
 	mysqli_query($dbconfig, $query);
 	break;
 
+	case "design_timeline_load":
+	$data = array();
+	$data['entry_id'] = array();
+	$data['date_day'] = array();
+	$data['date_month'] = array();
+	$data['author'] = array();
+	$data['title'] = array();
+	$data['description'] = array();
+	$data['num_alternates'] = array();
+	$query = "SELECT entry_id, DATE_FORMAT(date, '%Y-%m-%d') AS date_day, DATE_FORMAT(date, '%M %Y') AS date_month, title, author, description, num_alternates FROM design_timeline_entries ORDER BY date DESC";
+	$result = mysqli_query($dbconfig, $query);
+	while ($row = mysqli_fetch_assoc($result)) {
+		array_push($data['entry_id'], $row['entry_id']);
+		array_push($data['date_day'], $row['date_day']);
+		array_push($data['date_month'], $row['date_month']);
+		array_push($data['author'], $row['author']);
+		array_push($data['title'], $row['title']);
+		array_push($data['description'], $row['description']);
+		array_push($data['num_alternates'], $row['num_alternates']);
+	}
+	echo json_encode($data);
+	break;
+
 
 	default:
 		# code...

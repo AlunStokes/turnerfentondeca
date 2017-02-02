@@ -1,16 +1,3 @@
-/*All*/
-html, body {
-  height:100%;
-  font-family: 'Raleway', sans-serif;
-  background-color: #eee;
-  margin: 0;
-  -webkit-overflow-scrolling: touch;
-}
-a[href], input[type='submit'], input[type='image'], label[for], select, button, .pointer {
-       cursor: pointer;
-}
-
-
 /*containers*/
 #landing-container {
   position: relative;
@@ -121,6 +108,9 @@ p {
   font-size: 22px;
   text-align: left;
   margin-top: 35px;
+}
+.news-text {
+margin-top: 0;
 }
 
 /*Links*/
