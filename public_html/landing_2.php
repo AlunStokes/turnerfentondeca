@@ -96,12 +96,22 @@ session_destroy();
             <div class="col-5">
               <div class="landing-info-option">
                 <a href="login">
-                  <img src="img/google-noto.jpg" class="" width="100%" />
-                  <h2 class="landing-text emblem-title" style="text-align:center">Sign In</h2>
+                  <img src="img/provs_poster.png" class="" width="100%" />
+                  <h2 class="landing-text emblem-title" style="text-align:center">Provincials 7-9 Feb</h2>
                 </a>
                 <p>
                   &nbsp&nbsp
-                  <i>A typeface five years in the making, Google Noto spans more than 100 writing systems, 800 languages, and hundreds of thousands of characters for users worldwide</i>
+                  <i>Provincials are coming up soon, so make sure you're doing you best to prepare for the competition!</i>
+                </p>
+              </div>
+              <div class="landing-info-option">
+                <a href="login">
+                  <img src="img/awards_poster.png" class="" width="100%" />
+                  <h2 class="landing-text emblem-title" style="text-align:center">Mock Competition Awards</h2>
+                </a>
+                <p>
+                  &nbsp&nbsp
+                  <i>Make sure to show up for the mock competition awards ceremonies where the finalists will be announced!</i>
                 </p>
               </div>
             </div>

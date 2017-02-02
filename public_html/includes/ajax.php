@@ -53,7 +53,7 @@ switch ($ajax_id) {
 		echo json_encode(false);
 	}
 	break;
-	
+
 	case 'attendance_check':
 	$code_word = stripslashes(json_decode($_GET['code_word']));
 	$student_number = stripslashes(json_decode($_GET['student_number']));
@@ -269,7 +269,7 @@ switch ($ajax_id) {
 			$data['correct'][$id] = 0;
 		}
 	}
-	$data['percent_correct'] = round(($data['num_correct']*100)/$num_questions,1); 
+	$data['percent_correct'] = round(($data['num_correct']*100)/$num_questions,1);
 	if ($exam_id != 0) {
 		$add_exam_query = 'INSERT INTO exam_results (student_number, exam_id, percentage, score, total) VALUES ('.$_SESSION["student_number"].', '.$exam_id.', '.$data["percent_correct"].', '.$data["num_correct"].', '.$num_questions.')';
 	}
@@ -287,7 +287,7 @@ switch ($ajax_id) {
 			$counter++;
 		}
 		mysqli_multi_query($dbconfig, $add_attempted_query);
-		do { 
+		do {
 			mysqli_use_result($dbconfig);
 		} while(mysqli_more_results($dbconfig) && mysqli_next_result($dbconfig));
 //Update statistics Section
@@ -339,15 +339,15 @@ switch ($ajax_id) {
 		}
 		$insert_scores = "UPDATE
 		user_statistics
-		SET 
-		num_correct_marketing = ".$num['correct']['marketing'].", 
-		num_attempted_marketing = ".$num['attempted']['marketing'].", 
-		num_correct_businessadmin = ".$num['correct']['businessadmin'].", 
-		num_attempted_businessadmin = ".$num['attempted']['businessadmin'].", 
-		num_correct_finance = ".$num['correct']['finance'].", 
-		num_attempted_finance = ".$num['attempted']['finance'].", 
-		num_correct_hospitality = ".$num['correct']['hospitality'].", 
-		num_attempted_hospitality = ".$num['attempted']['hospitality']." 
+		SET
+		num_correct_marketing = ".$num['correct']['marketing'].",
+		num_attempted_marketing = ".$num['attempted']['marketing'].",
+		num_correct_businessadmin = ".$num['correct']['businessadmin'].",
+		num_attempted_businessadmin = ".$num['attempted']['businessadmin'].",
+		num_correct_finance = ".$num['correct']['finance'].",
+		num_attempted_finance = ".$num['attempted']['finance'].",
+		num_correct_hospitality = ".$num['correct']['hospitality'].",
+		num_attempted_hospitality = ".$num['attempted']['hospitality']."
 		WHERE
 		student_number = ".$_SESSION['student_number']."";
 		mysqli_query($dbconfig, $insert_scores) or die (mysqli_error($dbconfig));
@@ -607,10 +607,15 @@ switch ($ajax_id) {
 	$messages ['class_proper'] = array();
 	$messages ['date'] = array();
 	$messages ['time'] = array();
-	$post_query = "SELECT class_posts.id as id, message, poster, UNIX_TIMESTAMP(class_posts.date) AS date_order, DATE_FORMAT(DATE, '%M %D %Y') AS date, DATE_FORMAT(DATE, '%H:%i') AS time, first_name, last_name, class_posts.class FROM class_posts JOIN members ON members.student_number = class_posts.poster WHERE class_posts.class = '".$class."' OR class_posts.class = 'all' ORDER BY date_order DESC LIMIT 150;";
 	if ($admin == 1) {
 		$post_query = "SELECT class_posts.id as id, message, json_message, poster, UNIX_TIMESTAMP(class_posts.date) AS date_order, DATE_FORMAT(DATE, '%M %D %Y') AS date, DATE_FORMAT(DATE, '%H:%i') AS time, first_name, last_name, class_posts.class FROM class_posts JOIN members ON members.student_number = class_posts.poster ORDER BY date_order DESC LIMIT 150;";
 	}
+	else if (strpos($class, "principles")) {
+		$post_query = "SELECT class_posts.id as id, message, poster, UNIX_TIMESTAMP(class_posts.date) AS date_order, DATE_FORMAT(DATE, '%M %D %Y') AS date, DATE_FORMAT(DATE, '%H:%i') AS time, first_name, last_name, class_posts.class FROM class_posts JOIN members ON members.student_number = class_posts.poster WHERE class_posts.class LIKE '%principles%' OR class_posts.class = 'all' ORDER BY date_order DESC LIMIT 150;";
+	}
+	else {
+		$post_query = "SELECT class_posts.id as id, message, poster, UNIX_TIMESTAMP(class_posts.date) AS date_order, DATE_FORMAT(DATE, '%M %D %Y') AS date, DATE_FORMAT(DATE, '%H:%i') AS time, first_name, last_name, class_posts.class FROM class_posts JOIN members ON members.student_number = class_posts.poster WHERE class_posts.class = '".$class."' OR class_posts.class = 'all' ORDER BY date_order DESC LIMIT 150;";
+}
 	$results = mysqli_query($dbconfig, $post_query);
 	if ($results != false) {
 		while ($row = mysqli_fetch_assoc($results)) {
@@ -652,16 +657,16 @@ switch ($ajax_id) {
 				break;
 				case "hospitality_principles":
 				$messages['class_proper'][$i] = "Principles of Hospitality";
-				break;  
+				break;
 				case "writtens":
 				$messages['class_proper'][$i] = "Writtens";
-				break;    
+				break;
 				case "all":
 				$messages['class_proper'][$i] = "All Classes";
-				break;        
+				break;
 				case "admin":
 				$messages['class_proper'][$i] = "Admin";
-				break;    
+				break;
 			}
 			if (!file_exists("../img/user_images/thumbnails/".$messages['poster_picture_path'][$i])) {
 				$messages['poster_picture_path'][$i] = "unresolved.jpg";
@@ -861,7 +866,7 @@ switch ($ajax_id) {
 	$password = json_decode($_POST['password']);
 	$hashed_password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 11]);
 	$query = "UPDATE members SET password='$hashed_password' WHERE student_number = '$student_number' AND admin = 0";
-	$result = mysqli_query($dbconfig, $query);	
+	$result = mysqli_query($dbconfig, $query);
 	if (mysqli_affected_rows($dbconfig) > 0) {
 		$data = true;
 	}
