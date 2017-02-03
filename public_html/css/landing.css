@@ -1,7 +1,6 @@
 /*containers*/
 #landing-container {
   position: relative;
-  overflow: auto;
   margin-left: auto;
   margin-right: auto;
   height: 100vh;
