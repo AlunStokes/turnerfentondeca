@@ -1,5 +1,5 @@
 /*containers*/
-#landing-container {
+#top-container {
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -9,7 +9,7 @@
   background: linear-gradient(90deg, #eee 60%, #deddd6 60%);
 }
 @media screen and (max-width: 1030px) {
-  #landing-container {
+  #top-container {
     background: #eee;
   }
 }
@@ -50,6 +50,7 @@
 @media screen and (max-width:1030px) {
   .landing-content.left {
     width: 100%;
+      padding-top: 2vh;
   }
   .landing-content.right {
     padding: 5vh 0 0 0;

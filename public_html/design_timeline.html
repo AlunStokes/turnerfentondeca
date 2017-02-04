@@ -40,17 +40,27 @@
     </ul>
     <div style="clear: both"></div>
   </nav>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#top-container').css('margin-top', $('#navbar').height() + 'px');
+    });
+    $(window).resize(function() {
+      $('#top-container').css('margin-top', $('#navbar').height() + 'px');
+    });
+  </script>
 
-  <div id="title-container">
-    <h1 id="title">Turner Fenton DECA: A History of Design</h1>
+  <div id="top-container">
+    <div id="title-container">
+      <h1 id="title">Turner Fenton DECA: A History of Design</h1>
+    </div>
+
+    <section id="cd-timeline" class="cd-container">
+
+
+
+    </section> <!-- cd-timeline -->
   </div>
-
-
-  <section id="cd-timeline" class="cd-container">
-
-
-
-  </section> <!-- cd-timeline -->
 
   <script>
 
